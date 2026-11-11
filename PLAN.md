@@ -7,7 +7,7 @@ Decisions: `QUESTIONS.md`. Style: `STYLE.md`. Each step ends in something you ca
 **Language:** everything in the repo (code, comments, commits, docs) is in English. The UI is bilingual (ES/EN).
 
 ## Version 1 — the minimum to start using it
-1. **Project setup:** GitHub repo, Next.js + TypeScript project, first Vercel deploy and `.env.example`.
+1. ✅ **Project setup:** GitHub repo, Next.js + TypeScript project, first Vercel deploy (https://the-wire-gamma.vercel.app) and `.env.example`.
 2. **Base design (no real data):** CSS color tokens, Inter + JetBrains Mono fonts, header, hero with ticker background, 3+2 news cards with "read more", using sample news (per `STYLE.md`).
 3. **Bilingual:** ES/EN UI strings, browser language detection and a language switcher.
 4. **Database:** Postgres and a news table (date, topic, country, importance, ES/EN text, source link). History is stored from day one.
