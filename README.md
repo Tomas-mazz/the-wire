@@ -1,21 +1,21 @@
 # The Wire
 
-Noticias resumidas, sin saturarte. Bolsa, cripto, programación y economía: las más importantes del día, en 2–3 líneas, con precios en vivo. En español e inglés.
+News summaries without the overload. Stocks, crypto, programming and economy: the most important stories of the day in 2–3 lines, with live prices. Available in English and Spanish.
 
-> En construcción. Ver [`PLAN.md`](PLAN.md) para los pasos y [`ESTILO.md`](ESTILO.md) para el diseño.
+> Work in progress. See [`PLAN.md`](PLAN.md) for the roadmap and [`STYLE.md`](STYLE.md) for the design guide.
 
 ## Stack
 Next.js + TypeScript · Tailwind CSS · Postgres · Vercel · Claude API
 
-## Correr en local
+## Run locally
 ```bash
 npm install
-cp .env.example .env.local   # completar las claves
+cp .env.example .env.local   # fill in the keys
 npm run dev                  # http://localhost:3000
 ```
 
-## Documentos del proyecto
-- [`IDEA.md`](IDEA.md): qué es y por qué
-- [`PREGUNTAS.md`](PREGUNTAS.md): todas las decisiones tomadas
-- [`ESTILO.md`](ESTILO.md): guía visual
-- [`PLAN.md`](PLAN.md): plan de trabajo por pasos
+## Project docs
+- [`IDEA.md`](IDEA.md): what it is and why
+- [`QUESTIONS.md`](QUESTIONS.md): all product decisions
+- [`STYLE.md`](STYLE.md): visual design guide
+- [`PLAN.md`](PLAN.md): step-by-step roadmap

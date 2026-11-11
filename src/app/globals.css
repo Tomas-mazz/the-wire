@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Provisorio (paso 1). En el paso 2 se cargan todos los tokens de ESTILO.md. */
+/* Temporary (step 1). Full design tokens from STYLE.md are added in step 2. */
 :root {
   --background: #0b0b0b;
   --foreground: #cccccc;

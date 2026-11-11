@@ -1,5 +1,5 @@
-// Página provisoria del paso 1: solo confirma que el deploy funciona.
-// En el paso 2 se reemplaza por la portada real (ver ESTILO.md).
+// Temporary page for step 1: only confirms that the deploy works.
+// Replaced by the real home page in step 2 (see STYLE.md).
 export default function Home() {
   return (
     <main className="flex flex-1 flex-col items-center justify-center gap-4 px-4 text-center">

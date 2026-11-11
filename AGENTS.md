@@ -1,19 +1,15 @@
-# Instrucciones para la IA (Cursor)
+# Instructions for AI assistants
 
-**Estado (11/11/2026):** la etapa de definición terminó. Ya están respondidas todas las preguntas y el usuario aprobó empezar. Se programa siguiendo `PLAN.md`, paso a paso, respetando `ESTILO.md`. Ante decisiones nuevas, se le sigue preguntando al usuario.
+**Status (2026-11-11):** the definition phase is complete. All kickoff questions are answered and the user approved starting development. Build step by step following `PLAN.md`, respecting `STYLE.md`. For any new decision, ask the user — don't decide for them.
 
-(Proceso original de definición, ya completado:)
+**Repo language:** everything committed to the repository is written in **English**: commit messages, README, docs, code (variable and function names, comments) and config files. Talk to the user in **Spanish**. User-facing UI text is bilingual (ES/EN).
 
-1. Leé `IDEA.md` para entender el proyecto.
-2. Antes de crear cualquier archivo de código, hacele al usuario las preguntas de `PREGUNTAS.md`.
-   - Hacelas de a pocas (3–5 por vez), por bloque, en español.
-   - No asumas respuestas ni tomes decisiones por él: todo se pregunta.
-   - Si una respuesta abre dudas nuevas, preguntá también eso.
-   - Si el usuario no sabe qué elegir, explicale las opciones de forma simple (pros y contras) y dejá que decida él.
-3. Anotá cada respuesta en `PREGUNTAS.md`, debajo de su pregunta.
-4. Cuando estén todas respondidas, proponé un plan de trabajo por pasos y esperá su OK antes de programar.
+**Working with the user:**
+- The user is learning to program: explain what you do and why.
+- When the user is unsure, explain the options simply (pros and cons) and let them choose.
+- Record new product decisions in `QUESTIONS.md` and keep `PLAN.md` up to date.
 
-El usuario está aprendiendo programación: explicá lo que hacés y por qué.
+**Project docs:** `IDEA.md` (what and why) · `QUESTIONS.md` (decisions) · `STYLE.md` (design guide) · `PLAN.md` (roadmap).
 
 <!-- BEGIN:nextjs-agent-rules -->
 
