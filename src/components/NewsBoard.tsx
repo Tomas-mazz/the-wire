@@ -19,11 +19,11 @@ export default function NewsBoard({ items }: { items: NewsItem[] }) {
 
   return (
     <section className="mx-auto w-full max-w-[1200px] px-4 py-12 sm:px-6 sm:py-16">
-      {/* Tabs scroll horizontally on small screens instead of wrapping. */}
+      {/* Tabs scroll horizontally on small screens instead of wrapping (scrollbar hidden). */}
       <div
         role="tablist"
         aria-label="News topics"
-        className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-2 sm:mx-0 sm:px-0"
+        className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-2 [scrollbar-width:none] sm:mx-0 sm:px-0"
       >
         {TOPICS.map(({ id, label }) => {
           const selected = id === topic;
