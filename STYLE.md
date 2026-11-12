@@ -53,8 +53,11 @@ No gradients.
 
 ### Header
 - Sticky at the top, semi-transparent `--bg` with blur (glass effect).
-- "THE WIRE" logo in uppercase with letter spacing, topic tabs, language, country and currency selectors.
-- On mobile, topics become a horizontally scrollable row.
+- "THE WIRE" logo in uppercase with letter spacing, plus language, country and currency selectors.
+
+### Topic tabs
+- Pill-shaped tabs with the topic icon, placed right above the news grid (moved out of the header in step 2 to keep the header clean on mobile).
+- Selected tab: white background, black text. On mobile the row scrolls horizontally.
 
 ### Hero
 - Today's date and a short heading, e.g. "What matters today".

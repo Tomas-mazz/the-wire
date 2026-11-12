@@ -1,12 +1,21 @@
-// Temporary page for step 1: only confirms that the deploy works.
-// Replaced by the real home page in step 2 (see STYLE.md).
+import Header from "@/components/Header";
+import Hero from "@/components/Hero";
+import NewsBoard from "@/components/NewsBoard";
+import { SAMPLE_NEWS } from "@/data/sample-news";
+
 export default function Home() {
   return (
-    <main className="flex flex-1 flex-col items-center justify-center gap-4 px-4 text-center">
-      <h1 className="text-3xl font-bold tracking-[0.3em] text-white sm:text-5xl">
-        THE WIRE
-      </h1>
-      <p className="text-[#8A8A8A]">En construcción · Under construction</p>
-    </main>
+    <>
+      <Header />
+      <main className="flex-1">
+        <Hero />
+        <NewsBoard items={SAMPLE_NEWS} />
+      </main>
+      <footer className="border-t border-line">
+        <p className="mx-auto max-w-[1200px] px-4 py-8 text-xs text-muted sm:px-6">
+          The Wire · Sample stories for design preview
+        </p>
+      </footer>
+    </>
   );
 }

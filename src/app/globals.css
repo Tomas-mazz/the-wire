@@ -1,20 +1,70 @@
 @import "tailwindcss";
 
-/* Temporary (step 1). Full design tokens from STYLE.md are added in step 2. */
-:root {
-  --background: #0b0b0b;
-  --foreground: #cccccc;
+/*
+ * Design tokens — single source of truth for colors, fonts and motion.
+ * Values come from STYLE.md. Tailwind turns each token into utility
+ * classes, e.g. --color-surface → bg-surface, --color-up → text-up.
+ */
+@theme {
+  --color-bg: #0b0b0b;
+  --color-surface: #161616;
+  --color-surface-hover: #1f1f1f;
+  --color-line: rgb(255 255 255 / 0.08);
+  --color-line-strong: rgb(255 255 255 / 0.2);
+  --color-fg: #ffffff; /* headings */
+  --color-body: #cccccc; /* reading text */
+  --color-muted: #8a8a8a; /* dates, sources, labels */
+  --color-up: #3dd68c; /* price gains */
+  --color-down: #ff5c5c; /* price losses */
+
+  --animate-fade-up: fade-up 0.4s ease-out both;
+  --animate-ticker: ticker 160s linear infinite;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* Each ticker row holds its content twice, so moving -50% loops seamlessly. */
+  @keyframes ticker {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
 }
 
+/* Fonts are loaded in layout.tsx with next/font and exposed as CSS variables. */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-body);
+}
+
+/* Visible keyboard focus everywhere (accessibility). */
+:focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: 2px;
+}
+
+/* Respect the OS "reduce motion" setting: stop everything that moves on its own. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }
