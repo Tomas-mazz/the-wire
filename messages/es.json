@@ -1,0 +1,30 @@
+{
+  "Metadata": {
+    "title": "The Wire",
+    "description": "Noticias resumidas, sin saturarte."
+  },
+  "Header": {
+    "language": "Idioma",
+    "comingSoon": "Próximamente"
+  },
+  "Hero": {
+    "heading": "Lo importante de hoy.",
+    "intro": "Las noticias más importantes de bolsa, cripto, programación y economía, resumidas en pocas líneas.",
+    "preview": "Vista previa · noticias de ejemplo"
+  },
+  "Topics": {
+    "label": "Temas de noticias",
+    "stocks": "Bolsa",
+    "crypto": "Cripto",
+    "programming": "Programación",
+    "economy": "Economía"
+  },
+  "NewsCard": {
+    "readMore": "Ver más",
+    "showLess": "Ver menos",
+    "readOn": "Leer en {source}"
+  },
+  "Footer": {
+    "note": "The Wire · Noticias de ejemplo para la vista previa"
+  }
+}

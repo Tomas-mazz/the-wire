@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import type { NewsItem, Topic } from "@/data/types";
 import { TOPICS } from "@/data/types";
 import NewsCard from "./NewsCard";
@@ -11,6 +12,7 @@ import TopicIcon from "./TopicIcon";
  * then two compact secondary stories underneath (like a newspaper front page).
  */
 export default function NewsBoard({ items }: { items: NewsItem[] }) {
+  const t = useTranslations("Topics");
   const [topic, setTopic] = useState<Topic>("stocks");
 
   const stories = items.filter((item) => item.topic === topic);
@@ -22,10 +24,10 @@ export default function NewsBoard({ items }: { items: NewsItem[] }) {
       {/* Tabs scroll horizontally on small screens instead of wrapping (scrollbar hidden). */}
       <div
         role="tablist"
-        aria-label="News topics"
+        aria-label={t("label")}
         className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-2 [scrollbar-width:none] sm:mx-0 sm:px-0"
       >
-        {TOPICS.map(({ id, label }) => {
+        {TOPICS.map((id) => {
           const selected = id === topic;
           return (
             <button
@@ -41,7 +43,7 @@ export default function NewsBoard({ items }: { items: NewsItem[] }) {
               }`}
             >
               <TopicIcon topic={id} />
-              {label}
+              {t(id)}
             </button>
           );
         })}

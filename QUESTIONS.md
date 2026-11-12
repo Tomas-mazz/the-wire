@@ -11,6 +11,7 @@ Each answer is recorded under its question (→ Answer:).
    → Answer: Both equally (responsive design).
 4. What language should the news and site be in: Spanish, English or both?
    → Answer: Both, user-selectable. Defaults to the browser language.
+   Implementation (step 3): language in the URL (`/es`, `/en`); `/` redirects based on the browser language. Library: next-intl.
 5. When during the day will you open it (morning, all day)?
    → Answer: Several times a day. A single daily news update is still enough (prices are live).
 

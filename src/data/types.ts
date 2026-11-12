@@ -1,13 +1,8 @@
 /** The four news topics available in v1. */
 export type Topic = "stocks" | "crypto" | "programming" | "economy";
 
-/** Display metadata for each topic, in tab order. */
-export const TOPICS: { id: Topic; label: string }[] = [
-  { id: "stocks", label: "Stocks" },
-  { id: "crypto", label: "Crypto" },
-  { id: "programming", label: "Programming" },
-  { id: "economy", label: "Economy" },
-];
+/** Topics in tab order. Their display names live in messages/<locale>.json → "Topics". */
+export const TOPICS: Topic[] = ["stocks", "crypto", "programming", "economy"];
 
 /**
  * One summarized news story.

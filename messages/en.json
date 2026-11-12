@@ -1,0 +1,30 @@
+{
+  "Metadata": {
+    "title": "The Wire",
+    "description": "News summaries without the overload."
+  },
+  "Header": {
+    "language": "Language",
+    "comingSoon": "Coming soon"
+  },
+  "Hero": {
+    "heading": "What matters today.",
+    "intro": "The most important stories in stocks, crypto, programming and the economy — summarized in a few lines.",
+    "preview": "Preview · sample stories"
+  },
+  "Topics": {
+    "label": "News topics",
+    "stocks": "Stocks",
+    "crypto": "Crypto",
+    "programming": "Programming",
+    "economy": "Economy"
+  },
+  "NewsCard": {
+    "readMore": "Read more",
+    "showLess": "Show less",
+    "readOn": "Read on {source}"
+  },
+  "Footer": {
+    "note": "The Wire · Sample stories for design preview"
+  }
+}

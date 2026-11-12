@@ -1,12 +1,16 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { useLocale } from "next-intl";
 
 // The date never needs to "update" while the page is open, so subscribe is a no-op.
 const subscribe = () => () => {};
 
-const formatToday = () =>
-  new Date().toLocaleDateString("en-US", {
+// Regional format for each UI language.
+const DATE_LOCALES = { en: "en-US", es: "es-ES" } as const;
+
+const formatToday = (locale: keyof typeof DATE_LOCALES) =>
+  new Date().toLocaleDateString(DATE_LOCALES[locale], {
     weekday: "long",
     month: "long",
     day: "numeric",
@@ -20,6 +24,7 @@ const formatToday = () =>
  * re-renders with the browser's value, so there is no hydration mismatch.
  */
 export default function TodayDate() {
-  const today = useSyncExternalStore(subscribe, formatToday, () => null);
+  const locale = useLocale();
+  const today = useSyncExternalStore(subscribe, () => formatToday(locale), () => null);
   return <span>{today ?? " "}</span>;
 }

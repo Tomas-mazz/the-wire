@@ -1,12 +1,14 @@
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 /**
  * Sticky top bar with a glass effect (semi-transparent background + blur).
- * The language / country / currency pills are visual placeholders for now:
- * they become real selectors in steps 3 and 8.
+ * The country / currency pills are visual placeholders until step 8.
  */
 export default function Header() {
-  const placeholders = ["EN", "Global", "USD"];
+  const t = useTranslations("Header");
+  const placeholders = ["Global", "USD"];
 
   return (
     <header className="sticky top-0 z-20 border-b border-line bg-bg/70 backdrop-blur-md">
@@ -16,10 +18,11 @@ export default function Header() {
         </Link>
 
         <div className="flex items-center gap-2">
+          <LanguageSwitcher />
           {placeholders.map((label) => (
             <span
               key={label}
-              title="Coming soon"
+              title={t("comingSoon")}
               className="rounded-xl border border-line-strong px-3 py-1.5 text-xs font-medium text-body"
             >
               {label}

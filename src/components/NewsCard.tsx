@@ -2,8 +2,8 @@
 
 import { useId, useState } from "react";
 import { ArrowUpRight, ChevronDown } from "lucide-react";
+import { useTranslations } from "next-intl";
 import type { NewsItem } from "@/data/types";
-import { TOPICS } from "@/data/types";
 import TopicIcon from "./TopicIcon";
 
 // Always format in UTC so the server and browser render the same text.
@@ -28,7 +28,8 @@ export default function NewsCard({ item, index }: NewsCardProps) {
   const [open, setOpen] = useState(false);
   const detailsId = useId();
   const isTop = item.importance === "top";
-  const topicLabel = TOPICS.find((t) => t.id === item.topic)?.label;
+  const t = useTranslations("NewsCard");
+  const tTopics = useTranslations("Topics");
 
   return (
     <article
@@ -40,7 +41,7 @@ export default function NewsCard({ item, index }: NewsCardProps) {
       <div className="flex items-center gap-2 text-[13px] font-medium tracking-wider text-muted uppercase">
         <span className="inline-flex items-center gap-1.5 rounded-full border border-line px-2.5 py-1 text-body">
           <TopicIcon topic={item.topic} size={14} />
-          {topicLabel}
+          {tTopics(item.topic)}
         </span>
         <time dateTime={item.publishedAt}>{formatTime(item.publishedAt)}</time>
       </div>
@@ -84,7 +85,7 @@ export default function NewsCard({ item, index }: NewsCardProps) {
               rel="noopener noreferrer"
               className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-fg hover:underline"
             >
-              Read on {item.source.name}
+              {t("readOn", { source: item.source.name })}
               <ArrowUpRight size={16} strokeWidth={1.5} aria-hidden="true" />
             </a>
           </div>
@@ -98,7 +99,7 @@ export default function NewsCard({ item, index }: NewsCardProps) {
         aria-controls={detailsId}
         className="mt-5 inline-flex w-fit items-center gap-1.5 rounded-xl border border-line-strong px-3 py-1.5 text-sm font-medium text-fg transition-colors hover:bg-fg/5"
       >
-        {open ? "Show less" : "Read more"}
+        {open ? t("showLess") : t("readMore")}
         <ChevronDown
           size={16}
           strokeWidth={1.5}

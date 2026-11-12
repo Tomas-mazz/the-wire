@@ -1,7 +1,10 @@
+import { useTranslations } from "next-intl";
 import TickerBackground from "./TickerBackground";
 import TodayDate from "./TodayDate";
 
 export default function Hero() {
+  const t = useTranslations("Hero");
+
   return (
     <section className="relative isolate overflow-hidden border-b border-line">
       <TickerBackground />
@@ -11,14 +14,13 @@ export default function Hero() {
           <TodayDate />
         </p>
         <h1 className="mt-4 max-w-2xl text-3xl leading-tight font-bold text-fg sm:text-5xl">
-          What matters today.
+          {t("heading")}
         </h1>
         <p className="mt-4 max-w-xl text-body">
-          The most important stories in stocks, crypto, programming and the economy — summarized
-          in a few lines.
+          {t("intro")}
         </p>
         <p className="mt-6 inline-block rounded-full border border-line px-3 py-1 text-xs text-muted">
-          Preview · sample stories
+          {t("preview")}
         </p>
       </div>
     </section>
