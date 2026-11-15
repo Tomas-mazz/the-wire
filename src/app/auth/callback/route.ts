@@ -14,8 +14,8 @@ function safeNext(next: string | null) {
 }
 
 /**
- * Landing point after the magic link email or Google sign-in.
- * - `code`: PKCE flow (Google, or the default email template). Works in the same browser.
+ * Landing point after the magic link email.
+ * - `code`: PKCE flow (default email template). Works in the same browser.
  * - `token_hash` + `type`: custom email template. Also works when the email is
  *   opened on another device.
  * On success the session cookies are set and the user goes to `next`.

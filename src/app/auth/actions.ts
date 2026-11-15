@@ -19,7 +19,7 @@ function safeLocale(locale: string) {
 }
 
 /**
- * Where Supabase sends the user back after the email link or Google.
+ * Where Supabase sends the user back after they click the email link.
  * Server Actions always carry an Origin header that Next.js checks against the
  * host, and Supabase only accepts URLs from its redirect allow-list.
  */
@@ -48,22 +48,6 @@ export async function signInWithEmail(
     return { status: "error" };
   }
   return { status: "sent", email };
-}
-
-/** Starts the Google sign-in flow and sends the browser to Google. */
-export async function signInWithGoogle(locale: string) {
-  const lang = safeLocale(locale);
-  const supabase = await createClient();
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: "google",
-    options: { redirectTo: await callbackUrl(lang) },
-  });
-
-  if (error || !data.url) {
-    console.error("Google sign-in failed:", error?.message);
-    redirect(`/${lang}/login?error=google`);
-  }
-  redirect(data.url);
 }
 
 export async function signOut(locale: string) {

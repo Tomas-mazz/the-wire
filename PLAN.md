@@ -13,7 +13,7 @@ A personal investment **ledger and analytics** app under The Wire brand (decisio
 P1. ✅ **Landing + routes:** The Wire home with Portfolio and News cards; sample news moved to `/news`; placeholder `/portfolio`.
 
 ### Product
-- **Accounts:** every user signs up (Supabase Auth: magic link + Google). All data is private to its owner.
+- **Accounts:** every user signs up (Supabase Auth: email magic link, no Google). All data is private to its owner.
 - **Projects ("albums"):** user-created, named groups of transactions (e.g. "Retirement", "Short term"). Optional description, default broker, strategy, horizon, tags. Can be archived.
 - **Views:** Overview (everything) · Crypto only · Stocks only · one project. Every view shows the same blocks, filtered.
 - **Assets:** US stocks/ETFs and any crypto. Stablecoins (USDT, USDC…) are cash. Fractional quantities. Manual price when no provider has one.
@@ -55,7 +55,7 @@ Holdings table columns: asset, quantity, avg cost, last price, market value, unr
 - API keys live only in server env vars (Vercel), never in the browser or git.
 
 ### Milestones (v1)
-- **M1. Accounts:** Supabase project, env vars, sign up/in (magic link + Google), `profiles`, protected `/portfolio`, sign out.
+- **M1. Accounts:** Supabase project, env vars, sign up/in with an email magic link, `profiles`, protected `/portfolio`, sign out.
 - **M2. Portfolio math:** `src/domain` with decimal.js + Vitest tests for buy/sell/fees/rewards/dividends/cash/edge cases.
 - **M3. Database:** tables above (except `daily_prices`), RLS policies, audit trail trigger.
 - **M4. Projects + transactions:** create/edit/archive projects, add/edit/delete transactions, asset search, transactions list with filters.

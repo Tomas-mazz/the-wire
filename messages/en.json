@@ -62,9 +62,6 @@
     "sentBody": "We sent a sign-in link to {email}. It works once and expires in 1 hour.",
     "invalidEmail": "Enter a valid email address.",
     "sendError": "We couldn't send the link. Wait a minute and try again.",
-    "or": "or",
-    "google": "Continue with Google",
-    "linkError": "That link is invalid or expired. Request a new one.",
-    "googleError": "Google sign-in didn't work. Try again or use your email."
+    "linkError": "That link is invalid or expired. Request a new one."
   }
 }

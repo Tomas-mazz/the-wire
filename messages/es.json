@@ -62,9 +62,6 @@
     "sentBody": "Te mandamos un link para entrar a {email}. Sirve una sola vez y vence en 1 hora.",
     "invalidEmail": "Ingresá un email válido.",
     "sendError": "No pudimos enviar el link. Esperá un minuto y probá de nuevo.",
-    "or": "o",
-    "google": "Continuar con Google",
-    "linkError": "Ese link no es válido o ya venció. Pedí uno nuevo.",
-    "googleError": "No se pudo entrar con Google. Probá de nuevo o usá tu email."
+    "linkError": "Ese link no es válido o ya venció. Pedí uno nuevo."
   }
 }

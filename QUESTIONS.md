@@ -126,7 +126,7 @@ Each answer is recorded under its question (→ Answer:).
 ## 11. Investment tracker spec (decided 2026-11-15)
 The portfolio grows into a full investment tracker (a ledger, not a broker: no orders, no wallet connect, no trading APIs). This section refines decisions 41–49.
 50. Users?
-    → Answer: Every user creates their own account. Login (Supabase Auth: magic link + Google) is built first, before the tracker. Replaces 44 ("only me").
+    → Answer: Every user creates their own account. Login (Supabase Auth: magic link) is built first, before the tracker. Replaces 44 ("only me").
 51. What is it for?
     → Answer: See my diversification and my average buy price (e.g. BTC), and whether I'm up (green) or down (red), in money and %.
 52. Current holdings to load?
@@ -167,3 +167,5 @@ The portfolio grows into a full investment tracker (a ledger, not a broker: no o
     → Answer: Same dark, clean style, plus a subtle blue glow when hovering cards. Charts in v1 (allocation donut). Desktop-first with a good mobile version.
 70. Workflow?
     → Answer: Commit at the end of each step without asking. Don't push until the user says so.
+71. Sign in with Google?
+    → Answer: No. Email magic link only (decided 2026-11-15).
