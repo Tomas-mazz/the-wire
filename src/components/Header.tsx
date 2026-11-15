@@ -1,5 +1,7 @@
+import { Suspense } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import AccountMenu, { AccountMenuSkeleton } from "./auth/AccountMenu";
 import LanguageSwitcher from "./LanguageSwitcher";
 
 interface HeaderProps {
@@ -9,7 +11,9 @@ interface HeaderProps {
 
 /**
  * Sticky top bar with a glass effect (semi-transparent background + blur).
- * Shared by every section of The Wire: logo, section links and language switcher.
+ * Shared by every section of The Wire: logo, section links, language switcher
+ * and account menu. Only the account menu depends on the visitor, so it streams
+ * in behind <Suspense> while the rest of the header is prerendered.
  */
 export default function Header({ showNewsControls = false }: HeaderProps) {
   const t = useTranslations("Header");
@@ -22,12 +26,12 @@ export default function Header({ showNewsControls = false }: HeaderProps) {
   return (
     <header className="sticky top-0 z-20 border-b border-line bg-bg/70 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between gap-3 px-4 sm:px-6">
-        <div className="flex items-center gap-5 sm:gap-8">
-          <Link href="/" className="text-sm font-bold tracking-[0.3em] whitespace-nowrap text-fg">
+        <div className="flex items-center gap-3 sm:gap-8">
+          <Link href="/" className="text-sm font-bold tracking-[0.2em] whitespace-nowrap text-fg sm:tracking-[0.3em]">
             THE WIRE
           </Link>
 
-          <nav aria-label={t("nav.label")} className="flex items-center gap-4 sm:gap-6">
+          <nav aria-label={t("nav.label")} className="flex items-center gap-3 sm:gap-6">
             {links.map(({ href, label }) => (
               <Link
                 key={href}
@@ -40,7 +44,7 @@ export default function Header({ showNewsControls = false }: HeaderProps) {
           </nav>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           <LanguageSwitcher />
           {showNewsControls &&
             placeholders.map((label) => (
@@ -53,6 +57,9 @@ export default function Header({ showNewsControls = false }: HeaderProps) {
                 {label}
               </span>
             ))}
+          <Suspense fallback={<AccountMenuSkeleton />}>
+            <AccountMenu />
+          </Suspense>
         </div>
       </div>
     </header>

@@ -10,6 +10,13 @@
       "label": "Sections",
       "portfolio": "Portfolio",
       "news": "News"
+    },
+    "account": {
+      "signIn": "Sign in",
+      "menu": "Account menu",
+      "signedInAs": "Signed in as",
+      "portfolio": "Portfolio",
+      "signOut": "Sign out"
     }
   },
   "Hero": {
@@ -47,9 +54,7 @@
     "heading": "Portfolio",
     "intro": "Your stocks and crypto, with live prices.",
     "placeholder": "Under construction · your projects and holdings arrive in the next steps.",
-    "loading": "Checking your session…",
-    "signedInAs": "Signed in as {email}",
-    "signOut": "Sign out"
+    "loading": "Checking your session…"
   },
   "Login": {
     "title": "Sign in",

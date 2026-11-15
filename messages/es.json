@@ -10,6 +10,13 @@
       "label": "Secciones",
       "portfolio": "Portafolio",
       "news": "Noticias"
+    },
+    "account": {
+      "signIn": "Iniciar sesión",
+      "menu": "Menú de cuenta",
+      "signedInAs": "Sesión iniciada como",
+      "portfolio": "Portafolio",
+      "signOut": "Cerrar sesión"
     }
   },
   "Hero": {
@@ -47,9 +54,7 @@
     "heading": "Portafolio",
     "intro": "Tus acciones y cripto, con precios en vivo.",
     "placeholder": "En construcción · tus proyectos e inversiones llegan en los próximos pasos.",
-    "loading": "Verificando tu sesión…",
-    "signedInAs": "Sesión iniciada como {email}",
-    "signOut": "Cerrar sesión"
+    "loading": "Verificando tu sesión…"
   },
   "Login": {
     "title": "Iniciar sesión",
