@@ -1,11 +1,23 @@
 {
   "Metadata": {
     "title": "The Wire",
-    "description": "News summaries without the overload."
+    "description": "Your markets, in one place: portfolio and news."
   },
   "Header": {
     "language": "Language",
-    "comingSoon": "Coming soon"
+    "comingSoon": "Coming soon",
+    "nav": {
+      "label": "Sections",
+      "portfolio": "Portfolio",
+      "news": "News"
+    },
+    "account": {
+      "signIn": "Sign in",
+      "menu": "Account menu",
+      "signedInAs": "Signed in as",
+      "portfolio": "Portfolio",
+      "signOut": "Sign out"
+    }
   },
   "Hero": {
     "heading": "What matters today.",
@@ -26,5 +38,35 @@
   },
   "Footer": {
     "note": "The Wire · Sample stories for design preview"
+  },
+  "Landing": {
+    "tagline": "Your markets, in one place.",
+    "intro": "Track your stocks and crypto with live prices. Daily news summaries are coming back soon.",
+    "sectionsLabel": "Sections",
+    "portfolioTitle": "Portfolio",
+    "portfolioDescription": "Your stocks and crypto: invested capital, profit and the weight of each asset, with live prices.",
+    "newsTitle": "News",
+    "newsDescription": "The day's most important stories, summarized in a few lines.",
+    "paused": "Coming soon",
+    "open": "Open"
+  },
+  "Portfolio": {
+    "heading": "Portfolio",
+    "intro": "Your stocks and crypto, with live prices.",
+    "placeholder": "Under construction · your projects and holdings arrive in the next steps.",
+    "loading": "Checking your session…"
+  },
+  "Login": {
+    "title": "Sign in",
+    "intro": "Sign in or create your account. No password: we email you a link.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@example.com",
+    "sendLink": "Email me a link",
+    "sending": "Sending…",
+    "sentTitle": "Check your inbox",
+    "sentBody": "We sent a sign-in link to {email}. It works once and expires in 1 hour.",
+    "invalidEmail": "Enter a valid email address.",
+    "sendError": "We couldn't send the link. Wait a minute and try again.",
+    "linkError": "That link is invalid or expired. Request a new one."
   }
 }

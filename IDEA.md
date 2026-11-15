@@ -16,6 +16,9 @@ Me and my friends. It's not a business (for now).
 - **Automatic daily updates.**
 - **Chatbot** to ask questions about the day's news.
 
+## Portfolio (second product, current focus)
+An investment tracker under the same brand (a ledger, not a broker): each user has an account, groups their stock and crypto transactions into named projects, and sees how much they have invested, their average buy price, profit (money and %) and diversification, with live prices. Later: educational statistics such as crypto seasonality. News is paused meanwhile.
+
 ## Visual style
 Futuristic, dark and clean, inspired by starknet.io: near-black background, white and grays, green/red only for prices.
 (It used to be an "old stock exchange" look; changed on 2026-11-11. Full guide in `STYLE.md`.)

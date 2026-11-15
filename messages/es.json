@@ -1,11 +1,23 @@
 {
   "Metadata": {
     "title": "The Wire",
-    "description": "Noticias resumidas, sin saturarte."
+    "description": "Tus mercados en un solo lugar: portafolio y noticias."
   },
   "Header": {
     "language": "Idioma",
-    "comingSoon": "Próximamente"
+    "comingSoon": "Próximamente",
+    "nav": {
+      "label": "Secciones",
+      "portfolio": "Portafolio",
+      "news": "Noticias"
+    },
+    "account": {
+      "signIn": "Iniciar sesión",
+      "menu": "Menú de cuenta",
+      "signedInAs": "Sesión iniciada como",
+      "portfolio": "Portafolio",
+      "signOut": "Cerrar sesión"
+    }
   },
   "Hero": {
     "heading": "Lo importante de hoy.",
@@ -26,5 +38,35 @@
   },
   "Footer": {
     "note": "The Wire · Noticias de ejemplo para la vista previa"
+  },
+  "Landing": {
+    "tagline": "Tus mercados, en un solo lugar.",
+    "intro": "Seguí tus acciones y cripto con precios en tiempo real. Los resúmenes diarios de noticias vuelven pronto.",
+    "sectionsLabel": "Secciones",
+    "portfolioTitle": "Portafolio",
+    "portfolioDescription": "Tus acciones y cripto: capital invertido, ganancia y el peso de cada activo, con precios en vivo.",
+    "newsTitle": "Noticias",
+    "newsDescription": "Las noticias más importantes del día, resumidas en pocas líneas.",
+    "paused": "Próximamente",
+    "open": "Abrir"
+  },
+  "Portfolio": {
+    "heading": "Portafolio",
+    "intro": "Tus acciones y cripto, con precios en vivo.",
+    "placeholder": "En construcción · tus proyectos e inversiones llegan en los próximos pasos.",
+    "loading": "Verificando tu sesión…"
+  },
+  "Login": {
+    "title": "Iniciar sesión",
+    "intro": "Entrá o creá tu cuenta. Sin contraseña: te mandamos un link por email.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "vos@ejemplo.com",
+    "sendLink": "Enviarme un link",
+    "sending": "Enviando…",
+    "sentTitle": "Revisá tu email",
+    "sentBody": "Te mandamos un link para entrar a {email}. Sirve una sola vez y vence en 1 hora.",
+    "invalidEmail": "Ingresá un email válido.",
+    "sendError": "No pudimos enviar el link. Esperá un minuto y probá de nuevo.",
+    "linkError": "Ese link no es válido o ya venció. Pedí uno nuevo."
   }
 }
