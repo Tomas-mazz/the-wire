@@ -8,7 +8,7 @@
 
 ## Principles
 1. **Less is more.** On arrival you see only the essentials: headlines and prices. Everything else opens on tap ("read more", tabs, dropdowns). The opposite of Yahoo Finance, which shows everything at once.
-2. **Color has meaning.** No decorative colors: white and grays for everything, and green/red only for gains and losses. A glance is enough to read the market.
+2. **Color has meaning.** No decorative colors: white and grays for everything, green/red only for gains and losses, and blue only as feedback when you hover or focus something. A glance is enough to read the market.
 3. **Generous spacing.** Wide margins and gaps. If something feels cramped, there is too much content.
 4. **Subtle motion.** Animations support the content and never distract.
 5. **Readable in under 5 minutes.** Every design decision should help with that.
@@ -28,6 +28,7 @@ Dark mode only. In code they are defined as CSS variables (*design tokens*): a s
 | `--text-muted` | `#8A8A8A` | Dates, sources, labels |
 | `--up` | `#3DD68C` | Gain (price and ▲ arrow) |
 | `--down` | `#FF5C5C` | Loss (price and ▼ arrow) |
+| `--glow` | `#4C8DFF` | Interaction only: soft blue glow and border on hovered/focused cards (decision 69) |
 
 No gradients.
 
@@ -84,7 +85,7 @@ No gradients.
 
 ## Animation (level: subtle)
 - **Reveal on scroll:** cards rise 8px and fade in (0.4 s).
-- **Card hover:** background changes to `--surface-hover` and the border lightens slightly.
+- **Card hover:** background changes to `--surface-hover`, the border turns `--glow` at low opacity and a soft blue glow appears around the card (0.2 s).
 - **Carousel:** continuous, slow movement.
 - **Ticker background:** drifts very slowly.
 - **Accessibility:** if the user has "reduce motion" enabled (`prefers-reduced-motion`), everything that moves on its own is turned off.
@@ -95,7 +96,7 @@ No gradients.
 - Everything is keyboard-accessible, with a visible white focus outline.
 
 ## Don'ts
-- No gradients or accent colors.
+- No gradients. Blue (`--glow`) is never used for text, prices or static decoration.
 - No photos or 3D illustrations.
 - Don't fill the screen with information: when in doubt, hide it behind "read more".
 - No flashy animations that distract from reading.

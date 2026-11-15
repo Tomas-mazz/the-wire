@@ -122,3 +122,48 @@ Each answer is recorded under its question (→ Answer:).
     → Answer: Crypto and US stocks/ETFs. Any stock or crypto I own can be added (symbol search).
 49. What does each buy/sell record store?
     → Answer: Asset, side (buy/sell), quantity, price, date, fee and broker/exchange.
+
+## 11. Investment tracker spec (decided 2026-11-15)
+The portfolio grows into a full investment tracker (a ledger, not a broker: no orders, no wallet connect, no trading APIs). This section refines decisions 41–49.
+50. Users?
+    → Answer: Every user creates their own account. Login (Supabase Auth: magic link + Google) is built first, before the tracker. Replaces 44 ("only me").
+51. What is it for?
+    → Answer: See my diversification and my average buy price (e.g. BTC), and whether I'm up (green) or down (red), in money and %.
+52. Current holdings to load?
+    → Answer: BTC, NVIDIA, AMD, Tesla, GoPro, Google.
+53. How are holdings organized?
+    → Answer: In "projects" (like photo albums): the user creates and names as many as they want, each with its own transactions. Optional fields: description, default broker, strategy, horizon, tags. Projects can be archived without losing history.
+54. Views?
+    → Answer: A main overview of everything (totals and diversification %), plus separate views per asset class (crypto only, stocks only) and per project.
+55. Base currency?
+    → Answer: USD for everyone in v1. Other currencies later.
+56. Transfers between projects?
+    → Answer: No. A sale is logged as a sell.
+57. Assets?
+    → Answer: US stocks/ETFs and all cryptos in v1; non-US stocks maybe later. Stablecoins count as cash. Fractional quantities are supported.
+58. Missing or delisted price?
+    → Answer: The user can enter the price manually.
+59. Data entry?
+    → Answer: Manual entry first. Right after, in v1: import from a screenshot, PDF or broker statement/CSV (Nordnet, Binance, Coinbase…), parsed by Claude (Haiku) and always shown in a review table before saving. This is also how the initial history gets loaded.
+60. Cost basis method?
+    → Answer: Weighted average cost only. No FIFO, no tax report.
+61. Fees?
+    → Answer: Optional field. When entered, buy fees add to cost basis and sell fees reduce proceeds.
+62. Dividends and staking rewards?
+    → Answer: Yes, in v1.
+63. Stock splits?
+    → Answer: Not in v1: trades are entered with the split-adjusted numbers the broker shows today. A "split" transaction type comes in v2.
+64. Prices?
+    → Answer: Crypto live via Binance (CoinGecko fallback), US stocks via Finnhub free tier (up to 15 min delay is fine). Latest prices are stored; daily price history comes with insights.
+65. Insights?
+    → Answer: In v2, for every crypto (and stock) the user holds: as complete as possible without overloading the screen. Methodology and a short disclaimer on each insight panel, full disclaimer in the footer. Never phrased as advice.
+66. Numbers and dates?
+    → Answer: Exact decimals (Postgres `numeric` + decimal.js, never floats). Dates stored in UTC and shown in the user's time zone, selectable by country in settings.
+67. Offline?
+    → Answer: Not needed.
+68. Export?
+    → Answer: CSV export in v1.
+69. Design?
+    → Answer: Same dark, clean style, plus a subtle blue glow when hovering cards. Charts in v1 (allocation donut). Desktop-first with a good mobile version.
+70. Workflow?
+    → Answer: Commit at the end of each step without asking. Don't push until the user says so.

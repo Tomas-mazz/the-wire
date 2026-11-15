@@ -17,7 +17,7 @@ Me and my friends. It's not a business (for now).
 - **Chatbot** to ask questions about the day's news.
 
 ## Portfolio (second product, current focus)
-A private investment portfolio under the same brand: I log my stock and crypto buys and sells, and see how much I have invested, my profit (money and %) and the share of each asset in a donut chart, with live prices. News is paused meanwhile.
+An investment tracker under the same brand (a ledger, not a broker): each user has an account, groups their stock and crypto transactions into named projects, and sees how much they have invested, their average buy price, profit (money and %) and diversification, with live prices. Later: educational statistics such as crypto seasonality. News is paused meanwhile.
 
 ## Visual style
 Futuristic, dark and clean, inspired by starknet.io: near-black background, white and grays, green/red only for prices.
