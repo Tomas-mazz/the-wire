@@ -1,18 +1,11 @@
 import { Suspense } from "react";
-import { notFound } from "next/navigation";
-import { hasLocale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import AuthErrorNotice from "@/components/auth/AuthErrorNotice";
 import LoginForm from "@/components/auth/LoginForm";
 import Header from "@/components/Header";
-import { routing } from "@/i18n/routing";
 
 /** Sign in or create an account (same flow). Signed-in users are sent to /portfolio by src/proxy.ts. */
-export default async function LoginPage({ params }: PageProps<"/[locale]/login">) {
-  const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) notFound();
-  setRequestLocale(locale);
-
+export default async function LoginPage() {
   const t = await getTranslations("Login");
 
   return (

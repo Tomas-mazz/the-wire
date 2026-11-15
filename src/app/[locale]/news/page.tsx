@@ -1,17 +1,11 @@
-import { notFound } from "next/navigation";
-import { hasLocale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import NewsBoard from "@/components/NewsBoard";
 import { SAMPLE_NEWS } from "@/data/sample-news";
-import { routing } from "@/i18n/routing";
 
-export default async function NewsPage({ params }: PageProps<"/[locale]/news">) {
-  const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) notFound();
-  setRequestLocale(locale);
-
+export default async function NewsPage() {
+  const locale = await getLocale();
   const t = await getTranslations("Footer");
 
   return (

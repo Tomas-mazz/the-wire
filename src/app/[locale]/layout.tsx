@@ -1,8 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
+import { locale as rootLocale } from "next/root-params";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
 
@@ -26,10 +27,8 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-export async function generateMetadata({
-  params,
-}: LayoutProps<"/[locale]">): Promise<Metadata> {
-  const { locale } = await params;
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await rootLocale();
   if (!hasLocale(routing.locales, locale)) return {};
 
   const t = await getTranslations({ locale, namespace: "Metadata" });
@@ -43,12 +42,11 @@ export async function generateMetadata({
   };
 }
 
-export default async function LocaleLayout({ children, params }: LayoutProps<"/[locale]">) {
-  const { locale } = await params;
+/** Root layout: every page lives under /en or /es. */
+export default async function LocaleLayout({ children }: LayoutProps<"/[locale]">) {
+  const locale = await rootLocale();
   if (!hasLocale(routing.locales, locale)) notFound();
 
-  // Lets next-intl render this locale statically (no per-request headers needed).
-  setRequestLocale(locale);
 
   return (
     <html

@@ -1,17 +1,10 @@
 import { Suspense } from "react";
-import { notFound } from "next/navigation";
-import { hasLocale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import Header from "@/components/Header";
-import { routing } from "@/i18n/routing";
 import { requireUser } from "@/lib/auth";
 
 /** Private portfolio. The header renders instantly; the content waits for the session check. */
-export default async function PortfolioPage({ params }: PageProps<"/[locale]/portfolio">) {
-  const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) notFound();
-  setRequestLocale(locale);
-
+export default async function PortfolioPage() {
   const t = await getTranslations("Portfolio");
 
   return (
@@ -19,14 +12,15 @@ export default async function PortfolioPage({ params }: PageProps<"/[locale]/por
       <Header />
       <main className="mx-auto w-full max-w-[1200px] flex-1 px-4 py-16 sm:px-6 sm:py-24">
         <Suspense fallback={<p className="text-sm text-muted">{t("loading")}</p>}>
-          <PortfolioContent locale={locale} />
+          <PortfolioContent />
         </Suspense>
       </main>
     </>
   );
 }
 
-async function PortfolioContent({ locale }: { locale: string }) {
+async function PortfolioContent() {
+  const locale = await getLocale();
   // Verifies the session (or redirects to /login) before anything private renders.
   await requireUser(locale);
   const t = await getTranslations("Portfolio");

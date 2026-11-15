@@ -1,18 +1,11 @@
 import { ChartPie, Newspaper } from "lucide-react";
-import { notFound } from "next/navigation";
-import { hasLocale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import Header from "@/components/Header";
 import SectionCard from "@/components/SectionCard";
 import TickerBackground from "@/components/TickerBackground";
-import { routing } from "@/i18n/routing";
 
 /** The Wire home: brand hero + one card per section (Portfolio active, News paused). */
-export default async function Home({ params }: PageProps<"/[locale]">) {
-  const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) notFound();
-  setRequestLocale(locale);
-
+export default async function Home() {
   const t = await getTranslations("Landing");
 
   return (

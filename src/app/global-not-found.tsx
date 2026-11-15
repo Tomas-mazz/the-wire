@@ -1,6 +1,6 @@
 import "./globals.css";
 
-/** 404 for URLs outside any locale (rare: the proxy adds a locale to almost every path). */
+/** 404 for URLs that match no route. Bypasses the layouts, so it brings its own <html> and styles. */
 export default function GlobalNotFound() {
   return (
     <html lang="en">
