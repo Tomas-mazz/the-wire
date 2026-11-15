@@ -16,6 +16,9 @@ Me and my friends. It's not a business (for now).
 - **Automatic daily updates.**
 - **Chatbot** to ask questions about the day's news.
 
+## Portfolio (second product, current focus)
+A private investment portfolio under the same brand: I log my stock and crypto buys and sells, and see how much I have invested, my profit (money and %) and the share of each asset in a donut chart, with live prices. News is paused meanwhile.
+
 ## Visual style
 Futuristic, dark and clean, inspired by starknet.io: near-black background, white and grays, green/red only for prices.
 (It used to be an "old stock exchange" look; changed on 2026-11-11. Full guide in `STYLE.md`.)

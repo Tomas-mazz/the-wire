@@ -102,3 +102,23 @@ Each answer is recorded under its question (→ Answer:).
     → Answer: USD 0–5.
 40. How will you know the site works well for you?
     → Answer: I get informed in under 5 minutes, I open it every day, and it runs on its own.
+
+## 10. Portfolio (decided 2026-11-14)
+41. What happens to the news site?
+    → Answer: Paused. The code stays in the repo to resume later.
+42. What is the new project?
+    → Answer: A personal investment portfolio under the same brand (The Wire). I log my stock and crypto buys and sells and see how much I have invested, my profit and the % of each asset (donut chart), with live prices.
+43. Same app or a separate project?
+    → Answer: Same Next.js app and Vercel deploy, as a new section (`/portfolio`). It shares the design, fonts, languages and header.
+44. Who can see the portfolio and where is the data stored?
+    → Answer: Only me, with login. Data lives in a cloud database so it syncs between phone and computer.
+45. Database and login provider?
+    → Answer: Supabase (Postgres + Auth). Row Level Security so each row is only readable by its owner. (This also settles question 33: Supabase over Neon.)
+46. What does the home page show?
+    → Answer: A The Wire landing with two cards: Portfolio (active) and News ("coming soon").
+47. Display currency?
+    → Answer: USD by default, with a selector to switch currency (converted with daily exchange rates).
+48. Which assets?
+    → Answer: Crypto and US stocks/ETFs. Any stock or crypto I own can be added (symbol search).
+49. What does each buy/sell record store?
+    → Answer: Asset, side (buy/sell), quantity, price, date, fee and broker/exchange.

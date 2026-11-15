@@ -3,8 +3,24 @@
 Decisions: `QUESTIONS.md`. Style: `STYLE.md`. Each step ends in something you can see or test, and gets reviewed on mobile and desktop before moving on.
 
 **Stack:** Next.js (App Router) + TypeScript · Tailwind CSS · Postgres in the cloud (Supabase or Neon) · Vercel · GitHub (public repo) · Claude API (low-cost model, Haiku) for summaries.
+**Stack (portfolio):** Supabase (Postgres + Auth) for data and login.
 **Constraints:** under 5 h/week · USD 0–5/month.
 **Language:** everything in the repo (code, comments, commits, docs) is in English. The UI is bilingual (ES/EN).
+
+## Portfolio — current focus
+Personal stock and crypto portfolio under The Wire brand (decisions 41–49 in `QUESTIONS.md`). Lives in the same app at `/portfolio`, private behind login.
+
+P1. **Landing + routes:** The Wire home with two cards (Portfolio active, News "coming soon"); move the sample news page to `/news`.
+P2. **Supabase + login:** Supabase project, env vars in Vercel, login page, `/portfolio` protected; sign-ups disabled so only my account exists.
+P3. **Database:** `transactions` table (owner, symbol, asset type stock/crypto, side buy/sell, quantity, price, fee, broker, date) with Row Level Security.
+P4. **Log trades:** form to add, edit and delete buys/sells, with symbol search for any US stock/ETF or crypto; trades list.
+P5. **Portfolio math:** holdings from trades (average cost), total invested, profit in money and %, and a donut chart with the % of each asset.
+P6. **Live prices:** crypto via Binance WebSocket; US stocks via a free API (Finnhub, to be evaluated). Profit updates live.
+P7. **Currency selector:** USD by default, other currencies converted with daily exchange rates.
+P8. **Polish and one week of real use.**
+
+## News — paused
+Paused on 2026-11-14 in favor of the portfolio. Steps 1–3 are done; resume at step 4.
 
 ## Version 1 — the minimum to start using it
 1. ✅ **Project setup:** GitHub repo, Next.js + TypeScript project, first Vercel deploy (https://the-wire-gamma.vercel.app) and `.env.example`.
