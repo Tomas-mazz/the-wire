@@ -1,11 +1,16 @@
 {
   "Metadata": {
     "title": "The Wire",
-    "description": "Noticias resumidas, sin saturarte."
+    "description": "Tus mercados en un solo lugar: portafolio y noticias."
   },
   "Header": {
     "language": "Idioma",
-    "comingSoon": "Próximamente"
+    "comingSoon": "Próximamente",
+    "nav": {
+      "label": "Secciones",
+      "portfolio": "Portafolio",
+      "news": "Noticias"
+    }
   },
   "Hero": {
     "heading": "Lo importante de hoy.",
@@ -26,5 +31,21 @@
   },
   "Footer": {
     "note": "The Wire · Noticias de ejemplo para la vista previa"
+  },
+  "Landing": {
+    "tagline": "Tus mercados, en un solo lugar.",
+    "intro": "Seguí tus acciones y cripto con precios en tiempo real. Los resúmenes diarios de noticias vuelven pronto.",
+    "sectionsLabel": "Secciones",
+    "portfolioTitle": "Portafolio",
+    "portfolioDescription": "Tus acciones y cripto: capital invertido, ganancia y el peso de cada activo, con precios en vivo.",
+    "newsTitle": "Noticias",
+    "newsDescription": "Las noticias más importantes del día, resumidas en pocas líneas.",
+    "paused": "Próximamente",
+    "open": "Abrir"
+  },
+  "Portfolio": {
+    "heading": "Portafolio",
+    "intro": "Tus acciones y cripto, con precios en vivo.",
+    "placeholder": "En construcción · el login y tus inversiones llegan en los próximos pasos."
   }
 }

@@ -1,11 +1,16 @@
 {
   "Metadata": {
     "title": "The Wire",
-    "description": "News summaries without the overload."
+    "description": "Your markets, in one place: portfolio and news."
   },
   "Header": {
     "language": "Language",
-    "comingSoon": "Coming soon"
+    "comingSoon": "Coming soon",
+    "nav": {
+      "label": "Sections",
+      "portfolio": "Portfolio",
+      "news": "News"
+    }
   },
   "Hero": {
     "heading": "What matters today.",
@@ -26,5 +31,21 @@
   },
   "Footer": {
     "note": "The Wire · Sample stories for design preview"
+  },
+  "Landing": {
+    "tagline": "Your markets, in one place.",
+    "intro": "Track your stocks and crypto with live prices. Daily news summaries are coming back soon.",
+    "sectionsLabel": "Sections",
+    "portfolioTitle": "Portfolio",
+    "portfolioDescription": "Your stocks and crypto: invested capital, profit and the weight of each asset, with live prices.",
+    "newsTitle": "News",
+    "newsDescription": "The day's most important stories, summarized in a few lines.",
+    "paused": "Coming soon",
+    "open": "Open"
+  },
+  "Portfolio": {
+    "heading": "Portfolio",
+    "intro": "Your stocks and crypto, with live prices.",
+    "placeholder": "Under construction · login and your holdings arrive in the next steps."
   }
 }

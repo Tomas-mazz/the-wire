@@ -10,7 +10,7 @@ Decisions: `QUESTIONS.md`. Style: `STYLE.md`. Each step ends in something you ca
 ## Portfolio — current focus
 Personal stock and crypto portfolio under The Wire brand (decisions 41–49 in `QUESTIONS.md`). Lives in the same app at `/portfolio`, private behind login.
 
-P1. **Landing + routes:** The Wire home with two cards (Portfolio active, News "coming soon"); move the sample news page to `/news`.
+P1. ✅ **Landing + routes:** The Wire home with two cards (Portfolio active, News "coming soon"); move the sample news page to `/news`.
 P2. **Supabase + login:** Supabase project, env vars in Vercel, login page, `/portfolio` protected; sign-ups disabled so only my account exists.
 P3. **Database:** `transactions` table (owner, symbol, asset type stock/crypto, side buy/sell, quantity, price, fee, broker, date) with Row Level Security.
 P4. **Log trades:** form to add, edit and delete buys/sells, with symbol search for any US stock/ETF or crypto; trades list.
