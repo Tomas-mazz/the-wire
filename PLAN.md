@@ -83,7 +83,7 @@ Holdings table columns: asset, quantity, avg cost, last price, market value, unr
 Paused on 2026-11-14 in favor of the portfolio. Steps 1–3 are done; resume at step 4.
 
 ## Version 1 — the minimum to start using it
-1. ✅ **Project setup:** GitHub repo, Next.js + TypeScript project, first Vercel deploy (https://the-wire-gamma.vercel.app) and `.env.example`.
+1. ✅ **Project setup:** GitHub repo, Next.js + TypeScript project, first Vercel deploy (https://the-wire-seven.vercel.app) and `.env.example`.
 2. ✅ **Base design (no real data):** CSS color tokens, Inter + JetBrains Mono fonts, header, hero with ticker background, 3+2 news cards with "read more", using sample news (per `STYLE.md`).
 3. ✅ **Bilingual:** ES/EN UI strings, browser language detection and a language switcher (next-intl, `/en` and `/es` URLs, `src/proxy.ts`).
 4. **Database:** Postgres and a news table (date, topic, country, importance, ES/EN text, source link). History is stored from day one.
