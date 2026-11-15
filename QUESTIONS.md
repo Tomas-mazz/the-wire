@@ -169,3 +169,7 @@ The portfolio grows into a full investment tracker (a ledger, not a broker: no o
     → Answer: Commit at the end of each step without asking. Don't push until the user says so.
 71. Sign in with Google?
     → Answer: No. Email magic link only (decided 2026-11-15).
+72. Editing the Supabase auth email template?
+    → Answer: Not possible without custom SMTP on the free plan. Keep the default email for now (the link must be opened in the same browser). Set up custom SMTP in M8.
+73. How is the session shown?
+    → Answer: In the header, like most sites: a person icon + "Sign in" when signed out; a round avatar with the user's initial when signed in, opening a menu with the email, Portfolio and Sign out.

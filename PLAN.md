@@ -55,18 +55,21 @@ Holdings table columns: asset, quantity, avg cost, last price, market value, unr
 - API keys live only in server env vars (Vercel), never in the browser or git.
 
 ### Milestones (v1)
-- **M1. Accounts:** Supabase project, env vars, sign up/in with an email magic link, `profiles`, protected `/portfolio`, sign out.
+- **M1. ✅ Accounts:** Supabase project, env vars, sign up/in with an email magic link, `profiles` (migration `20261115120000_profiles.sql`), protected `/portfolio`, account menu in the header (avatar with initial + sign out). Locale read via `next/root-params`.
 - **M2. Portfolio math:** `src/domain` with decimal.js + Vitest tests for buy/sell/fees/rewards/dividends/cash/edge cases.
 - **M3. Database:** tables above (except `daily_prices`), RLS policies, audit trail trigger.
 - **M4. Projects + transactions:** create/edit/archive projects, add/edit/delete transactions, asset search, transactions list with filters.
 - **M5. Prices + holdings:** provider interface, Binance + Finnhub, cached prices, holdings table with live P/L and stale/missing states.
 - **M6. Dashboards:** Overview, Crypto, Stocks and project views, allocation donut, top winners/losers, blue hover glow.
 - **M7. Import:** CSV (Nordnet, Binance, Coinbase) and AI screenshot/PDF import with review table.
-- **M8. Settings + polish:** language, country/time zone, CSV export, disclaimers, one week of real use.
+- **M8. Settings + polish:** language, country/time zone, CSV export, disclaimers, custom SMTP for auth emails (editable template that works across devices, higher email limit), one week of real use.
 
 ### Later
 - **v2:** daily price history, insights (seasonality by day of month/week and month of year, drawdowns, volatility), portfolio value chart, split transactions, display currencies with FX, non-US stocks, quick DCA entry.
 - **v3:** benchmarks (SPY, BTC), time-weighted / money-weighted returns, price alerts.
+
+### Housekeeping
+- Upgrade local Node.js from 20 to 22+ (Supabase deprecates Node 20).
 
 ### Risks
 - **Wrong numbers** → domain isolated and unit-tested; check results against real broker statements.
