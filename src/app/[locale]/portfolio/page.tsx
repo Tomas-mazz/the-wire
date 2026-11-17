@@ -44,7 +44,6 @@ async function Overview() {
       <h2 id="holdings-title" className="text-xl font-bold text-fg">
         {t("overview.holdingsTitle")}
       </h2>
-      <p className="text-sm text-muted">{t("overview.pricesSoon")}</p>
       {problemSymbols.length > 0 && (
         <p role="alert" className="rounded-xl border border-down/40 px-4 py-3 text-sm text-down">
           {t("overview.problems", { assets: problemSymbols.join(", ") })}

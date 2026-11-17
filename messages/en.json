@@ -72,17 +72,27 @@
       "holdingsTitle": "Holdings",
       "empty": "No transactions yet. Add your first buy to see your holdings here.",
       "emptyCta": "Add a transaction",
-      "pricesSoon": "Live prices and profit/loss arrive in the next step. For now: what you hold and what you paid.",
-      "problems": "Some transactions can't be calculated because a sale is larger than what was held: {assets}. Check their dates and quantities."
+      "problems": "Some transactions can't be calculated because a sale is larger than what was held: {assets}. Check their dates and quantities.",
+      "live": "Live: crypto updates every second",
+      "polling": "Prices update every 30 seconds",
+      "summary": "Realized P/L: {realized} · Dividends: {income} · Total P/L: {total}",
+      "missingPrices": "{count, plural, one {# position has no price and is} other {# positions have no price and are}} left out of the totals.",
+      "sources": "Prices: Binance, Finnhub and <coingecko>CoinGecko</coingecko>. Crypto is quoted in USDT (≈ USD). For information only, not advice."
     },
     "holdings": {
       "asset": "Asset",
       "quantity": "Quantity",
       "avgCost": "Avg. cost",
-      "invested": "Invested",
-      "realized": "Realized P/L",
-      "income": "Dividends",
-      "closed": "closed"
+      "closed": "closed",
+      "price": "Price",
+      "value": "Value",
+      "unrealized": "Unrealized P/L",
+      "allocation": "% of portfolio",
+      "total": "Total",
+      "noPrice": "No price",
+      "stale": "Out of date · {age}",
+      "staleHint": "The price providers have not answered for a while, so this is the last known price.",
+      "day": "24 h"
     },
     "assetClasses": {
       "stock": "Stock",

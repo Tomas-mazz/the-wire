@@ -45,3 +45,21 @@ export function formatDateTime(iso: string, locale: string, timeZone: string): s
 export function formatDate(iso: string, locale: string, timeZone: string): string {
   return new Intl.DateTimeFormat(locale, { timeZone, dateStyle: "medium" }).format(new Date(iso));
 }
+
+/** A fraction as a percent with up to 2 decimals, without sign (0.0125 → "1.25 %"). */
+export function formatPercent(fraction: Exact, locale: string): string {
+  const text = exact(fraction).replace(/^-/, "");
+  return new Intl.NumberFormat(locale, { style: "percent", maximumFractionDigits: 2 }).format(
+    text as Intl.StringNumericLiteral,
+  );
+}
+
+/** How long ago, in words ("5 minutes ago", "hace 5 minutos"). */
+export function formatAge(iso: string, now: number, locale: string): string {
+  const seconds = Math.max(0, Math.round((now - Date.parse(iso)) / 1000));
+  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
+  if (seconds < 60) return rtf.format(-seconds, "second");
+  if (seconds < 3600) return rtf.format(-Math.floor(seconds / 60), "minute");
+  if (seconds < 86_400) return rtf.format(-Math.floor(seconds / 3600), "hour");
+  return rtf.format(-Math.floor(seconds / 86_400), "day");
+}
