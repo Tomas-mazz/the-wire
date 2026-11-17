@@ -53,8 +53,174 @@
   "Portfolio": {
     "heading": "Portafolio",
     "intro": "Tus acciones y cripto, con precios en vivo.",
-    "placeholder": "En construcción · tus proyectos e inversiones llegan en los próximos pasos.",
-    "loading": "Verificando tu sesión…"
+    "loading": "Cargando…",
+    "defaultProject": "Principal",
+    "addTransaction": "Transacción",
+    "addTransactionLabel": "Agregar una transacción",
+    "tabs": {
+      "label": "Secciones del portafolio",
+      "overview": "Resumen",
+      "projects": "Proyectos",
+      "transactions": "Transacciones"
+    },
+    "error": {
+      "title": "Algo salió mal",
+      "body": "No pudimos cargar esta página. Tus datos están a salvo.",
+      "retry": "Reintentar"
+    },
+    "notFound": "No encontrado. Puede que se haya borrado o que no sea tuyo.",
+    "overview": {
+      "holdingsTitle": "Posiciones",
+      "empty": "Todavía no hay transacciones. Cargá tu primera compra para ver tus posiciones acá.",
+      "emptyCta": "Agregar una transacción",
+      "pricesSoon": "Los precios en vivo y la ganancia/pérdida llegan en el próximo paso. Por ahora: qué tenés y cuánto pagaste.",
+      "problems": "Algunas transacciones no se pueden calcular porque una venta es mayor que lo que había: {assets}. Revisá sus fechas y cantidades."
+    },
+    "holdings": {
+      "asset": "Activo",
+      "quantity": "Cantidad",
+      "avgCost": "Costo prom.",
+      "invested": "Invertido",
+      "realized": "G/P realizada",
+      "income": "Dividendos",
+      "closed": "cerrada"
+    },
+    "assetClasses": {
+      "stock": "Acción",
+      "etf": "ETF",
+      "crypto": "Cripto",
+      "cash": "Efectivo"
+    },
+    "types": {
+      "buy": "Compra",
+      "sell": "Venta",
+      "deposit": "Depósito",
+      "withdrawal": "Retiro",
+      "dividend": "Dividendo",
+      "reward": "Recompensa"
+    },
+    "projects": {
+      "title": "Proyectos",
+      "intro": "Agrupá tus transacciones por objetivo, como álbumes.",
+      "new": "Nuevo proyecto",
+      "archivedTitle": "Archivados ({count})",
+      "archivedBadge": "Archivado",
+      "archive": "Archivar",
+      "unarchive": "Restaurar",
+      "archiveHint": "Archivar oculta el proyecto de listas y formularios. No se borra nada.",
+      "transactions": "{count, plural, =0 {Sin transacciones} one {# transacción} other {# transacciones}}",
+      "edit": "Editar datos",
+      "cash": "Efectivo",
+      "cashNegative": "El efectivo está por debajo de cero: puede faltar un depósito.",
+      "recent": "Transacciones",
+      "viewAll": "Ver todas en Transacciones",
+      "back": "Todos los proyectos"
+    },
+    "projectForm": {
+      "name": "Nombre",
+      "namePlaceholder": "ej. Retiro",
+      "description": "Descripción",
+      "moreOptions": "Más opciones",
+      "defaultBroker": "Broker habitual",
+      "strategy": "Estrategia",
+      "horizon": "Horizonte",
+      "horizonPlaceholder": "ej. 10+ años",
+      "tags": "Etiquetas",
+      "tagsHint": "Separadas por comas.",
+      "trackCash": "Seguir el efectivo",
+      "trackCashHint": "Cuenta depósitos y retiros para mostrar cuánto efectivo queda en este proyecto.",
+      "create": "Crear proyecto",
+      "save": "Guardar cambios",
+      "saving": "Guardando…",
+      "saved": "Guardado.",
+      "errors": {
+        "required": "Obligatorio.",
+        "too_long": "Demasiado largo.",
+        "too_many": "Hasta 10 etiquetas."
+      }
+    },
+    "transactions": {
+      "title": "Transacciones",
+      "empty": "Todavía no hay transacciones.",
+      "emptyFiltered": "Ninguna transacción coincide con estos filtros.",
+      "limitNote": "Se muestran las últimas {count}. Usá los filtros para encontrar las anteriores.",
+      "filters": {
+        "label": "Filtros",
+        "project": "Proyecto",
+        "asset": "Activo",
+        "type": "Tipo",
+        "from": "Desde",
+        "to": "Hasta",
+        "all": "Todos",
+        "apply": "Aplicar",
+        "clear": "Limpiar"
+      },
+      "columns": {
+        "date": "Fecha",
+        "asset": "Activo",
+        "type": "Tipo",
+        "quantity": "Cantidad",
+        "price": "Precio",
+        "fee": "Comisión",
+        "total": "Total",
+        "project": "Proyecto"
+      },
+      "edit": "Editar",
+      "editLabel": "Editar {type} de {asset} del {date}"
+    },
+    "transactionForm": {
+      "newTitle": "Nueva transacción",
+      "editTitle": "Editar transacción",
+      "intro": "Registrá lo que ya hiciste en tu broker. Acá no se compra ni se vende nada.",
+      "project": "Proyecto",
+      "type": "Tipo",
+      "asset": "Activo",
+      "searchAsset": "Buscar por símbolo o nombre",
+      "noMatches": "Sin resultados.",
+      "addNew": "¿No está en la lista? Agregalo",
+      "chooseExisting": "Elegir de la lista",
+      "change": "Cambiar",
+      "symbol": "Símbolo",
+      "symbolPlaceholder": "ej. BTC o AAPL",
+      "name": "Nombre",
+      "namePlaceholder": "ej. Bitcoin",
+      "assetClass": "Tipo de activo",
+      "date": "Fecha y hora",
+      "timeZoneNote": "En tu zona horaria ({timeZone}).",
+      "quantity": "Cantidad",
+      "amount": "Monto (USD)",
+      "shares": "Acciones",
+      "unitPrice": "Precio por unidad (USD)",
+      "perShare": "Dividendo por acción (USD)",
+      "fee": "Comisión (USD)",
+      "withholding": "Comisión o impuesto retenido (USD)",
+      "rewardHint": "Las recompensas (staking, airdrops) son gratis: bajan tu costo promedio.",
+      "decimalHint": "Usá punto o coma para los decimales, sin separador de miles.",
+      "broker": "Broker",
+      "note": "Nota",
+      "optional": "opcional",
+      "save": "Guardar",
+      "saving": "Guardando…",
+      "cancel": "Cancelar",
+      "delete": "Borrar",
+      "deleting": "Borrando…",
+      "confirmDelete": "¿Borrar esta transacción? No se puede deshacer.",
+      "errors": {
+        "required": "Obligatorio.",
+        "invalid": "No es válido.",
+        "invalid_number": "Escribí un número, ej. 0,5 o 1500.",
+        "ambiguous_number": "Ambiguo: escribilo sin separador de miles (1500) o con más decimales (1,5).",
+        "must_be_positive": "Tiene que ser mayor que 0.",
+        "too_long": "Demasiado largo.",
+        "future_date": "La fecha no puede ser futura."
+      },
+      "messages": {
+        "unauthorized": "Tu sesión terminó. Volvé a iniciar sesión.",
+        "not_found": "Esta transacción ya no existe.",
+        "would_oversell": "Esto dejaría una venta mayor que lo que tenías en esa fecha. Revisá las fechas y cantidades.",
+        "save_failed": "No se pudo guardar. Intentá de nuevo."
+      }
+    }
   },
   "Login": {
     "title": "Iniciar sesión",

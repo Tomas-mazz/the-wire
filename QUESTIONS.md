@@ -185,3 +185,9 @@ The portfolio grows into a full investment tracker (a ledger, not a broker: no o
     → Answer: Automatically. The Supabase GitHub integration ("Deploy to production") applies new files in `supabase/migrations` when they are merged to `main`. No more pasting into the SQL Editor. The profiles migration was made idempotent because it had been applied by hand (decided 2026-11-17).
 79. Who maintains the shared asset catalogue?
     → Answer: Any signed-in user can read it and add a missing asset (e.g. from the search in M4); nobody can edit or delete assets from the app. Duplicates (same class, symbol and exchange) are rejected by the database (decided 2026-11-17).
+80. First project?
+    → Answer: Created automatically ("Main" / "Principal") on the first visit, and can be renamed. A transaction always has a project (decided 2026-11-17).
+81. Asset search before price providers (M5)?
+    → Answer: M4 searches the shared catalogue and lets the user add a missing asset by hand (symbol, name, kind: stock / ETF / crypto). Provider search comes in M5 (decided 2026-11-17).
+82. Portfolio screen layout?
+    → Answer: Tabs under /portfolio: Overview · Projects · Transactions, each project with its own page, and a "+ Transaction" button always visible (decided 2026-11-17).

@@ -12,6 +12,7 @@ import {
   parseProjectForm,
   parseTransactionForm,
   type AssetChoice,
+  type FieldError,
   type ProjectField,
   type TransactionField,
   type TransactionInput,
@@ -28,18 +29,32 @@ import { createClient } from "@/lib/supabase/server";
 
 export type ActionMessage = "unauthorized" | "not_found" | "would_oversell" | "save_failed";
 
-export type FormState<F extends string> =
+export type FormState<F extends string, E extends string> =
   | { status: "idle" }
   | { status: "saved" }
-  | { status: "error"; errors?: Partial<Record<F, string>>; message?: ActionMessage };
+  | {
+      status: "error";
+      errors?: Partial<Record<F, E>>;
+      message?: ActionMessage;
+      /** What the user typed: React 19 resets forms after an action, so they refill from this. */
+      values?: Record<string, string>;
+    };
 
-export type ProjectFormState = FormState<ProjectField>;
-export type TransactionFormState = FormState<TransactionField>;
+export type ProjectFormState = FormState<ProjectField, "required" | "too_long" | "too_many">;
+export type TransactionFormState = FormState<TransactionField, FieldError>;
 
 type Supabase = Awaited<ReturnType<typeof createClient>>;
 
 function safeLocale(locale: string) {
   return hasLocale(routing.locales, locale) ? locale : routing.defaultLocale;
+}
+
+function typed(form: FormData): Record<string, string> {
+  const values: Record<string, string> = {};
+  for (const [key, value] of form.entries()) {
+    if (typeof value === "string" && !key.startsWith("$")) values[key] = value;
+  }
+  return values;
 }
 
 // ---------------------------------------------------------------------------
@@ -67,7 +82,7 @@ export async function createProject(
   const user = await getActionUser();
   if (!user) return { status: "error", message: "unauthorized" };
   const parsed = parseProjectForm(form);
-  if (!parsed.ok) return { status: "error", errors: parsed.errors };
+  if (!parsed.ok) return { status: "error", errors: parsed.errors, values: typed(form) };
 
   const supabase = await createClient();
   const { data, error } = await supabase
@@ -77,7 +92,7 @@ export async function createProject(
     .single();
   if (error) {
     console.error("createProject failed:", error.message);
-    return { status: "error", message: "save_failed" };
+    return { status: "error", message: "save_failed", values: typed(form) };
   }
   redirect(`/${safeLocale(locale)}/portfolio/projects/${data.id}`);
 }
@@ -91,7 +106,7 @@ export async function updateProject(
   if (!user) return { status: "error", message: "unauthorized" };
   if (!isUuid(projectId)) return { status: "error", message: "not_found" };
   const parsed = parseProjectForm(form);
-  if (!parsed.ok) return { status: "error", errors: parsed.errors };
+  if (!parsed.ok) return { status: "error", errors: parsed.errors, values: typed(form) };
 
   const supabase = await createClient();
   const { data, error } = await supabase
@@ -101,7 +116,7 @@ export async function updateProject(
     .select("id");
   if (error) {
     console.error("updateProject failed:", error.message);
-    return { status: "error", message: "save_failed" };
+    return { status: "error", message: "save_failed", values: typed(form) };
   }
   if (data.length === 0) return { status: "error", message: "not_found" };
   refresh();
@@ -235,7 +250,7 @@ export async function saveTransaction(
   }
 
   const parsed = parseTransactionForm(form);
-  if (!parsed.ok) return { status: "error", errors: parsed.errors };
+  if (!parsed.ok) return { status: "error", errors: parsed.errors, values: typed(form) };
   const input = parsed.value;
 
   const supabase = await createClient();
@@ -246,10 +261,10 @@ export async function saveTransaction(
     .select("id")
     .eq("id", input.projectId)
     .maybeSingle();
-  if (!project.data) return { status: "error", errors: { projectId: "invalid" } };
+  if (!project.data) return { status: "error", errors: { projectId: "invalid" }, values: typed(form) };
 
   const assetId = await resolveAsset(supabase, input.asset);
-  if (!assetId) return { status: "error", errors: { asset: "invalid" } };
+  if (!assetId) return { status: "error", errors: { asset: "invalid" }, values: typed(form) };
 
   let previous: { project_id: string; asset_id: string; created_at: string } | null = null;
   if (transactionId) {
@@ -283,7 +298,7 @@ export async function saveTransaction(
     previous !== null && movedAway
       ? await ledgerStaysValid(supabase, previous.project_id, previous.asset_id, withoutThis)
       : true;
-  if (!targetOk || !sourceOk) return { status: "error", message: "would_oversell" };
+  if (!targetOk || !sourceOk) return { status: "error", message: "would_oversell", values: typed(form) };
 
   const row = transactionRow(input, assetId);
   const { error } = transactionId
@@ -291,7 +306,7 @@ export async function saveTransaction(
     : await supabase.from("transactions").insert({ ...row, source: "manual" });
   if (error) {
     console.error("saveTransaction failed:", error.message);
-    return { status: "error", message: "save_failed" };
+    return { status: "error", message: "save_failed", values: typed(form) };
   }
   redirect(`/${safeLocale(locale)}/portfolio/transactions`);
 }
