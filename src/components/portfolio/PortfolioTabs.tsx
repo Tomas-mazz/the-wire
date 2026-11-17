@@ -29,17 +29,20 @@ export function TabList({ pathname }: { pathname: string | null }) {
   ] as const;
 
   return (
-    <nav aria-label={t("label")} className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
-      <ul className="flex gap-2">
+    // Underlined tabs, like the site header; the row scrolls sideways on small phones.
+    <nav aria-label={t("label")} className="h-full min-w-0 overflow-x-auto">
+      <ul className="flex h-full gap-5 sm:gap-7">
         {tabs.map((tab) => (
-          <li key={tab.href}>
+          <li key={tab.href} className="h-full">
             <Link
               href={tab.href}
               aria-current={tab.active ? "page" : undefined}
-              className={`block rounded-full px-4 py-2 text-sm whitespace-nowrap transition-colors ${
+              // Active tab: white and bold with a 2px amethyst line on the bar's
+              // bottom edge (an inset shadow, so the text never moves).
+              className={`flex h-full items-center text-sm whitespace-nowrap transition-colors ${
                 tab.active
-                  ? "bg-accent font-semibold text-accent-ink"
-                  : "border border-line-strong text-body hover:border-accent hover:text-fg"
+                  ? "font-semibold text-fg shadow-[inset_0_-2px_0_var(--color-accent)]"
+                  : "text-muted hover:text-fg"
               }`}
             >
               {tab.label}

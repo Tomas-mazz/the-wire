@@ -188,8 +188,24 @@ The portfolio grows into a full investment tracker (a ledger, not a broker: no o
 80. First project?
     → Answer: Created automatically ("Main" / "Principal") on the first visit, and can be renamed. A transaction always has a project (decided 2026-11-17).
 81. Asset search before price providers (M5)?
-    → Answer: M4 searches the shared catalogue and lets the user add a missing asset by hand (symbol, name, kind: stock / ETF / crypto). Provider search comes in M5 (decided 2026-11-17).
+    → Answer: M4 searches the shared catalogue and lets the user add a missing asset by hand (symbol, name, kind: stock / ETF / crypto). Provider search comes in M5 (decided 2026-11-17). Done: typing 2+ letters also searches Finnhub (US stocks/ETFs) and CoinGecko (crypto); picking a result fills in the new asset and saves the provider id so prices match exactly.
 82. Portfolio screen layout?
     → Answer: Tabs under /portfolio: Overview · Projects · Transactions, each project with its own page, and a "+ Transaction" button always visible (decided 2026-11-17).
 83. Colors?
     → Answer: Three main colors, palette "Amethyst": black #0B0B0B (page), deep violet #33204F (borders, card tint #140F1F) and amethyst #B57CFF (primary buttons, active tabs, links, asset symbols, focus, hover light). Clickable cards get a beam of light that travels around the border on hover, and everything clickable shows the pointing hand. Chosen over blue and other violet options shown side by side. Replaces the plain white accents and the soft blue glow of decision 69 (decided 2026-11-17).
+84. Portfolio sections?
+    → Answer: Three: Overview (all investments), Crypto (all coins, BTC first) and Stocks. Each has 4 compact summary cards on top, an allocation donut, and more detail below to be defined later (decided 2026-11-17).
+85. Which summary cards?
+    → Answer: Overview: current value, total P/L, today's change, news. Crypto: BTC average buy price, BTC P/L, total crypto value, news. Stocks: total stocks value, stocks P/L, best and worst of the day, news. Average buy price is shown for BTC only for now (decided 2026-11-17).
+86. Green or red card numbers?
+    → Answer: All numbers on a section's cards follow that section's result: green in profit, red at a loss. For Crypto it is the BTC price against the BTC average buy price (decided 2026-11-17).
+87. News card while the news product is paused?
+    → Answer: Shows the most important sample story (short headline + "Open →") in all three sections; real news, by topic, comes later (decided 2026-11-17).
+88. Portfolio header?
+    → Answer: Highlight the current section in the site header (Portfolio / News), remove the "Portfolio · Your stocks and crypto…" title block, and move the tabs and "+ Transaction" button to a better place. Chosen from options shown side by side: the active link gets an amethyst underline on the header's edge (over a pill or a bigger link), and the tabs plus "+ Transaction" go in a sticky sub-bar under the header, only as wide as the content so it reads as the portfolio's own header (over a toolbar row, tabs inside the header or a sidebar; a sidebar was built first and then dropped by the user). Done before M5 as step S2 (decided 2026-11-17).
+89. Where do prices come from?
+    → Answer: Crypto from Binance's public market data, with CoinGecko as automatic fallback (Binance may block Vercel's US servers with HTTP 451). US stocks and ETFs from Finnhub's free plan. Prices are cached server-side in `latest_prices`, written only with the Supabase secret key (decided 2026-11-17).
+90. How "live" are prices?
+    → Answer: Crypto updates every second in the browser over Binance's WebSocket; everything else (and crypto as a backup) is refreshed every 30 s while the page is open (decided 2026-11-17).
+91. Manual prices?
+    → Answer: Set right in the holdings table: an open position with "No price" shows "Set price", which opens a small field in the cell. The price is private to the user, labelled "manual" with its age, can be edited or removed, and is used only while no provider has a price for that asset (decided 2026-11-17).

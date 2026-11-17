@@ -7,16 +7,20 @@ import { computePosition, PortfolioError, type Transaction } from "@/domain";
 import { routing } from "@/i18n/routing";
 import { getActionUser } from "@/lib/auth";
 import {
+  isPositive,
   isUuid,
   isValidTimeZone,
+  parseDecimalInput,
   parseProjectForm,
   parseTransactionForm,
   type AssetChoice,
   type FieldError,
+  type NumberError,
   type ProjectField,
   type TransactionField,
   type TransactionInput,
 } from "@/lib/portfolio/parse";
+import type { PriceSnapshot } from "@/lib/prices/types";
 import { createClient } from "@/lib/supabase/server";
 
 /*
@@ -147,10 +151,15 @@ async function resolveAsset(supabase: Supabase, asset: AssetChoice): Promise<str
     return data?.id ?? null;
   }
 
-  const wanted =
+  const wanted: { symbol: string; name: string; asset_class: string; provider_refs: Record<string, string> } =
     asset.kind === "cash"
-      ? { symbol: "USD", name: "US Dollar", asset_class: "cash" }
-      : { symbol: asset.symbol, name: asset.name, asset_class: asset.assetClass };
+      ? { symbol: "USD", name: "US Dollar", asset_class: "cash", provider_refs: {} }
+      : {
+          symbol: asset.symbol,
+          name: asset.name,
+          asset_class: asset.assetClass,
+          provider_refs: asset.providerRefs,
+        };
 
   const find = () =>
     supabase
@@ -342,4 +351,64 @@ export async function deleteTransaction(
     return { status: "error", message: "save_failed" };
   }
   redirect(`/${safeLocale(locale)}/portfolio/transactions`);
+}
+
+// ---------------------------------------------------------------------------
+// Manual prices (decision 91)
+// ---------------------------------------------------------------------------
+
+export type ManualPriceResult =
+  | { status: "ok"; price: PriceSnapshot | null }
+  | {
+      status: "error";
+      error: "unauthorized" | "not_found" | NumberError | "must_be_positive" | "save_failed";
+    };
+
+/**
+ * Saves the user's own price for an asset that no provider prices. Typed by
+ * a person, so it goes through parseDecimalInput ("1.500" is rejected as
+ * ambiguous). Returns the price for the table to show right away.
+ */
+export async function saveManualPrice(assetId: string, rawPrice: string): Promise<ManualPriceResult> {
+  const user = await getActionUser();
+  if (!user) return { status: "error", error: "unauthorized" };
+  if (!isUuid(assetId)) return { status: "error", error: "not_found" };
+
+  const parsed = parseDecimalInput(rawPrice);
+  if (!parsed.ok) return { status: "error", error: parsed.error };
+  if (!isPositive(parsed.value)) return { status: "error", error: "must_be_positive" };
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("manual_prices")
+    .upsert(
+      { user_id: user.id, asset_id: assetId, price: parsed.value, as_of: new Date().toISOString() },
+      { onConflict: "user_id,asset_id" },
+    )
+    .select("asset_id, price::text, as_of")
+    .single();
+  if (error) {
+    console.error("saveManualPrice failed:", error.message);
+    // 23503 = the asset does not exist.
+    return { status: "error", error: error.code === "23503" ? "not_found" : "save_failed" };
+  }
+  return {
+    status: "ok",
+    price: { assetId: data.asset_id, price: data.price, dayChangePct: null, asOf: data.as_of, source: "manual" },
+  };
+}
+
+/** Removes the user's manual price for an asset. */
+export async function removeManualPrice(assetId: string): Promise<ManualPriceResult> {
+  const user = await getActionUser();
+  if (!user) return { status: "error", error: "unauthorized" };
+  if (!isUuid(assetId)) return { status: "error", error: "not_found" };
+
+  const supabase = await createClient();
+  const { error } = await supabase.from("manual_prices").delete().eq("user_id", user.id).eq("asset_id", assetId);
+  if (error) {
+    console.error("removeManualPrice failed:", error.message);
+    return { status: "error", error: "save_failed" };
+  }
+  return { status: "ok", price: null };
 }

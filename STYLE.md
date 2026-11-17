@@ -56,6 +56,18 @@ No gradients, except the hover light on clickable cards (see Animation).
 ### Header
 - Sticky at the top, semi-transparent `--bg` with blur (glass effect).
 - "THE WIRE" logo in uppercase with letter spacing, plus language, country and currency selectors.
+- Section links (Portfolio, News): the current one is white and bold with a 2px amethyst line on the header's bottom edge (decision 88); the others are muted.
+
+### Prices in tables
+- Price cell: the price, and under it the 24 h change (▲/▼ with green/red). A price not confirmed for 10 minutes turns muted with "⚠ Out of date · 10 minutes ago". An open position without a price says "No price" and is left out of totals, with a note under the table.
+- "Set price" (amethyst link) under "No price" opens a small inline field; a manual price shows "✎ manual · 2 days ago · Edit" and is never marked out of date.
+- A green dot plus "Live" while the crypto WebSocket is connected; otherwise "Prices update every 30 seconds".
+- Under the table: sources (Binance, Finnhub, CoinGecko with a link, as CoinGecko's free plan requires) and "for information only, not advice".
+
+### Portfolio sub-bar
+- A sticky bar right under the site header with the tabs (Overview · Projects · Transactions) on the left and "+ Transaction" on the right (only "+" on phones).
+- It is as wide as the content (max 1200px), not the whole screen like the site header, so it reads as the portfolio's own header.
+- Tabs look like the header links: the active one is white and bold with a 2px amethyst line on the bar's bottom edge. No page title: the header already shows the section.
 
 ### Topic tabs
 - Pill-shaped tabs with the topic icon, placed right above the news grid (moved out of the header in step 2 to keep the header clean on mobile).

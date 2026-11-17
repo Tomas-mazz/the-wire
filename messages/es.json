@@ -52,7 +52,6 @@
   },
   "Portfolio": {
     "heading": "Portafolio",
-    "intro": "Tus acciones y cripto, con precios en vivo.",
     "loading": "Cargando…",
     "defaultProject": "Principal",
     "addTransaction": "Transacción",
@@ -73,17 +72,41 @@
       "holdingsTitle": "Posiciones",
       "empty": "Todavía no hay transacciones. Cargá tu primera compra para ver tus posiciones acá.",
       "emptyCta": "Agregar una transacción",
-      "pricesSoon": "Los precios en vivo y la ganancia/pérdida llegan en el próximo paso. Por ahora: qué tenés y cuánto pagaste.",
-      "problems": "Algunas transacciones no se pueden calcular porque una venta es mayor que lo que había: {assets}. Revisá sus fechas y cantidades."
+      "problems": "Algunas transacciones no se pueden calcular porque una venta es mayor que lo que había: {assets}. Revisá sus fechas y cantidades.",
+      "live": "En vivo: la cripto se actualiza cada segundo",
+      "polling": "Los precios se actualizan cada 30 segundos",
+      "summary": "G/P realizada: {realized} · Dividendos: {income} · G/P total: {total}",
+      "missingPrices": "{count, plural, one {# posición no tiene precio y no se suma} other {# posiciones no tienen precio y no se suman}} a los totales.",
+      "sources": "Precios: Binance, Finnhub y <coingecko>CoinGecko</coingecko>. La cripto cotiza en USDT (≈ USD). Solo informativo, no es asesoramiento."
     },
     "holdings": {
       "asset": "Activo",
       "quantity": "Cantidad",
       "avgCost": "Costo prom.",
-      "invested": "Invertido",
-      "realized": "G/P realizada",
-      "income": "Dividendos",
-      "closed": "cerrada"
+      "closed": "cerrada",
+      "price": "Precio",
+      "value": "Valor",
+      "unrealized": "G/P no realizada",
+      "allocation": "% cartera",
+      "total": "Total",
+      "noPrice": "Sin precio",
+      "stale": "Desactualizado · {age}",
+      "staleHint": "Los proveedores de precios no responden hace un rato, así que este es el último precio conocido.",
+      "day": "24 h",
+      "setPrice": "Poner precio",
+      "setPriceLabel": "Poner un precio manual para {symbol}",
+      "editPrice": "Editar",
+      "manual": "manual · {age}",
+      "manualHint": "Cargado por vos. Se usa solo mientras ningún proveedor tenga precio para este activo.",
+      "manualLabel": "Precio manual de {symbol} en USD",
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "remove": "Quitar",
+      "manualErrors": {
+        "unauthorized": "Se cerró tu sesión. Volvé a iniciarla.",
+        "not_found": "Este activo ya no existe.",
+        "save_failed": "No se pudo guardar. Probá de nuevo."
+      }
     },
     "assetClasses": {
       "stock": "Acción",
@@ -219,7 +242,11 @@
         "not_found": "Esta transacción ya no existe.",
         "would_oversell": "Esto dejaría una venta mayor que lo que tenías en esa fecha. Revisá las fechas y cantidades.",
         "save_failed": "No se pudo guardar. Intentá de nuevo."
-      }
+      },
+      "searchingProviders": "Buscando acciones, ETF y cripto…",
+      "fromProviders": "Más resultados (Finnhub y CoinGecko):",
+      "noProviderMatches": "No hay otros resultados. Podés agregarlo a mano abajo.",
+      "pickedFromProvider": "Completado desde la búsqueda. Revisalo y guardá."
     }
   },
   "Login": {

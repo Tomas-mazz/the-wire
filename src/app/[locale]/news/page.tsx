@@ -10,7 +10,7 @@ export default async function NewsPage() {
 
   return (
     <>
-      <Header showNewsControls />
+      <Header showNewsControls active="news" />
       <main className="flex-1">
         <Hero />
         <NewsBoard items={SAMPLE_NEWS[locale]} />

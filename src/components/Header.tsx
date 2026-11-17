@@ -7,6 +7,8 @@ import LanguageSwitcher from "./LanguageSwitcher";
 interface HeaderProps {
   /** Show the country / currency pills (news page only, placeholders until news resumes). */
   showNewsControls?: boolean;
+  /** Section the visitor is in; its link gets an amethyst underline (decision 88). */
+  active?: "portfolio" | "news";
 }
 
 /**
@@ -15,28 +17,36 @@ interface HeaderProps {
  * and account menu. Only the account menu depends on the visitor, so it streams
  * in behind <Suspense> while the rest of the header is prerendered.
  */
-export default function Header({ showNewsControls = false }: HeaderProps) {
+export default function Header({ showNewsControls = false, active }: HeaderProps) {
   const t = useTranslations("Header");
   const placeholders = ["Global", "USD"];
   const links = [
-    { href: "/portfolio", label: t("nav.portfolio") },
-    { href: "/news", label: t("nav.news") },
+    { key: "portfolio", href: "/portfolio", label: t("nav.portfolio") },
+    { key: "news", href: "/news", label: t("nav.news") },
   ] as const;
 
   return (
     <header className="sticky top-0 z-20 border-b border-line bg-bg/70 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between gap-3 px-4 sm:px-6">
-        <div className="flex items-center gap-3 sm:gap-8">
+        <div className="flex items-center gap-3 self-stretch sm:gap-8">
           <Link href="/" className="text-sm font-bold tracking-[0.2em] whitespace-nowrap text-fg sm:tracking-[0.3em]">
             THE <span className="text-accent">WIRE</span>
           </Link>
 
-          <nav aria-label={t("nav.label")} className="flex items-center gap-3 sm:gap-6">
-            {links.map(({ href, label }) => (
+          <nav aria-label={t("nav.label")} className="flex items-center gap-3 self-stretch sm:gap-6">
+            {links.map(({ key, href, label }) => (
               <Link
-                key={href}
+                key={key}
                 href={href}
-                className="text-sm text-muted transition-colors hover:text-fg"
+                aria-current={active === key ? "page" : undefined}
+                // The active link is white and bold, with a 2px amethyst line
+                // drawn on the header's bottom edge (an inset shadow, so the
+                // text does not move when the section changes).
+                className={`flex h-full items-center text-sm transition-colors ${
+                  active === key
+                    ? "font-semibold text-fg shadow-[inset_0_-2px_0_var(--color-accent)]"
+                    : "text-muted hover:text-fg"
+                }`}
               >
                 {label}
               </Link>

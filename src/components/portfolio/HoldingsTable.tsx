@@ -1,8 +1,9 @@
-import { getTranslations } from "next-intl/server";
+import { connection } from "next/server";
 import { computeHoldings, type Holding } from "@/domain";
-import { formatQuantity, formatUsd } from "@/lib/format";
+import { livePairs, type PriceAsset } from "@/market-data";
+import { getPriceAssets, getPricesForUser, type PriceSnapshot } from "@/lib/prices/service";
 import { toLedger, type Asset, type TransactionRow } from "@/lib/portfolio/data";
-import { tdNumber, th } from "./styles";
+import LiveHoldings, { type LiveHoldingRow } from "./LiveHoldings";
 
 export interface HoldingRow {
   asset: Asset;
@@ -27,73 +28,49 @@ export function holdingsFrom(transactions: TransactionRow[]): {
   };
 }
 
-/** Signed money: "+" or "−" plus an arrow, never color alone (STYLE.md). */
-function Signed({ value, locale }: { value: Holding["realized"]; locale: string }) {
-  if (value.isZero()) return <span className="text-muted">{formatUsd(value, locale)}</span>;
-  const up = value.isPositive();
-  return (
-    <span className={up ? "text-up" : "text-down"}>
-      {up ? "▲ +" : "▼ −"}
-      {formatUsd(value.abs(), locale)}
-    </span>
-  );
+/** First prices plus the server time they belong to. Never throws. */
+async function loadInitialPrices(assets: PriceAsset[]): Promise<{ prices: PriceSnapshot[]; renderedAt: number }> {
+  try {
+    return { prices: await getPricesForUser(assets), renderedAt: Date.now() };
+  } catch (error) {
+    // The table still renders; the browser asks again in 30 s.
+    console.error("[prices]", error);
+    return { prices: [], renderedAt: Date.now() };
+  }
 }
 
 /**
- * What the user holds, per asset. Prices arrive in M5, so this shows
- * quantity, average cost and money invested (no market value yet).
+ * What the user holds, with prices (M5). The first prices are fetched here on
+ * the server so the table never starts empty; LiveHoldings keeps them moving
+ * in the browser. Render inside <Suspense>.
  */
-export default async function HoldingsTable({ rows, locale }: { rows: HoldingRow[]; locale: string }) {
-  const t = await getTranslations("Portfolio");
-  const sorted = [...rows].sort(
-    (a, b) =>
-      Number(b.holding.quantity.isZero() ? 0 : 1) - Number(a.holding.quantity.isZero() ? 0 : 1) ||
-      b.holding.costBasis.comparedTo(a.holding.costBasis) ||
-      a.asset.symbol.localeCompare(b.asset.symbol),
-  );
+export default async function HoldingsTable({ rows }: { rows: HoldingRow[]; locale?: string }) {
+  await connection(); // prices and "now" are request-time data
+  const priced = rows.filter((r) => r.asset.assetClass !== "cash");
+  const openIds = priced.filter((r) => !r.holding.quantity.isZero()).map((r) => r.asset.id);
+
+  const assets = await getPriceAssets(openIds);
+  const { prices: initialPrices, renderedAt } = await loadInitialPrices(assets);
+
+  const liveRows: LiveHoldingRow[] = priced.map(({ asset, holding }) => ({
+    assetId: asset.id,
+    symbol: asset.symbol,
+    name: asset.name,
+    assetClass: asset.assetClass as LiveHoldingRow["assetClass"],
+    quantity: holding.quantity.toFixed(),
+    costBasis: holding.costBasis.toFixed(),
+    avgCost: holding.avgCost?.toFixed() ?? null,
+    realized: holding.realized.toFixed(),
+    income: holding.income.toFixed(),
+    fees: holding.fees.toFixed(),
+  }));
 
   return (
-    <div className="overflow-x-auto rounded-2xl border border-line">
-      <table className="w-full min-w-[640px] text-sm">
-        <thead className="border-b border-line bg-surface">
-          <tr>
-            <th scope="col" className={th}>{t("holdings.asset")}</th>
-            <th scope="col" className={`${th} text-right`}>{t("holdings.quantity")}</th>
-            <th scope="col" className={`${th} text-right`}>{t("holdings.avgCost")}</th>
-            <th scope="col" className={`${th} text-right`}>{t("holdings.invested")}</th>
-            <th scope="col" className={`${th} text-right`}>{t("holdings.realized")}</th>
-            <th scope="col" className={`${th} text-right`}>{t("holdings.income")}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sorted.map(({ asset, holding }) => {
-            const closed = holding.quantity.isZero();
-            return (
-              <tr key={asset.id} className={`border-b border-line last:border-0 ${closed ? "opacity-60" : ""}`}>
-                <th scope="row" className="px-3 py-3 text-left font-normal">
-                  <span className="font-mono font-semibold text-accent">{asset.symbol}</span>
-                  <span className="ml-2 text-muted">{asset.name}</span>
-                  <span className="ml-2 text-xs text-muted">
-                    · {t(`assetClasses.${asset.assetClass}`)}
-                    {closed && ` · ${t("holdings.closed")}`}
-                  </span>
-                </th>
-                <td className={tdNumber}>{formatQuantity(holding.quantity, locale)}</td>
-                <td className={tdNumber}>
-                  {holding.avgCost ? formatUsd(holding.avgCost, locale) : "—"}
-                </td>
-                <td className={tdNumber}>{formatUsd(holding.costBasis, locale)}</td>
-                <td className={tdNumber}>
-                  <Signed value={holding.realized} locale={locale} />
-                </td>
-                <td className={tdNumber}>
-                  {holding.income.isZero() ? "—" : formatUsd(holding.income, locale)}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
+    <LiveHoldings
+      rows={liveRows}
+      initialPrices={initialPrices}
+      livePairs={livePairs(assets)}
+      renderedAt={renderedAt}
+    />
   );
 }
