@@ -188,7 +188,7 @@ The portfolio grows into a full investment tracker (a ledger, not a broker: no o
 80. First project?
     → Answer: Created automatically ("Main" / "Principal") on the first visit, and can be renamed. A transaction always has a project (decided 2026-11-17).
 81. Asset search before price providers (M5)?
-    → Answer: M4 searches the shared catalogue and lets the user add a missing asset by hand (symbol, name, kind: stock / ETF / crypto). Provider search comes in M5 (decided 2026-11-17).
+    → Answer: M4 searches the shared catalogue and lets the user add a missing asset by hand (symbol, name, kind: stock / ETF / crypto). Provider search comes in M5 (decided 2026-11-17). Done: typing 2+ letters also searches Finnhub (US stocks/ETFs) and CoinGecko (crypto); picking a result fills in the new asset and saves the provider id so prices match exactly.
 82. Portfolio screen layout?
     → Answer: Tabs under /portfolio: Overview · Projects · Transactions, each project with its own page, and a "+ Transaction" button always visible (decided 2026-11-17).
 83. Colors?

@@ -228,7 +228,11 @@
         "not_found": "Esta transacción ya no existe.",
         "would_oversell": "Esto dejaría una venta mayor que lo que tenías en esa fecha. Revisá las fechas y cantidades.",
         "save_failed": "No se pudo guardar. Intentá de nuevo."
-      }
+      },
+      "searchingProviders": "Buscando acciones, ETF y cripto…",
+      "fromProviders": "Más resultados (Finnhub y CoinGecko):",
+      "noProviderMatches": "No hay otros resultados. Podés agregarlo a mano abajo.",
+      "pickedFromProvider": "Completado desde la búsqueda. Revisalo y guardá."
     }
   },
   "Login": {

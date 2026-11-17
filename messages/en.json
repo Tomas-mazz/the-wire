@@ -228,7 +228,11 @@
         "not_found": "This transaction no longer exists.",
         "would_oversell": "This would leave a sale larger than what you held at that date. Check the dates and quantities.",
         "save_failed": "Couldn't save. Try again."
-      }
+      },
+      "searchingProviders": "Searching stocks, ETFs and crypto…",
+      "fromProviders": "More results (Finnhub and CoinGecko):",
+      "noProviderMatches": "No other matches. You can add it by hand below.",
+      "pickedFromProvider": "Filled in from the search. Check it and save."
     }
   },
   "Login": {

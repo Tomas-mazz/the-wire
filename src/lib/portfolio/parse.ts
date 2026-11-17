@@ -141,9 +141,41 @@ export type FieldError =
   | "too_long"
   | "future_date";
 
+const PROVIDER_KEYS = ["binance", "coingecko", "finnhub"] as const;
+const PROVIDER_ID = /^[A-Za-z0-9._\-]{1,64}$/;
+
+/**
+ * Provider ids sent by the form as JSON, e.g. {"coingecko":"solana"}. Only
+ * known providers and plain ids are kept; anything else is dropped (they
+ * only help find a price, so bad input just means "no hint").
+ */
+export function parseProviderRefs(raw: string): Record<string, string> {
+  if (!raw) return {};
+  let data: unknown;
+  try {
+    data = JSON.parse(raw);
+  } catch {
+    return {};
+  }
+  if (typeof data !== "object" || data === null || Array.isArray(data)) return {};
+  const refs: Record<string, string> = {};
+  for (const key of PROVIDER_KEYS) {
+    const value = (data as Record<string, unknown>)[key];
+    if (typeof value === "string" && PROVIDER_ID.test(value)) refs[key] = value;
+  }
+  return refs;
+}
+
 export type AssetChoice =
   | { kind: "existing"; assetId: string }
-  | { kind: "new"; symbol: string; name: string; assetClass: UserAssetClass }
+  | {
+      kind: "new";
+      symbol: string;
+      name: string;
+      assetClass: UserAssetClass;
+      /** Provider ids picked from the search (e.g. { coingecko: "solana" }), saved in `assets.provider_refs`. */
+      providerRefs: Record<string, string>;
+    }
   /** deposit / withdrawal always move US dollars. */
   | { kind: "cash" };
 
@@ -214,7 +246,13 @@ export function parseTransactionForm(form: FormData, now = Date.now()): Transact
     else if (name.length > 120) errors.name = "too_long";
     if (!(ASSET_CLASSES as readonly string[]).includes(assetClass)) errors.assetClass = "invalid";
     if (!errors.symbol && !errors.name && !errors.assetClass) {
-      asset = { kind: "new", symbol, name, assetClass: assetClass as UserAssetClass };
+      asset = {
+        kind: "new",
+        symbol,
+        name,
+        assetClass: assetClass as UserAssetClass,
+        providerRefs: parseProviderRefs(text(form, "providerRefs")),
+      };
     }
   } else {
     const assetId = text(form, "assetId");

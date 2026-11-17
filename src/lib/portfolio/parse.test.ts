@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   parseDecimalInput,
   parseProjectForm,
+  parseProviderRefs,
   parseTransactionForm,
   utcToZonedLocal,
   zonedLocalToUtc,
@@ -121,7 +122,22 @@ describe("parseTransactionForm", () => {
       symbol: "AAPL",
       name: "Apple",
       assetClass: "stock",
+      providerRefs: {},
     });
+  });
+
+  it("keeps the provider ids picked from the search", () => {
+    const r = parseTransactionForm(
+      form({
+        assetMode: "new",
+        symbol: "SOL",
+        name: "Solana",
+        assetClass: "crypto",
+        providerRefs: '{"coingecko":"solana"}',
+      }),
+      NOW,
+    );
+    expect(r.ok && r.value.asset).toMatchObject({ providerRefs: { coingecko: "solana" } });
   });
 
   it("forces USD cash and price 1 for deposits", () => {
@@ -209,5 +225,15 @@ describe("parseProjectForm", () => {
   it("limits the number of tags", () => {
     const r = parseProjectForm(form({ name: "A", tags: "1,2,3,4,5,6,7,8,9,10,11" }));
     expect(r.ok ? null : r.errors).toEqual({ tags: "too_many" });
+  });
+});
+
+describe("parseProviderRefs", () => {
+  it("keeps known providers with plain ids and drops the rest", () => {
+    expect(parseProviderRefs('{"coingecko":"solana","finnhub":"VOO"}')).toEqual({ coingecko: "solana", finnhub: "VOO" });
+    expect(parseProviderRefs('{"evil":"x","binance":"bad id!"}')).toEqual({});
+    expect(parseProviderRefs("not json")).toEqual({});
+    expect(parseProviderRefs("[1]")).toEqual({});
+    expect(parseProviderRefs("")).toEqual({});
   });
 });

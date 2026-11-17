@@ -7,6 +7,7 @@ import { saveTransaction, type TransactionFormState } from "@/app/[locale]/portf
 import { TRANSACTION_TYPES, type TransactionType } from "@/domain";
 import { Link } from "@/i18n/navigation";
 import type { Asset } from "@/lib/portfolio/data";
+import type { AssetCandidate } from "@/market-data/search";
 import { ASSET_CLASSES, utcToZonedLocal, type FieldError } from "@/lib/portfolio/parse";
 import { fieldError, hint, input, label, primaryButton, secondaryButton } from "./styles";
 
@@ -68,6 +69,10 @@ export default function TransactionForm({
   const [assetId, setAssetId] = useState(initial.assetId);
   const [query, setQuery] = useState("");
   const [newSymbol, setNewSymbol] = useState("");
+  // A result picked from the provider search pre-fills the "new asset" fields.
+  const [picked, setPicked] = useState<AssetCandidate | null>(null);
+  const [remote, setRemote] = useState<{ query: string; results: AssetCandidate[] }>({ query: "", results: [] });
+  const [searching, setSearching] = useState(false);
 
   const browserTimeZone = useBrowserTimeZone();
   const tz = timeZone ?? browserTimeZone ?? "UTC";
@@ -94,6 +99,40 @@ export default function TransactionForm({
       .sort((a, b) => Number(b.symbol.toLowerCase() === q) - Number(a.symbol.toLowerCase() === q))
       .slice(0, MAX_MATCHES);
   }, [assets, query]);
+
+  // Ask the providers (Finnhub + CoinGecko) 350 ms after the user stops typing.
+  const remoteQuery = query.trim();
+  useEffect(() => {
+    if (remoteQuery.length < 2) return;
+    const controller = new AbortController();
+    const timer = setTimeout(async () => {
+      setSearching(true);
+      try {
+        const response = await fetch(`/api/assets/search?q=${encodeURIComponent(remoteQuery)}`, {
+          signal: controller.signal,
+        });
+        if (response.ok) {
+          const body = (await response.json()) as { results: AssetCandidate[] };
+          setRemote({ query: remoteQuery, results: body.results });
+        }
+      } catch {
+        // Aborted or offline: the catalogue results are still there.
+      } finally {
+        if (!controller.signal.aborted) setSearching(false);
+      }
+    }, 350);
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
+  }, [remoteQuery]);
+
+  // Provider results not already in the catalogue (same symbol and kind).
+  const known = new Set(assets.map((a) => `${a.assetClass}|${a.symbol}`));
+  const remoteMatches =
+    remote.query === remoteQuery
+      ? remote.results.filter((c) => !known.has(`${c.assetClass}|${c.symbol}`))
+      : [];
 
   const value = (name: keyof TransactionFormInitial) => typed?.[name] ?? initial[name];
   const error = (name: string) =>
@@ -222,9 +261,39 @@ export default function TransactionForm({
               ) : (
                 <p className={hint}>{f("noMatches")}</p>
               )}
+              {remoteQuery.length >= 2 && (
+                <div className="mt-3" aria-live="polite">
+                  <p className={`${hint} mb-2`}>{searching ? f("searchingProviders") : f("fromProviders")}</p>
+                  {remoteMatches.length > 0 && (
+                    <ul className="divide-y divide-line overflow-hidden rounded-xl border border-line">
+                      {remoteMatches.map((c) => (
+                        <li key={`${c.assetClass}|${c.symbol}|${Object.values(c.providerRefs)[0]}`}>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setPicked(c);
+                              setNewSymbol(c.symbol);
+                              setAssetMode("new");
+                            }}
+                            className="flex w-full items-center gap-2 px-3 py-2.5 text-left hover:bg-surface-hover"
+                          >
+                            <span className="font-mono font-semibold text-accent">{c.symbol}</span>
+                            <span className="truncate text-sm text-muted">{c.name}</span>
+                            <span className="ml-auto text-xs text-muted">{t(`assetClasses.${c.assetClass}`)}</span>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {!searching && remoteMatches.length === 0 && remote.query === remoteQuery && (
+                    <p className={hint}>{f("noProviderMatches")}</p>
+                  )}
+                </div>
+              )}
               <button
                 type="button"
                 onClick={() => {
+                  setPicked(null);
                   setNewSymbol(query.trim().toUpperCase());
                   setAssetMode("new");
                 }}
@@ -236,7 +305,13 @@ export default function TransactionForm({
           )}
 
           {assetMode === "new" && (
-            <div className="grid gap-4 rounded-xl border border-line p-4 sm:grid-cols-3">
+            <div
+              // Remount when another search result is picked, so the defaults refresh.
+              key={picked ? `${picked.assetClass}|${picked.symbol}` : "manual"}
+              className="grid gap-4 rounded-xl border border-line p-4 sm:grid-cols-3"
+            >
+              <input type="hidden" name="providerRefs" value={picked ? JSON.stringify(picked.providerRefs) : ""} />
+              {picked && <p className={`${hint} mt-0 sm:col-span-3`}>{f("pickedFromProvider")}</p>}
               <div>
                 <label htmlFor="symbol" className={label}>
                   {f("symbol")}
@@ -262,7 +337,7 @@ export default function TransactionForm({
                   name="name"
                   maxLength={120}
                   placeholder={f("namePlaceholder")}
-                  defaultValue={typed?.name ?? ""}
+                  defaultValue={typed?.name ?? picked?.name ?? ""}
                   className={input}
                   {...a11y("name")}
                 />
@@ -275,7 +350,7 @@ export default function TransactionForm({
                 <select
                   id="assetClass"
                   name="assetClass"
-                  defaultValue={typed?.assetClass ?? "crypto"}
+                  defaultValue={typed?.assetClass ?? picked?.assetClass ?? "crypto"}
                   className={input}
                   {...a11y("assetClass")}
                 >
@@ -289,7 +364,10 @@ export default function TransactionForm({
               </div>
               <button
                 type="button"
-                onClick={() => setAssetMode("existing")}
+                onClick={() => {
+                  setPicked(null);
+                  setAssetMode("existing");
+                }}
                 className="text-left text-sm text-muted hover:text-fg sm:col-span-3"
               >
                 {f("chooseExisting")}

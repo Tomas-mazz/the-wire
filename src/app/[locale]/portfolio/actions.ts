@@ -147,10 +147,15 @@ async function resolveAsset(supabase: Supabase, asset: AssetChoice): Promise<str
     return data?.id ?? null;
   }
 
-  const wanted =
+  const wanted: { symbol: string; name: string; asset_class: string; provider_refs: Record<string, string> } =
     asset.kind === "cash"
-      ? { symbol: "USD", name: "US Dollar", asset_class: "cash" }
-      : { symbol: asset.symbol, name: asset.name, asset_class: asset.assetClass };
+      ? { symbol: "USD", name: "US Dollar", asset_class: "cash", provider_refs: {} }
+      : {
+          symbol: asset.symbol,
+          name: asset.name,
+          asset_class: asset.assetClass,
+          provider_refs: asset.providerRefs,
+        };
 
   const find = () =>
     supabase
