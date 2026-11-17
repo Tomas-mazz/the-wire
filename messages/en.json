@@ -92,7 +92,21 @@
       "noPrice": "No price",
       "stale": "Out of date · {age}",
       "staleHint": "The price providers have not answered for a while, so this is the last known price.",
-      "day": "24 h"
+      "day": "24 h",
+      "setPrice": "Set price",
+      "setPriceLabel": "Set a manual price for {symbol}",
+      "editPrice": "Edit",
+      "manual": "manual · {age}",
+      "manualHint": "Typed by you. Used only while no provider has a price for this asset.",
+      "manualLabel": "Manual price of {symbol} in USD",
+      "save": "Save",
+      "cancel": "Cancel",
+      "remove": "Remove",
+      "manualErrors": {
+        "unauthorized": "Your session ended. Sign in again.",
+        "not_found": "This asset no longer exists.",
+        "save_failed": "Could not save. Try again."
+      }
     },
     "assetClasses": {
       "stock": "Stock",

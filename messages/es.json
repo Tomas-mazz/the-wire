@@ -92,7 +92,21 @@
       "noPrice": "Sin precio",
       "stale": "Desactualizado · {age}",
       "staleHint": "Los proveedores de precios no responden hace un rato, así que este es el último precio conocido.",
-      "day": "24 h"
+      "day": "24 h",
+      "setPrice": "Poner precio",
+      "setPriceLabel": "Poner un precio manual para {symbol}",
+      "editPrice": "Editar",
+      "manual": "manual · {age}",
+      "manualHint": "Cargado por vos. Se usa solo mientras ningún proveedor tenga precio para este activo.",
+      "manualLabel": "Precio manual de {symbol} en USD",
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "remove": "Quitar",
+      "manualErrors": {
+        "unauthorized": "Se cerró tu sesión. Volvé a iniciarla.",
+        "not_found": "Este activo ya no existe.",
+        "save_failed": "No se pudo guardar. Probá de nuevo."
+      }
     },
     "assetClasses": {
       "stock": "Acción",

@@ -8,6 +8,7 @@ import {
 } from "@/market-data";
 import { getAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
+import { withManualPrices } from "./merge";
 import type { PriceSnapshot } from "./types";
 
 export type { PriceSnapshot };
@@ -105,4 +106,34 @@ export async function getPrices(assets: readonly PriceAsset[]): Promise<PriceSna
     }
   }
   return [...prices.values()];
+}
+
+/**
+ * The signed-in user's manual prices for these assets. Row Level Security
+ * returns only the user's own rows, so no user id is needed here.
+ */
+export async function getManualPrices(assetIds: readonly string[]): Promise<PriceSnapshot[]> {
+  if (assetIds.length === 0) return [];
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("manual_prices")
+    .select("asset_id, price::text, as_of")
+    .in("asset_id", [...new Set(assetIds)]);
+  if (error) throw new Error(`Could not load manual prices: ${error.message}`);
+  return data.map((row) => ({
+    assetId: row.asset_id as string,
+    price: row.price as string,
+    dayChangePct: null,
+    asOf: row.as_of as string,
+    source: "manual" as const,
+  }));
+}
+
+/** Provider prices, with the user's manual prices filling the gaps (decision 91). */
+export async function getPricesForUser(assets: readonly PriceAsset[]): Promise<PriceSnapshot[]> {
+  const [provider, manual] = await Promise.all([
+    getPrices(assets),
+    getManualPrices(assets.map((a) => a.id)),
+  ]);
+  return withManualPrices(provider, manual);
 }

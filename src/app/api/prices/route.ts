@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server";
 import { getActionUser } from "@/lib/auth";
-import { getPriceAssets, getPrices } from "@/lib/prices/service";
+import { getPriceAssets, getPricesForUser } from "@/lib/prices/service";
 
 /**
  * GET /api/prices?ids=<asset id>,<asset id>
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const prices = await getPrices(await getPriceAssets(ids));
+    const prices = await getPricesForUser(await getPriceAssets(ids));
     return Response.json({ prices }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
     console.error("[prices]", error);

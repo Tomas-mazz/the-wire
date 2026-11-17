@@ -7,6 +7,7 @@ import { BINANCE_STREAM, miniTickerStream } from "@/market-data/binance";
 import { isStale, POLL_INTERVAL_MS } from "@/market-data/freshness";
 import { formatAge, formatPercent, formatQuantity, formatUsd } from "@/lib/format";
 import type { PriceSnapshot } from "@/lib/prices/types";
+import ManualPriceEditor from "./ManualPriceEditor";
 import { tdNumber, th } from "./styles";
 
 /** One holding as plain text, so it can travel from the server to the browser. */
@@ -88,6 +89,18 @@ export default function LiveHoldings({ rows, initialPrices, livePairs, renderedA
   );
   const [now, setNow] = useState(renderedAt);
   const [live, setLive] = useState(false);
+  const [editing, setEditing] = useState<string | null>(null);
+
+  /** After saving or removing a manual price. */
+  function applyManual(assetId: string, price: PriceSnapshot | null) {
+    setEditing(null);
+    setPrices((current) => {
+      const next = { ...current };
+      if (price) next[assetId] = price;
+      else if (next[assetId]?.source === "manual") delete next[assetId];
+      return next;
+    });
+  }
   const pricedIds = useMemo(() => rows.map((r) => r.assetId), [rows]);
   // A string, so the stream reconnects only when the set of pairs changes.
   const pairsKey = JSON.stringify(livePairs);
@@ -236,7 +249,10 @@ export default function LiveHoldings({ rows, initialPrices, livePairs, renderedA
           <tbody>
             {sorted.map(({ row, price, position, share }) => {
               const closed = position.quantity.isZero();
-              const stale = price !== null && isStale(price.asOf, now);
+              const manual = price?.source === "manual";
+              // A manual price is the user's own figure, so it is never "out of date".
+              const stale = price !== null && !manual && isStale(price.asOf, now);
+              const linkButton = "text-xs text-accent underline-offset-4 hover:underline";
               return (
                 <tr key={row.assetId} className={`border-b border-line last:border-0 ${closed ? "opacity-60" : ""}`}>
                   <th scope="row" className="px-3 py-3 text-left font-normal">
@@ -250,11 +266,26 @@ export default function LiveHoldings({ rows, initialPrices, livePairs, renderedA
                   <td className={tdNumber}>{formatQuantity(position.quantity, locale)}</td>
                   <td className={tdNumber}>{position.avgCost ? formatUsd(position.avgCost, locale) : "—"}</td>
                   <td className={tdNumber}>
-                    {price ? (
+                    {editing === row.assetId ? (
+                      <ManualPriceEditor
+                        assetId={row.assetId}
+                        symbol={row.symbol}
+                        current={manual ? price!.price : null}
+                        onDone={(p) => applyManual(row.assetId, p)}
+                        onCancel={() => setEditing(null)}
+                      />
+                    ) : price ? (
                       <>
                         <span className={stale ? "text-muted" : undefined}>{formatUsd(price.price, locale)}</span>
                         <span className="block text-xs">
-                          {stale ? (
+                          {manual ? (
+                            <span className="text-muted" title={t("holdings.manualHint")}>
+                              ✎ {t("holdings.manual", { age: formatAge(price.asOf, now, locale) })} ·{" "}
+                              <button type="button" onClick={() => setEditing(row.assetId)} className={linkButton}>
+                                {t("holdings.editPrice")}
+                              </button>
+                            </span>
+                          ) : stale ? (
                             <span className="text-muted" title={t("holdings.staleHint")}>
                               ⚠ {t("holdings.stale", { age: formatAge(price.asOf, now, locale) })}
                             </span>
@@ -269,7 +300,17 @@ export default function LiveHoldings({ rows, initialPrices, livePairs, renderedA
                     ) : closed ? (
                       "—"
                     ) : (
-                      <span className="text-muted">{t("holdings.noPrice")}</span>
+                      <>
+                        <span className="text-muted">{t("holdings.noPrice")}</span>
+                        <button
+                          type="button"
+                          onClick={() => setEditing(row.assetId)}
+                          aria-label={t("holdings.setPriceLabel", { symbol: row.symbol })}
+                          className={`${linkButton} block w-full text-right`}
+                        >
+                          {t("holdings.setPrice")}
+                        </button>
+                      </>
                     )}
                   </td>
                   <td className={tdNumber}>

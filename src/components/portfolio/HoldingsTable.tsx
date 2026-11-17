@@ -1,7 +1,7 @@
 import { connection } from "next/server";
 import { computeHoldings, type Holding } from "@/domain";
 import { livePairs, type PriceAsset } from "@/market-data";
-import { getPriceAssets, getPrices, type PriceSnapshot } from "@/lib/prices/service";
+import { getPriceAssets, getPricesForUser, type PriceSnapshot } from "@/lib/prices/service";
 import { toLedger, type Asset, type TransactionRow } from "@/lib/portfolio/data";
 import LiveHoldings, { type LiveHoldingRow } from "./LiveHoldings";
 
@@ -31,7 +31,7 @@ export function holdingsFrom(transactions: TransactionRow[]): {
 /** First prices plus the server time they belong to. Never throws. */
 async function loadInitialPrices(assets: PriceAsset[]): Promise<{ prices: PriceSnapshot[]; renderedAt: number }> {
   try {
-    return { prices: await getPrices(assets), renderedAt: Date.now() };
+    return { prices: await getPricesForUser(assets), renderedAt: Date.now() };
   } catch (error) {
     // The table still renders; the browser asks again in 30 s.
     console.error("[prices]", error);

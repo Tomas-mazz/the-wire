@@ -207,3 +207,5 @@ The portfolio grows into a full investment tracker (a ledger, not a broker: no o
     → Answer: Crypto from Binance's public market data, with CoinGecko as automatic fallback (Binance may block Vercel's US servers with HTTP 451). US stocks and ETFs from Finnhub's free plan. Prices are cached server-side in `latest_prices`, written only with the Supabase secret key (decided 2026-11-17).
 90. How "live" are prices?
     → Answer: Crypto updates every second in the browser over Binance's WebSocket; everything else (and crypto as a backup) is refreshed every 30 s while the page is open (decided 2026-11-17).
+91. Manual prices?
+    → Answer: Set right in the holdings table: an open position with "No price" shows "Set price", which opens a small field in the cell. The price is private to the user, labelled "manual" with its age, can be edited or removed, and is used only while no provider has a price for that asset (decided 2026-11-17).

@@ -60,6 +60,7 @@ No gradients, except the hover light on clickable cards (see Animation).
 
 ### Prices in tables
 - Price cell: the price, and under it the 24 h change (▲/▼ with green/red). A price not confirmed for 10 minutes turns muted with "⚠ Out of date · 10 minutes ago". An open position without a price says "No price" and is left out of totals, with a note under the table.
+- "Set price" (amethyst link) under "No price" opens a small inline field; a manual price shows "✎ manual · 2 days ago · Edit" and is never marked out of date.
 - A green dot plus "Live" while the crypto WebSocket is connected; otherwise "Prices update every 30 seconds".
 - Under the table: sources (Binance, Finnhub, CoinGecko with a link, as CoinGecko's free plan requires) and "for information only, not advice".
 
