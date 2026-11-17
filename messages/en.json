@@ -52,7 +52,6 @@
   },
   "Portfolio": {
     "heading": "Portfolio",
-    "intro": "Your stocks and crypto, with live prices.",
     "loading": "Loading…",
     "defaultProject": "Main",
     "addTransaction": "Transaction",

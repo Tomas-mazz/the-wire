@@ -202,4 +202,4 @@ The portfolio grows into a full investment tracker (a ledger, not a broker: no o
 87. News card while the news product is paused?
     → Answer: Shows the most important sample story (short headline + "Open →") in all three sections; real news, by topic, comes later (decided 2026-11-17).
 88. Portfolio header?
-    → Answer: Highlight the current section in the site header (Portfolio / News), remove the "Portfolio · Your stocks and crypto…" title block, and move the tabs and "+ Transaction" button to a better place, chosen from options shown side by side. Done before M5 as step S2 (decided 2026-11-17).
+    → Answer: Highlight the current section in the site header (Portfolio / News), remove the "Portfolio · Your stocks and crypto…" title block, and move the tabs and "+ Transaction" button to a better place. Chosen from options shown side by side: the active link gets an amethyst underline on the header's edge (over a pill or a bigger link), and the tabs plus "+ Transaction" go in a left sidebar that becomes a row on small screens (over a toolbar row, a sticky sub-bar or tabs inside the header). Done before M5 as step S2 (decided 2026-11-17).

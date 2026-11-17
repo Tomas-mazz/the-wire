@@ -52,7 +52,6 @@
   },
   "Portfolio": {
     "heading": "Portafolio",
-    "intro": "Tus acciones y cripto, con precios en vivo.",
     "loading": "Cargando…",
     "defaultProject": "Principal",
     "addTransaction": "Transacción",

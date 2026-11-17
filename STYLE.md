@@ -56,6 +56,11 @@ No gradients, except the hover light on clickable cards (see Animation).
 ### Header
 - Sticky at the top, semi-transparent `--bg` with blur (glass effect).
 - "THE WIRE" logo in uppercase with letter spacing, plus language, country and currency selectors.
+- Section links (Portfolio, News): the current one is white and bold with a 2px amethyst line on the header's bottom edge (decision 88); the others are muted.
+
+### Portfolio sidebar
+- On large screens a sticky sidebar on the left holds "+ Transaction" and the tabs (Overview · Projects · Transactions) as a vertical menu; on small screens it becomes a row above the page.
+- Active tab: tinted background (`surface-hover`), white bold text and an amethyst bar (left in the sidebar, below in the row). No page title: the header already shows the section.
 
 ### Topic tabs
 - Pill-shaped tabs with the topic icon, placed right above the news grid (moved out of the header in step 2 to keep the header clean on mobile).
