@@ -44,7 +44,7 @@ Transactions of one asset in one project are replayed in order (`executed_at`, t
 | `daily_prices` (v2) | `asset_id`, `date`, `open`, `high`, `low`, `close` |
 
 ### Screens
-1. **Landing** (done) · 2. **Sign in / sign up** · 3. **Overview:** total value, invested, P/L (money and %, green/red with ▲/▼), day change, allocation donut, top winners/losers, holdings table · 4. **Crypto / Stocks** views (same layout) · 5. **Project view** + create/edit/archive · 6. **Asset detail:** position per project, avg cost, its transactions · 7. **Transactions:** list with filters (project, asset, type, dates) + add/edit/delete form with asset search · 8. **Import:** upload screenshot/PDF/CSV → review table → confirm · 9. **Settings:** language, country/time zone, CSV export · 10. **Insights** (v2).
+1. **Landing** (done) · 2. **Sign in / sign up** · 3. **Overview / Crypto / Stocks sections** (see M6): each starts with a row of 4 summary cards (the last one is News), then an allocation donut, then more detail below (to be defined) · 4. *(merged into 3)* · 5. **Project view** + create/edit/archive · 6. **Asset detail:** position per project, avg cost, its transactions · 7. **Transactions:** list with filters (project, asset, type, dates) + add/edit/delete form with asset search · 8. **Import:** upload screenshot/PDF/CSV → review table → confirm · 9. **Settings:** language, country/time zone, CSV export · 10. **Insights** (v2).
 Holdings table columns: asset, quantity, avg cost, last price, market value, unrealized P/L, allocation %. Every screen has empty, loading and error states, and stale prices show their age.
 
 ### Architecture and providers
@@ -60,8 +60,15 @@ Holdings table columns: asset, quantity, avg cost, last price, market value, unr
 - **M3. ✅ Database:** tables above (except `daily_prices`), RLS policies, audit trail trigger (migration `20261117120000_portfolio_tables.sql`). Transactions can only point to a project of the same user; the shared `assets` catalogue can be read and extended by signed-in users but not edited; `latest_prices` is read-only for users (written server-side in M5).
 - **M4. ✅ Projects + transactions:** tabs Overview · Projects · Transactions under `/portfolio`; create/edit/archive projects (a default project is created on the first visit); add/edit/delete transactions with fields per type, asset search over the shared catalogue plus manual add; transactions list with filters (project, asset, type, dates) in the URL; Overview shows holdings per asset (quantity, average cost, invested, realized P/L, dividends) without prices. Every save or delete replays the ledger with `src/domain`, so a sell can never exceed the holding. Ambiguous numbers such as "1.500" are rejected. Pending: a signed-in manual test by the user (create, edit, delete, oversell error, filters, archive).
 - **S1. ✅ Visual identity:** Amethyst palette (black, deep violet borders, amethyst accent), border light on clickable cards, pointer cursor everywhere (decision 83, `STYLE.md`).
+- **S2. Portfolio header cleanup** (before M5, no prices needed): the header link of the current section (Portfolio / News) is clearly highlighted; remove the "Portfolio · Your stocks and crypto, with live prices" title block; find a better place for the Overview · Projects · Transactions tabs and the "+ Transaction" button (show layout options side by side first).
 - **M5. Prices + holdings:** provider interface, Binance + Finnhub, cached prices, holdings table with live P/L and stale/missing states.
-- **M6. Dashboards:** Overview, Crypto, Stocks and project views, allocation donut, top winners/losers (cards use the `glow-card` hover light).
+- **M6. Dashboards:** three sections, each with a row of 4 compact cards on top (in the style of the palette preview), then an allocation donut, then more detail below (to be defined later):
+  - **Overview** (crypto + stocks): Current value · Total P/L ($ and %) · Today's change (24 h) · News. Donut: share of each holding in the whole portfolio.
+  - **Crypto** (BTC first): BTC average buy price (next to the current price) · BTC P/L · Total crypto value · Crypto news. Donut: share of each coin. Average buy price is BTC only for now.
+  - **Stocks:** Total stocks value · Stocks P/L · Best and worst of the day · Stocks news. Donut: share of each stock/ETF.
+  - **Color rule:** the numbers on a section's cards turn green when that section is in profit and red when at a loss (Overview: total P/L; Crypto: BTC price vs BTC average buy price; Stocks: stocks P/L).
+  - **News card:** headline of the most important story, very short, plus "Open →" to the story. Uses the sample news until the news product returns.
+  - Project views and top winners/losers stay; cards use the `glow-card` hover light.
 - **M7. Import:** CSV (Nordnet, Binance, Coinbase) and AI screenshot/PDF import with review table.
 - **M8. Settings + polish:** language, country/time zone, CSV export, disclaimers, custom SMTP for auth emails (editable template that works across devices, higher email limit), one week of real use.
 

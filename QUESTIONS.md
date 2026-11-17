@@ -193,3 +193,13 @@ The portfolio grows into a full investment tracker (a ledger, not a broker: no o
     → Answer: Tabs under /portfolio: Overview · Projects · Transactions, each project with its own page, and a "+ Transaction" button always visible (decided 2026-11-17).
 83. Colors?
     → Answer: Three main colors, palette "Amethyst": black #0B0B0B (page), deep violet #33204F (borders, card tint #140F1F) and amethyst #B57CFF (primary buttons, active tabs, links, asset symbols, focus, hover light). Clickable cards get a beam of light that travels around the border on hover, and everything clickable shows the pointing hand. Chosen over blue and other violet options shown side by side. Replaces the plain white accents and the soft blue glow of decision 69 (decided 2026-11-17).
+84. Portfolio sections?
+    → Answer: Three: Overview (all investments), Crypto (all coins, BTC first) and Stocks. Each has 4 compact summary cards on top, an allocation donut, and more detail below to be defined later (decided 2026-11-17).
+85. Which summary cards?
+    → Answer: Overview: current value, total P/L, today's change, news. Crypto: BTC average buy price, BTC P/L, total crypto value, news. Stocks: total stocks value, stocks P/L, best and worst of the day, news. Average buy price is shown for BTC only for now (decided 2026-11-17).
+86. Green or red card numbers?
+    → Answer: All numbers on a section's cards follow that section's result: green in profit, red at a loss. For Crypto it is the BTC price against the BTC average buy price (decided 2026-11-17).
+87. News card while the news product is paused?
+    → Answer: Shows the most important sample story (short headline + "Open →") in all three sections; real news, by topic, comes later (decided 2026-11-17).
+88. Portfolio header?
+    → Answer: Highlight the current section in the site header (Portfolio / News), remove the "Portfolio · Your stocks and crypto…" title block, and move the tabs and "+ Transaction" button to a better place, chosen from options shown side by side. Done before M5 as step S2 (decided 2026-11-17).
