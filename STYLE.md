@@ -8,7 +8,7 @@
 
 ## Principles
 1. **Less is more.** On arrival you see only the essentials: headlines and prices. Everything else opens on tap ("read more", tabs, dropdowns). The opposite of Yahoo Finance, which shows everything at once.
-2. **Color has meaning.** No decorative colors: white and grays for everything, green/red only for gains and losses, and blue only as feedback when you hover or focus something. A glance is enough to read the market.
+2. **Color has meaning.** Three main colors (decision 83, palette "Amethyst"): **black** for the page, **deep violet** for borders and card tint, and **amethyst** for what you act on (primary buttons, active tabs, links, asset symbols, the logo's "WIRE") and for the hover light. Green/red are only for gains and losses, so the accent is never green or red. A glance is enough to read the market.
 3. **Generous spacing.** Wide margins and gaps. If something feels cramped, there is too much content.
 4. **Subtle motion.** Animations support the content and never distract.
 5. **Readable in under 5 minutes.** Every design decision should help with that.
@@ -19,18 +19,19 @@ Dark mode only. In code they are defined as CSS variables (*design tokens*): a s
 | Token | Value | Use |
 |---|---|---|
 | `--bg` | `#0B0B0B` | Page background (near-black) |
-| `--surface` | `#161616` | Cards and panels |
-| `--surface-hover` | `#1F1F1F` | Card on hover |
-| `--border` | `rgba(255,255,255,0.08)` | Thin, almost invisible borders |
-| `--border-strong` | `rgba(255,255,255,0.20)` | Outlined buttons, focus |
+| `--surface` | `#140F1F` | Cards and panels (black with a hint of violet) |
+| `--surface-hover` | `#1B1429` | Card on hover |
+| `--line` | `#33204F` | **2nd color.** Deep violet borders |
+| `--line-strong` | `#4A3170` | Inputs and outlined buttons |
+| `--accent` | `#B57CFF` | **3rd color.** Amethyst (6.8:1 on black): primary buttons, active tabs, links, asset symbols, focus outline, hover light |
+| `--accent-ink` | `#0B0714` | Text on accent backgrounds |
 | `--text` | `#FFFFFF` | Headings |
 | `--text-body` | `#CCCCCC` | Body text |
 | `--text-muted` | `#8A8A8A` | Dates, sources, labels |
 | `--up` | `#3DD68C` | Gain (price and ▲ arrow) |
 | `--down` | `#FF5C5C` | Loss (price and ▼ arrow) |
-| `--glow` | `#4C8DFF` | Interaction only: soft blue glow and border on hovered/focused cards (decision 69) |
 
-No gradients.
+No gradients, except the hover light on clickable cards (see Animation).
 
 ## Typography
 - **Text and headings:** [Inter](https://fonts.google.com/specimen/Inter), a modern, clean sans-serif.
@@ -85,7 +86,8 @@ No gradients.
 
 ## Animation (level: subtle)
 - **Reveal on scroll:** cards rise 8px and fade in (0.4 s).
-- **Card hover:** background changes to `--surface-hover`, the border turns `--glow` at low opacity and a soft blue glow appears around the card (0.2 s).
+- **Card hover (clickable cards):** the background changes to `--surface-hover` and a short beam of `--accent` fades in (0.4 s) and travels around the border (one lap every 2.4 s). Class `glow-card` in `globals.css`. With "reduce motion" the whole border lights up instead, without movement.
+- **Pointer:** everything clickable shows the pointing hand (buttons, links, tabs, selects, checkboxes); disabled buttons show "not allowed".
 - **Carousel:** continuous, slow movement.
 - **Ticker background:** drifts very slowly.
 - **Accessibility:** if the user has "reduce motion" enabled (`prefers-reduced-motion`), everything that moves on its own is turned off.
@@ -96,7 +98,7 @@ No gradients.
 - Everything is keyboard-accessible, with a visible white focus outline.
 
 ## Don'ts
-- No gradients. Blue (`--glow`) is never used for text, prices or static decoration.
+- No gradients other than the card hover light. The accent is never used for prices or gains/losses (those are green/red).
 - No photos or 3D illustrations.
 - Don't fill the screen with information: when in doubt, hide it behind "read more".
 - No flashy animations that distract from reading.

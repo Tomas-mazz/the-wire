@@ -1,37 +1,56 @@
 import { Suspense } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
-import Header from "@/components/Header";
+import HoldingsTable, { holdingsFrom } from "@/components/portfolio/HoldingsTable";
+import { card, primaryButton } from "@/components/portfolio/styles";
+import { Link } from "@/i18n/navigation";
 import { requireUser } from "@/lib/auth";
+import { getProjects, getTransactions } from "@/lib/portfolio/data";
 
-/** Private portfolio. The header renders instantly; the content waits for the session check. */
-export default async function PortfolioPage() {
+/** Overview tab: everything the user holds. Dashboards with prices come in M5–M6. */
+export default async function OverviewPage() {
   const t = await getTranslations("Portfolio");
-
   return (
-    <>
-      <Header />
-      <main className="mx-auto w-full max-w-[1200px] flex-1 px-4 py-16 sm:px-6 sm:py-24">
-        <Suspense fallback={<p className="text-sm text-muted">{t("loading")}</p>}>
-          <PortfolioContent />
-        </Suspense>
-      </main>
-    </>
+    <Suspense fallback={<p className="text-sm text-muted">{t("loading")}</p>}>
+      <Overview />
+    </Suspense>
   );
 }
 
-async function PortfolioContent() {
+async function Overview() {
   const locale = await getLocale();
   // Verifies the session (or redirects to /login) before anything private renders.
-  await requireUser(locale);
+  const user = await requireUser(locale);
   const t = await getTranslations("Portfolio");
 
+  // Creates the default project on the first visit (decision 80).
+  await getProjects(user.id, t("defaultProject"));
+  const transactions = await getTransactions(user.id, {}, 10_000);
+
+  if (transactions.length === 0) {
+    return (
+      <div className={card}>
+        <p className="text-body">{t("overview.empty")}</p>
+        <Link href="/portfolio/transactions/new" className={`${primaryButton} mt-5`}>
+          {t("overview.emptyCta")}
+        </Link>
+      </div>
+    );
+  }
+
+  const { rows, problemSymbols } = holdingsFrom(transactions);
+
   return (
-    <>
-      <h1 className="text-3xl font-bold text-fg sm:text-5xl">{t("heading")}</h1>
-      <p className="mt-4 max-w-xl text-body">{t("intro")}</p>
-      <p className="mt-8 inline-block rounded-full border border-line px-3 py-1 text-xs text-muted">
-        {t("placeholder")}
-      </p>
-    </>
+    <section aria-labelledby="holdings-title" className="space-y-4">
+      <h2 id="holdings-title" className="text-xl font-bold text-fg">
+        {t("overview.holdingsTitle")}
+      </h2>
+      <p className="text-sm text-muted">{t("overview.pricesSoon")}</p>
+      {problemSymbols.length > 0 && (
+        <p role="alert" className="rounded-xl border border-down/40 px-4 py-3 text-sm text-down">
+          {t("overview.problems", { assets: problemSymbols.join(", ") })}
+        </p>
+      )}
+      {rows.length > 0 && <HoldingsTable rows={rows} locale={locale} />}
+    </section>
   );
 }

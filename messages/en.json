@@ -53,8 +53,174 @@
   "Portfolio": {
     "heading": "Portfolio",
     "intro": "Your stocks and crypto, with live prices.",
-    "placeholder": "Under construction · your projects and holdings arrive in the next steps.",
-    "loading": "Checking your session…"
+    "loading": "Loading…",
+    "defaultProject": "Main",
+    "addTransaction": "Transaction",
+    "addTransactionLabel": "Add a transaction",
+    "tabs": {
+      "label": "Portfolio sections",
+      "overview": "Overview",
+      "projects": "Projects",
+      "transactions": "Transactions"
+    },
+    "error": {
+      "title": "Something went wrong",
+      "body": "We couldn't load this page. Your data is safe.",
+      "retry": "Try again"
+    },
+    "notFound": "Not found. It may have been deleted, or it isn't yours.",
+    "overview": {
+      "holdingsTitle": "Holdings",
+      "empty": "No transactions yet. Add your first buy to see your holdings here.",
+      "emptyCta": "Add a transaction",
+      "pricesSoon": "Live prices and profit/loss arrive in the next step. For now: what you hold and what you paid.",
+      "problems": "Some transactions can't be calculated because a sale is larger than what was held: {assets}. Check their dates and quantities."
+    },
+    "holdings": {
+      "asset": "Asset",
+      "quantity": "Quantity",
+      "avgCost": "Avg. cost",
+      "invested": "Invested",
+      "realized": "Realized P/L",
+      "income": "Dividends",
+      "closed": "closed"
+    },
+    "assetClasses": {
+      "stock": "Stock",
+      "etf": "ETF",
+      "crypto": "Crypto",
+      "cash": "Cash"
+    },
+    "types": {
+      "buy": "Buy",
+      "sell": "Sell",
+      "deposit": "Deposit",
+      "withdrawal": "Withdrawal",
+      "dividend": "Dividend",
+      "reward": "Reward"
+    },
+    "projects": {
+      "title": "Projects",
+      "intro": "Group your transactions by goal, like albums.",
+      "new": "New project",
+      "archivedTitle": "Archived ({count})",
+      "archivedBadge": "Archived",
+      "archive": "Archive",
+      "unarchive": "Restore",
+      "archiveHint": "Archiving hides the project from lists and forms. Nothing is deleted.",
+      "transactions": "{count, plural, =0 {No transactions} one {# transaction} other {# transactions}}",
+      "edit": "Edit details",
+      "cash": "Cash",
+      "cashNegative": "Cash is below zero: a deposit may be missing.",
+      "recent": "Transactions",
+      "viewAll": "See all in Transactions",
+      "back": "All projects"
+    },
+    "projectForm": {
+      "name": "Name",
+      "namePlaceholder": "e.g. Retirement",
+      "description": "Description",
+      "moreOptions": "More options",
+      "defaultBroker": "Usual broker",
+      "strategy": "Strategy",
+      "horizon": "Horizon",
+      "horizonPlaceholder": "e.g. 10+ years",
+      "tags": "Tags",
+      "tagsHint": "Separated by commas.",
+      "trackCash": "Track cash",
+      "trackCashHint": "Count deposits and withdrawals to show how much cash is left in this project.",
+      "create": "Create project",
+      "save": "Save changes",
+      "saving": "Saving…",
+      "saved": "Saved.",
+      "errors": {
+        "required": "Required.",
+        "too_long": "Too long.",
+        "too_many": "Up to 10 tags."
+      }
+    },
+    "transactions": {
+      "title": "Transactions",
+      "empty": "No transactions yet.",
+      "emptyFiltered": "No transactions match these filters.",
+      "limitNote": "Showing the latest {count}. Use the filters to find older ones.",
+      "filters": {
+        "label": "Filters",
+        "project": "Project",
+        "asset": "Asset",
+        "type": "Type",
+        "from": "From",
+        "to": "To",
+        "all": "All",
+        "apply": "Apply",
+        "clear": "Clear"
+      },
+      "columns": {
+        "date": "Date",
+        "asset": "Asset",
+        "type": "Type",
+        "quantity": "Quantity",
+        "price": "Price",
+        "fee": "Fee",
+        "total": "Total",
+        "project": "Project"
+      },
+      "edit": "Edit",
+      "editLabel": "Edit {asset} {type} from {date}"
+    },
+    "transactionForm": {
+      "newTitle": "New transaction",
+      "editTitle": "Edit transaction",
+      "intro": "Record what you already did at your broker. Nothing is bought or sold here.",
+      "project": "Project",
+      "type": "Type",
+      "asset": "Asset",
+      "searchAsset": "Search by symbol or name",
+      "noMatches": "No matches.",
+      "addNew": "Not in the list? Add it",
+      "chooseExisting": "Choose from the list",
+      "change": "Change",
+      "symbol": "Symbol",
+      "symbolPlaceholder": "e.g. BTC or AAPL",
+      "name": "Name",
+      "namePlaceholder": "e.g. Bitcoin",
+      "assetClass": "Kind",
+      "date": "Date and time",
+      "timeZoneNote": "In your time zone ({timeZone}).",
+      "quantity": "Quantity",
+      "amount": "Amount (USD)",
+      "shares": "Shares",
+      "unitPrice": "Price per unit (USD)",
+      "perShare": "Dividend per share (USD)",
+      "fee": "Fee (USD)",
+      "withholding": "Fee or tax withheld (USD)",
+      "rewardHint": "Rewards (staking, airdrops) are free: they lower your average cost.",
+      "decimalHint": "Use a dot or comma for decimals, with no thousands separator.",
+      "broker": "Broker",
+      "note": "Note",
+      "optional": "optional",
+      "save": "Save",
+      "saving": "Saving…",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "deleting": "Deleting…",
+      "confirmDelete": "Delete this transaction? This can't be undone.",
+      "errors": {
+        "required": "Required.",
+        "invalid": "Not valid.",
+        "invalid_number": "Enter a number, e.g. 0.5 or 1500.",
+        "ambiguous_number": "Ambiguous: write it without a thousands separator (1500) or with more decimals (1.5).",
+        "must_be_positive": "Must be greater than 0.",
+        "too_long": "Too long.",
+        "future_date": "The date can't be in the future."
+      },
+      "messages": {
+        "unauthorized": "Your session ended. Sign in again.",
+        "not_found": "This transaction no longer exists.",
+        "would_oversell": "This would leave a sale larger than what you held at that date. Check the dates and quantities.",
+        "save_failed": "Couldn't save. Try again."
+      }
+    }
   },
   "Login": {
     "title": "Sign in",

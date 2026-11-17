@@ -28,7 +28,7 @@ export default function Header({ showNewsControls = false }: HeaderProps) {
       <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between gap-3 px-4 sm:px-6">
         <div className="flex items-center gap-3 sm:gap-8">
           <Link href="/" className="text-sm font-bold tracking-[0.2em] whitespace-nowrap text-fg sm:tracking-[0.3em]">
-            THE WIRE
+            THE <span className="text-accent">WIRE</span>
           </Link>
 
           <nav aria-label={t("nav.label")} className="flex items-center gap-3 sm:gap-6">

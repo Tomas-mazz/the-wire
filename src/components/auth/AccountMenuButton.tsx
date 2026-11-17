@@ -45,7 +45,7 @@ export default function AccountMenuButton({ email, locale }: AccountMenuButtonPr
         aria-expanded={open}
         aria-controls={menuId}
         onClick={() => setOpen((value) => !value)}
-        className="flex size-8 items-center justify-center rounded-full bg-fg sm:size-9 text-sm font-semibold text-bg transition-opacity hover:opacity-90"
+        className="flex size-8 items-center justify-center rounded-full bg-accent sm:size-9 text-sm font-semibold text-accent-ink transition-opacity hover:opacity-90"
       >
         {initial}
       </button>

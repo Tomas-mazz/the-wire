@@ -17,3 +17,9 @@ export {
   type PortfolioTotals,
 } from "./valuation";
 export { computeCash, type CashBalance } from "./cash";
+export {
+  computeHoldings,
+  type Holding,
+  type LedgerProblem,
+  type LedgerTransaction,
+} from "./holdings";
