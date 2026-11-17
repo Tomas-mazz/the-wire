@@ -11,7 +11,7 @@ Next.js 16 (App Router, Cache Components) + TypeScript · Tailwind CSS · next-i
 
 ## Run locally
 1. Install dependencies: `npm install` (Node.js 22+ recommended).
-2. Create a Supabase project and copy `.env.example` to `.env.local`, filling in `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
+2. Create a Supabase project and copy `.env.example` to `.env.local`, filling in `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. For live prices also set the server-only `SUPABASE_SECRET_KEY`, `FINNHUB_API_KEY` (free account) and optionally `COINGECKO_API_KEY` (free Demo key); `.env.example` explains each one.
 3. Run every file in `supabase/migrations/` (in order) in the Supabase SQL Editor.
 4. In Supabase → Authentication → URL Configuration, add `http://localhost:3000/**` to the redirect URLs.
 5. `npm run dev` → http://localhost:3000 (redirects to `/en` or `/es`).
@@ -20,7 +20,11 @@ Next.js 16 (App Router, Cache Components) + TypeScript · Tailwind CSS · next-i
 - `src/app/[locale]/`: pages (root layout, landing, login, portfolio, news)
 - `src/app/auth/`: auth server actions and the magic-link callback route
 - `src/lib/auth.ts`: who is signed in (the only place that checks the session)
-- `src/lib/supabase/`: Supabase clients
+- `src/lib/supabase/`: Supabase clients (`admin.ts` uses the secret key, server only)
+- `src/domain/`: portfolio math (pure TypeScript + decimal.js, unit-tested)
+- `src/market-data/`: price providers (Binance, CoinGecko, Finnhub) behind one interface, unit-tested
+- `src/lib/prices/`: server price cache (`latest_prices`) and manual prices
+- `src/app/api/`: `prices` and `assets/search` routes (signed-in only)
 - `src/proxy.ts`: language routing + session refresh + auth redirects
 - `supabase/migrations/`: database schema (SQL)
 - `messages/`: UI strings in English and Spanish
