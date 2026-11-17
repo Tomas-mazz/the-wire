@@ -34,3 +34,15 @@ export async function requireUser(locale: string): Promise<CurrentUser> {
   if (!user) redirect(`/${locale}/login`);
   return user;
 }
+
+/**
+ * For Server Actions: they are reachable by direct POST requests, so every
+ * action checks the session itself. Returns null when signed out.
+ */
+export async function getActionUser(): Promise<CurrentUser | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.getClaims();
+  const claims = data?.claims;
+  if (error || !claims) return null;
+  return { id: claims.sub, email: typeof claims.email === "string" ? claims.email : null };
+}

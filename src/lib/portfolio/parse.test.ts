@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   parseDecimalInput,
+  parseProjectForm,
   parseTransactionForm,
   utcToZonedLocal,
   zonedLocalToUtc,
@@ -172,5 +173,41 @@ describe("parseTransactionForm", () => {
       name: "required",
       assetClass: "invalid",
     });
+  });
+});
+
+describe("parseProjectForm", () => {
+  function form(fields: Record<string, string>) {
+    const f = new FormData();
+    for (const [k, v] of Object.entries(fields)) f.set(k, v);
+    return f;
+  }
+
+  it("accepts a project and cleans the tags", () => {
+    const r = parseProjectForm(
+      form({ name: " Retirement ", tags: "long term, ETF ,, long term", trackCash: "on" }),
+    );
+    expect(r).toEqual({
+      ok: true,
+      value: {
+        name: "Retirement",
+        description: null,
+        defaultBroker: null,
+        strategy: null,
+        horizon: null,
+        tags: ["long term", "ETF"],
+        trackCash: true,
+      },
+    });
+  });
+
+  it("requires a name and limits lengths", () => {
+    const r = parseProjectForm(form({ name: "", description: "x".repeat(501) }));
+    expect(r.ok ? null : r.errors).toEqual({ name: "required", description: "too_long" });
+  });
+
+  it("limits the number of tags", () => {
+    const r = parseProjectForm(form({ name: "A", tags: "1,2,3,4,5,6,7,8,9,10,11" }));
+    expect(r.ok ? null : r.errors).toEqual({ tags: "too_many" });
   });
 });

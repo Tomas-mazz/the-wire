@@ -272,3 +272,64 @@ export function parseTransactionForm(form: FormData, now = Date.now()): Transact
     },
   };
 }
+
+// ---------------------------------------------------------------------------
+// Project form
+// ---------------------------------------------------------------------------
+
+export type ProjectField = "name" | "description" | "defaultBroker" | "strategy" | "horizon" | "tags";
+
+export interface ProjectInput {
+  name: string;
+  description: string | null;
+  defaultBroker: string | null;
+  strategy: string | null;
+  horizon: string | null;
+  tags: string[];
+  trackCash: boolean;
+}
+
+export type ProjectFormResult =
+  | { ok: true; value: ProjectInput }
+  | { ok: false; errors: Partial<Record<ProjectField, "required" | "too_long" | "too_many">> };
+
+const MAX_TAGS = 10;
+
+/** Validates the project form. Tags are comma separated, trimmed and de-duplicated. */
+export function parseProjectForm(form: FormData): ProjectFormResult {
+  const errors: Partial<Record<ProjectField, "required" | "too_long" | "too_many">> = {};
+
+  const name = text(form, "name");
+  if (name === "") errors.name = "required";
+  else if (name.length > 80) errors.name = "too_long";
+
+  const fields = { description: 500, defaultBroker: 80, strategy: 200, horizon: 80 } as const;
+  const values: Record<keyof typeof fields, string | null> = {
+    description: null,
+    defaultBroker: null,
+    strategy: null,
+    horizon: null,
+  };
+  for (const [key, max] of Object.entries(fields) as [keyof typeof fields, number][]) {
+    const result = optionalText(text(form, key), max);
+    if (result.ok) values[key] = result.value;
+    else errors[key] = result.error;
+  }
+
+  const tags = [
+    ...new Set(
+      text(form, "tags")
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean),
+    ),
+  ];
+  if (tags.length > MAX_TAGS) errors.tags = "too_many";
+  else if (tags.some((t) => t.length > 30)) errors.tags = "too_long";
+
+  if (Object.keys(errors).length > 0) return { ok: false, errors };
+  return {
+    ok: true,
+    value: { name, ...values, tags, trackCash: form.get("trackCash") === "on" },
+  };
+}
