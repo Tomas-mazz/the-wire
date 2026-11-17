@@ -29,20 +29,20 @@ export function TabList({ pathname }: { pathname: string | null }) {
   ] as const;
 
   return (
-    // A vertical menu in the sidebar on large screens; a scrollable row on small ones.
-    <nav aria-label={t("label")} className="min-w-0 overflow-x-auto lg:overflow-visible">
-      <ul className="flex gap-1 lg:flex-col">
+    // Underlined tabs, like the site header; the row scrolls sideways on small phones.
+    <nav aria-label={t("label")} className="h-full min-w-0 overflow-x-auto">
+      <ul className="flex h-full gap-5 sm:gap-7">
         {tabs.map((tab) => (
-          <li key={tab.href}>
+          <li key={tab.href} className="h-full">
             <Link
               href={tab.href}
               aria-current={tab.active ? "page" : undefined}
-              // Active tab: tinted background plus an amethyst bar (below on
-              // small screens, on the left in the sidebar).
-              className={`block rounded-lg px-3 py-2 text-sm whitespace-nowrap transition-colors ${
+              // Active tab: white and bold with a 2px amethyst line on the bar's
+              // bottom edge (an inset shadow, so the text never moves).
+              className={`flex h-full items-center text-sm whitespace-nowrap transition-colors ${
                 tab.active
-                  ? "bg-surface-hover font-semibold text-fg shadow-[inset_0_-2px_0_var(--color-accent)] lg:shadow-[inset_2px_0_0_var(--color-accent)]"
-                  : "text-body hover:bg-surface hover:text-fg"
+                  ? "font-semibold text-fg shadow-[inset_0_-2px_0_var(--color-accent)]"
+                  : "text-muted hover:text-fg"
               }`}
             >
               {tab.label}
