@@ -203,3 +203,7 @@ The portfolio grows into a full investment tracker (a ledger, not a broker: no o
     → Answer: Shows the most important sample story (short headline + "Open →") in all three sections; real news, by topic, comes later (decided 2026-11-17).
 88. Portfolio header?
     → Answer: Highlight the current section in the site header (Portfolio / News), remove the "Portfolio · Your stocks and crypto…" title block, and move the tabs and "+ Transaction" button to a better place. Chosen from options shown side by side: the active link gets an amethyst underline on the header's edge (over a pill or a bigger link), and the tabs plus "+ Transaction" go in a sticky sub-bar under the header, only as wide as the content so it reads as the portfolio's own header (over a toolbar row, tabs inside the header or a sidebar; a sidebar was built first and then dropped by the user). Done before M5 as step S2 (decided 2026-11-17).
+89. Where do prices come from?
+    → Answer: Crypto from Binance's public market data, with CoinGecko as automatic fallback (Binance may block Vercel's US servers with HTTP 451). US stocks and ETFs from Finnhub's free plan. Prices are cached server-side in `latest_prices`, written only with the Supabase secret key (decided 2026-11-17).
+90. How "live" are prices?
+    → Answer: Crypto updates every second in the browser over Binance's WebSocket; everything else (and crypto as a backup) is refreshed every 30 s while the page is open (decided 2026-11-17).
