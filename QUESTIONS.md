@@ -181,3 +181,5 @@ The portfolio grows into a full investment tracker (a ledger, not a broker: no o
     → Answer: Its market value, cost basis and unrealized P/L are left out (with a visible note), but its realized P/L and dividends still count, since they do not depend on a price (decided 2026-11-17).
 77. Node.js version?
     → Answer: Node 22 (`.nvmrc`), required by Vitest 5 and Supabase (decided 2026-11-17).
+78. How do database migrations reach Supabase?
+    → Answer: Automatically. The Supabase GitHub integration ("Deploy to production") applies new files in `supabase/migrations` when they are merged to `main`. No more pasting into the SQL Editor. The profiles migration was made idempotent because it had been applied by hand (decided 2026-11-17).

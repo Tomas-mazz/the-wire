@@ -1,6 +1,6 @@
 # Instructions for AI assistants
 
-**Status (2026-11-17):** The Wire is now an **investment tracker** (a ledger, not a broker). The news product is paused. The spec, data model and milestones are in `PLAN.md` ("Investment tracker"), and decisions 41–77 are in `QUESTIONS.md`. Done so far: P1 (landing), **M1 (accounts)** and **M2 (portfolio math in `src/domain`, `npm test`)**. **Next: M3, the database** (tables, RLS, audit trail). Use Node 22 (`nvm use`). For any new product decision, ask the user; don't decide for them.
+**Status (2026-11-17):** The Wire is now an **investment tracker** (a ledger, not a broker). The news product is paused. The spec, data model and milestones are in `PLAN.md` ("Investment tracker"), and decisions 41–78 are in `QUESTIONS.md`. Done so far: P1 (landing), **M1 (accounts)** and **M2 (portfolio math in `src/domain`, `npm test`)**. **Next: M3, the database** (tables, RLS, audit trail). Use Node 22 (`nvm use`). For any new product decision, ask the user; don't decide for them.
 
 **Repo language:** everything committed is in **English**: commits, branch names, PR titles, README, docs, code, comments, tests and config. Talk to the user in **Spanish**. The UI is bilingual (ES/EN): add every new string to both `messages/en.json` and `messages/es.json`.
 
@@ -27,7 +27,7 @@
 - `src/proxy.ts` (formerly middleware) runs next-intl first, then refreshes the Supabase session and does optimistic redirects (`/portfolio` needs a session; `/login` with a session goes to `/portfolio`).
 - Session checks live only in `src/lib/auth.ts` (`getOptionalUser`, `requireUser`). They call `connection()` and verify with `getClaims()`. Anything that reads the session must render inside `<Suspense>`.
 - Supabase clients: `src/lib/supabase/server.ts` (server code) and `src/lib/supabase/proxy.ts` (session refresh). Env vars: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (see `.env.example`).
-- Database changes go in `supabase/migrations/*.sql` (the user runs them in the Supabase SQL Editor). Every user table gets Row Level Security.
+- Database changes go in `supabase/migrations/<timestamp>_<name>.sql`. The Supabase GitHub integration applies new migrations automatically when they are merged to `main` (each file runs in one transaction; no `create index concurrently`). Never change the schema in the SQL Editor (it breaks the migration history), and never edit a migration after it is merged: add a new one. Every user table gets Row Level Security.
 - The default Supabase email template sends a PKCE link that only works in the browser where it was requested; `/auth/callback` also accepts `token_hash` for when custom SMTP is set up (M8).
 
 **Deploy:** production is https://the-wire-seven.vercel.app (Vercel, auto-deploys `main`). Vercel env vars: the two `NEXT_PUBLIC_SUPABASE_*` values as type "Config" (public by design); server-only keys such as `ANTHROPIC_API_KEY` go as "Secret" without the `NEXT_PUBLIC_` prefix. Supabase → Authentication → URL Configuration: Site URL is the production URL; redirect URLs are `https://the-wire-seven.vercel.app/**`, `http://localhost:3000/**` and `http://localhost:3100/**`.
