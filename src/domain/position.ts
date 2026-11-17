@@ -11,7 +11,7 @@ export interface Position {
   avgCost: Dec | null;
   /** Profit or loss already locked in by sells. */
   realized: Dec;
-  /** Dividends received, net of their fees. */
+  /** Gross dividends (decision 75); their fees are in `fees`. */
   income: Dec;
   /** All fees paid on this asset. */
   fees: Dec;
@@ -26,9 +26,10 @@ export interface Position {
  *   sell:     realized += q × price − fee − q × avgCost
  *             costBasis −= q × avgCost      (avgCost stays the same)
  *             quantity -= q                 (selling more than held throws)
- *   reward:   quantity += q at zero cost (lowers avgCost); a fee, if any,
- *             is added to costBasis because it was really paid
- *   dividend: income += q × price − fee    (q = shares, price = per share)
+ *   reward:   quantity += q at zero cost (lowers avgCost); the fee is
+ *             optional and, when entered, is added to costBasis
+ *   dividend: income += q × price          (gross: q = shares, price = per
+ *             share); a fee or withholding only counts in `fees`
  *
  *   avgCost = costBasis / quantity
  *
@@ -78,7 +79,7 @@ export function computePosition(transactions: readonly Transaction[]): Position 
         break;
 
       case "dividend":
-        income = income.plus(gross).minus(fee);
+        income = income.plus(gross);
         fees = fees.plus(fee);
         break;
 

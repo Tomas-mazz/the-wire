@@ -24,12 +24,12 @@ P1. ✅ **Landing + routes:** The Wire home with Portfolio and News cards; sampl
 Transactions of one asset in one project are replayed in order (`executed_at`, then `created_at`):
 - **Buy:** `quantity += q` · `costBasis += q × price + fee` → `avgCost = costBasis / quantity`
 - **Sell:** `realized += q × price − fee − q × avgCost` · `costBasis −= q × avgCost` · `quantity −= q` (average cost unchanged). Selling more than held is rejected.
-- **Reward:** `quantity += q` at zero cost (lowers the average).
-- **Dividend:** adds to `income` (and to cash when the project tracks cash).
+- **Reward:** `quantity += q` at zero cost (lowers the average). An optional fee is added to the cost basis.
+- **Dividend:** `income += q × price` (gross; the fee only counts in total fees). Cash receives the net amount.
 - **Unrealized** = `quantity × lastPrice − costBasis` · **%** = `unrealized / costBasis`
 - **Total P/L** = `realized + income + unrealized` · **Allocation %** = `marketValue / total marketValue`
 - **Cash (opt-in per project):** deposit +, withdrawal −, buy − (total + fee), sell + (total − fee), dividend +. Negative cash shows a warning, not a block.
-- Rounding only at display time. Missing price → the position shows "no price" and is left out of totals, with a visible note.
+- Rounding only at display time. Missing price → the position shows "no price" and its value, cost and unrealized P/L are left out of totals, with a visible note; its realized P/L and dividends still count.
 
 ### Data model (Supabase Postgres, Row Level Security on every user table)
 | Table | Key columns |
@@ -56,7 +56,7 @@ Holdings table columns: asset, quantity, avg cost, last price, market value, unr
 
 ### Milestones (v1)
 - **M1. ✅ Accounts:** Supabase project, env vars, sign up/in with an email magic link, `profiles` (migration `20261115120000_profiles.sql`), protected `/portfolio`, account menu in the header (avatar with initial + sign out). Locale read via `next/root-params`.
-- **M2. Portfolio math:** `src/domain` with decimal.js + Vitest tests for buy/sell/fees/rewards/dividends/cash/edge cases.
+- **M2. ✅ Portfolio math:** `src/domain` (`computePosition`, `valuePosition`, `summarize`, `allocation`, `computeCash`) with decimal.js + Vitest tests for buy/sell/fees/rewards/dividends/cash/edge cases. Run with `npm test`.
 - **M3. Database:** tables above (except `daily_prices`), RLS policies, audit trail trigger.
 - **M4. Projects + transactions:** create/edit/archive projects, add/edit/delete transactions, asset search, transactions list with filters.
 - **M5. Prices + holdings:** provider interface, Binance + Finnhub, cached prices, holdings table with live P/L and stale/missing states.
@@ -69,7 +69,7 @@ Holdings table columns: asset, quantity, avg cost, last price, market value, unr
 - **v3:** benchmarks (SPY, BTC), time-weighted / money-weighted returns, price alerts.
 
 ### Housekeeping
-- Upgrade local Node.js from 20 to 22+ (Supabase deprecates Node 20).
+- ✅ Upgrade local Node.js from 20 to 22+ (`.nvmrc`; done 2026-11-17).
 
 ### Risks
 - **Wrong numbers** → domain isolated and unit-tested; check results against real broker statements.

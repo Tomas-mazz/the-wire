@@ -173,3 +173,11 @@ The portfolio grows into a full investment tracker (a ledger, not a broker: no o
     → Answer: Not possible without custom SMTP on the free plan. Keep the default email for now (the link must be opened in the same browser). Set up custom SMTP in M8.
 73. How is the session shown?
     → Answer: In the header, like most sites: a person icon + "Sign in" when signed out; a round avatar with the user's initial when signed in, opening a menu with the email, Portfolio and Sign out.
+74. Fee on a reward (staking/airdrop)?
+    → Answer: Optional. When entered, it is added to the cost basis; without it the reward costs 0 (decided 2026-11-17).
+75. Dividend income: gross or net of fees/withholding?
+    → Answer: Gross. The fee or withholding is still counted in total fees, and the cash balance receives the net amount that actually arrives (decided 2026-11-17).
+76. Totals when an open position has no price?
+    → Answer: Its market value, cost basis and unrealized P/L are left out (with a visible note), but its realized P/L and dividends still count, since they do not depend on a price (decided 2026-11-17).
+77. Node.js version?
+    → Answer: Node 22 (`.nvmrc`), required by Vitest 5 and Supabase (decided 2026-11-17).

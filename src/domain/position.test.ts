@@ -109,15 +109,16 @@ describe("computePosition", () => {
     expect(s(p.avgCost)).toBe("0.5");
   });
 
-  it("counts dividends as income, net of fees, without changing quantity", () => {
-    // 10 shares × 0.25 − 0.3 = 2.2
+  it("counts gross dividends as income, without changing quantity", () => {
+    // 10 shares × 0.25 = 2.5; the 0.3 withholding only goes to fees
     const p = computePosition([
       tx("buy", "10", "50", { day: 1 }),
       tx("dividend", "10", "0.25", { fee: "0.3", day: 2 }),
     ]);
     expect(s(p.quantity)).toBe("10");
     expect(s(p.costBasis)).toBe("500");
-    expect(s(p.income)).toBe("2.2");
+    expect(s(p.income)).toBe("2.5");
+    expect(s(p.fees)).toBe("0.3");
   });
 
   it("ignores deposits and withdrawals", () => {
