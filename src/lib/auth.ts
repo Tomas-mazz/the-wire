@@ -36,8 +36,8 @@ export async function requireUser(locale: string): Promise<CurrentUser> {
 }
 
 /**
- * For Server Actions: they are reachable by direct POST requests, so every
- * action checks the session itself. Returns null when signed out.
+ * For Server Actions and Route Handlers: they are reachable by direct
+ * requests, so each one checks the session itself. Returns null when signed out.
  */
 export async function getActionUser(): Promise<CurrentUser | null> {
   const supabase = await createClient();
