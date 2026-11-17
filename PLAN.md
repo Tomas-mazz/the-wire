@@ -57,7 +57,7 @@ Holdings table columns: asset, quantity, avg cost, last price, market value, unr
 ### Milestones (v1)
 - **M1. ✅ Accounts:** Supabase project, env vars, sign up/in with an email magic link, `profiles` (migration `20261115120000_profiles.sql`), protected `/portfolio`, account menu in the header (avatar with initial + sign out). Locale read via `next/root-params`.
 - **M2. ✅ Portfolio math:** `src/domain` (`computePosition`, `valuePosition`, `summarize`, `allocation`, `computeCash`) with decimal.js + Vitest tests for buy/sell/fees/rewards/dividends/cash/edge cases. Run with `npm test`.
-- **M3. Database:** tables above (except `daily_prices`), RLS policies, audit trail trigger.
+- **M3. ✅ Database:** tables above (except `daily_prices`), RLS policies, audit trail trigger (migration `20261117120000_portfolio_tables.sql`). Transactions can only point to a project of the same user; the shared `assets` catalogue can be read and extended by signed-in users but not edited; `latest_prices` is read-only for users (written server-side in M5).
 - **M4. Projects + transactions:** create/edit/archive projects, add/edit/delete transactions, asset search, transactions list with filters.
 - **M5. Prices + holdings:** provider interface, Binance + Finnhub, cached prices, holdings table with live P/L and stale/missing states.
 - **M6. Dashboards:** Overview, Crypto, Stocks and project views, allocation donut, top winners/losers, blue hover glow.
