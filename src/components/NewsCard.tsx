@@ -34,7 +34,7 @@ export default function NewsCard({ item, index }: NewsCardProps) {
   return (
     <article
       style={{ animationDelay: `${index * 60}ms` }}
-      className={`flex animate-fade-up flex-col border border-line bg-surface transition-colors hover:border-line-strong hover:bg-surface-hover ${
+      className={`flex animate-fade-up flex-col border border-line bg-surface glow-card transition-colors hover:bg-surface-hover ${
         isTop ? "rounded-3xl p-6" : "rounded-2xl p-5"
       }`}
     >
@@ -97,7 +97,7 @@ export default function NewsCard({ item, index }: NewsCardProps) {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-controls={detailsId}
-        className="mt-5 inline-flex w-fit items-center gap-1.5 rounded-xl border border-line-strong px-3 py-1.5 text-sm font-medium text-fg transition-colors hover:bg-fg/5"
+        className="mt-5 inline-flex w-fit items-center gap-1.5 rounded-xl border border-line-strong px-3 py-1.5 text-sm font-medium text-fg transition-colors hover:border-accent hover:bg-surface-hover"
       >
         {open ? t("showLess") : t("readMore")}
         <ChevronDown

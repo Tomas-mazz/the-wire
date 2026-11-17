@@ -38,8 +38,8 @@ export default function NewsBoard({ items }: { items: NewsItem[] }) {
               onClick={() => setTopic(id)}
               className={`inline-flex shrink-0 items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
                 selected
-                  ? "border-fg bg-fg text-bg"
-                  : "border-line-strong text-body hover:bg-fg/5"
+                  ? "border-accent bg-accent text-accent-ink"
+                  : "border-line-strong text-body hover:border-accent hover:text-fg"
               }`}
             >
               <TopicIcon topic={id} />

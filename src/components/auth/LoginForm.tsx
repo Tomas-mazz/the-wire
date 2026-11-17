@@ -45,7 +45,7 @@ export default function LoginForm() {
         placeholder={t("emailPlaceholder")}
         aria-invalid={state.status === "invalid"}
         aria-describedby={message ? "email-message" : undefined}
-        className="w-full rounded-xl border border-line-strong bg-surface px-4 py-3 text-fg placeholder:text-muted focus:border-fg focus:outline-none"
+        className="w-full rounded-xl border border-line-strong bg-surface px-4 py-3 text-fg placeholder:text-muted focus:border-accent focus:outline-none"
       />
       {message && (
         <p id="email-message" role="alert" className="text-sm text-down">
@@ -55,7 +55,7 @@ export default function LoginForm() {
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-xl bg-fg px-4 py-3 text-sm font-semibold text-bg transition-opacity hover:opacity-90 disabled:opacity-60"
+        className="w-full rounded-xl bg-accent px-4 py-3 text-sm font-semibold text-accent-ink transition-opacity hover:opacity-90 disabled:opacity-60"
       >
         {pending ? t("sending") : t("sendLink")}
       </button>

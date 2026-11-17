@@ -112,7 +112,7 @@ async function ProjectDetail({ id }: { id: string }) {
             {transactions.length > RECENT && (
               <Link
                 href={`/portfolio/transactions?project=${project.id}`}
-                className="inline-block text-sm text-fg underline-offset-4 hover:underline"
+                className="inline-block text-sm text-accent underline-offset-4 hover:underline"
               >
                 {t("projects.viewAll")}
               </Link>

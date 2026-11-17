@@ -169,7 +169,7 @@ export default function TransactionForm({
           {assetMode === "existing" && selected && (
             <div className="mt-2 flex items-center justify-between gap-3 rounded-xl border border-line-strong bg-bg px-3 py-2.5">
               <span>
-                <span className="font-mono font-semibold text-fg">{selected.symbol}</span>
+                <span className="font-mono font-semibold text-accent">{selected.symbol}</span>
                 <span className="ml-2 text-sm text-muted">
                   {selected.name} · {t(`assetClasses.${selected.assetClass}`)}
                 </span>
@@ -210,7 +210,7 @@ export default function TransactionForm({
                         onClick={() => setAssetId(a.id)}
                         className="flex w-full items-center gap-2 px-3 py-2.5 text-left hover:bg-surface-hover"
                       >
-                        <span className="font-mono font-semibold text-fg">{a.symbol}</span>
+                        <span className="font-mono font-semibold text-accent">{a.symbol}</span>
                         <span className="truncate text-sm text-muted">{a.name}</span>
                         <span className="ml-auto text-xs text-muted">
                           {t(`assetClasses.${a.assetClass}`)}
@@ -228,7 +228,7 @@ export default function TransactionForm({
                   setNewSymbol(query.trim().toUpperCase());
                   setAssetMode("new");
                 }}
-                className="mt-3 text-sm text-fg underline-offset-4 hover:underline"
+                className="mt-3 text-sm text-accent underline-offset-4 hover:underline"
               >
                 {f("addNew")}
               </button>

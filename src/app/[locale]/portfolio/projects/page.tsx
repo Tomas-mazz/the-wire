@@ -77,7 +77,7 @@ async function ProjectCard({ project, count }: { project: Project; count: number
   return (
     <Link
       href={`/portfolio/projects/${project.id}`}
-      className="flex h-full flex-col rounded-2xl border border-line bg-surface p-5 transition-colors hover:border-line-strong hover:bg-surface-hover"
+      className="flex h-full flex-col rounded-2xl border border-line bg-surface p-5 glow-card transition-colors hover:bg-surface-hover"
     >
       <span className="flex items-start justify-between gap-3">
         <span className="font-semibold text-fg">{project.name}</span>

@@ -38,8 +38,8 @@ export function TabList({ pathname }: { pathname: string | null }) {
               aria-current={tab.active ? "page" : undefined}
               className={`block rounded-full px-4 py-2 text-sm whitespace-nowrap transition-colors ${
                 tab.active
-                  ? "bg-fg font-medium text-bg"
-                  : "border border-line text-body hover:border-line-strong hover:text-fg"
+                  ? "bg-accent font-semibold text-accent-ink"
+                  : "border border-line-strong text-body hover:border-accent hover:text-fg"
               }`}
             >
               {tab.label}

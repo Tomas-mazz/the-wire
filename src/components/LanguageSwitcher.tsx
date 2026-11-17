@@ -39,7 +39,7 @@ export default function LanguageSwitcher() {
             aria-pressed={active}
             onClick={() => switchTo(l)}
             className={`rounded-[10px] px-2.5 py-1 text-xs font-medium uppercase transition-colors ${
-              active ? "bg-fg text-bg" : "text-body hover:text-fg"
+              active ? "bg-accent text-accent-ink" : "text-body hover:text-fg"
             }`}
           >
             {l}

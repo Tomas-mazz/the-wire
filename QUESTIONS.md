@@ -191,3 +191,5 @@ The portfolio grows into a full investment tracker (a ledger, not a broker: no o
     → Answer: M4 searches the shared catalogue and lets the user add a missing asset by hand (symbol, name, kind: stock / ETF / crypto). Provider search comes in M5 (decided 2026-11-17).
 82. Portfolio screen layout?
     → Answer: Tabs under /portfolio: Overview · Projects · Transactions, each project with its own page, and a "+ Transaction" button always visible (decided 2026-11-17).
+83. Colors?
+    → Answer: Three main colors, palette "Amethyst": black #0B0B0B (page), deep violet #33204F (borders, card tint #140F1F) and amethyst #B57CFF (primary buttons, active tabs, links, asset symbols, focus, hover light). Clickable cards get a beam of light that travels around the border on hover, and everything clickable shows the pointing hand. Chosen over blue and other violet options shown side by side. Replaces the plain white accents and the soft blue glow of decision 69 (decided 2026-11-17).

@@ -71,7 +71,7 @@ export default async function HoldingsTable({ rows, locale }: { rows: HoldingRow
             return (
               <tr key={asset.id} className={`border-b border-line last:border-0 ${closed ? "opacity-60" : ""}`}>
                 <th scope="row" className="px-3 py-3 text-left font-normal">
-                  <span className="font-mono font-semibold text-fg">{asset.symbol}</span>
+                  <span className="font-mono font-semibold text-accent">{asset.symbol}</span>
                   <span className="ml-2 text-muted">{asset.name}</span>
                   <span className="ml-2 text-xs text-muted">
                     · {t(`assetClasses.${asset.assetClass}`)}

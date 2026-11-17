@@ -27,7 +27,7 @@ export default function SectionCard({
   return (
     <Link
       href={href}
-      className={`group flex min-h-56 flex-col rounded-2xl border border-line bg-surface p-6 transition-colors hover:border-line-strong hover:bg-surface-hover sm:p-8 ${
+      className={`group flex min-h-56 flex-col rounded-2xl border border-line bg-surface p-6 glow-card transition-colors hover:bg-surface-hover sm:p-8 ${
         muted ? "opacity-60 hover:opacity-100" : ""
       }`}
     >
@@ -45,7 +45,7 @@ export default function SectionCard({
       <h2 className="mt-6 text-xl font-bold text-fg sm:text-2xl">{title}</h2>
       <p className="mt-2 max-w-md text-sm leading-relaxed text-body">{description}</p>
 
-      <span className="mt-auto flex items-center gap-1 pt-6 text-sm font-medium text-fg">
+      <span className="mt-auto flex items-center gap-1 pt-6 text-sm font-medium text-accent">
         {cta}
         <ArrowUpRight
           size={16}

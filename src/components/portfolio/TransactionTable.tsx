@@ -62,7 +62,7 @@ export default async function TransactionTable({
               <tr key={row.id} className="border-b border-line last:border-0 hover:bg-surface">
                 <td className="px-3 py-3 whitespace-nowrap text-body">{date}</td>
                 <td className="px-3 py-3 whitespace-nowrap">
-                  <span className="font-mono font-semibold text-fg">{row.asset.symbol}</span>
+                  <span className="font-mono font-semibold text-accent">{row.asset.symbol}</span>
                 </td>
                 <td className="px-3 py-3 whitespace-nowrap text-body">{t(`types.${row.type}`)}</td>
                 <td className={tdNumber}>{formatQuantity(row.quantity, locale)}</td>

@@ -1,6 +1,6 @@
 # Instructions for AI assistants
 
-**Status (2026-11-17):** The Wire is now an **investment tracker** (a ledger, not a broker). The news product is paused. The spec, data model and milestones are in `PLAN.md` ("Investment tracker"), and decisions 41–82 are in `QUESTIONS.md`. Done so far: P1 (landing), **M1 (accounts)**, **M2 (portfolio math in `src/domain`, `npm test`)**, **M3 (database tables, RLS, audit trail)** and **M4 (projects + transactions screens)**. **Next: M5, prices + holdings** (provider interface, Binance + Finnhub, cached prices, live P/L). Use Node 22 (`nvm use`). For any new product decision, ask the user; don't decide for them.
+**Status (2026-11-17):** The Wire is now an **investment tracker** (a ledger, not a broker). The news product is paused. The spec, data model and milestones are in `PLAN.md` ("Investment tracker"), and decisions 41–83 are in `QUESTIONS.md`. Done so far: P1 (landing), **M1 (accounts)**, **M2 (portfolio math in `src/domain`, `npm test`)**, **M3 (database tables, RLS, audit trail)** and **M4 (projects + transactions screens)**. **Next: M5, prices + holdings** (provider interface, Binance + Finnhub, cached prices, live P/L). Use Node 22 (`nvm use`). For any new product decision, ask the user; don't decide for them.
 
 **Repo language:** everything committed is in **English**: commits, branch names, PR titles, README, docs, code, comments, tests and config. Talk to the user in **Spanish**. The UI is bilingual (ES/EN): add every new string to both `messages/en.json` and `messages/es.json`.
 
