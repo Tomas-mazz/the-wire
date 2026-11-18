@@ -66,3 +66,28 @@ export async function mapLimited<T, R>(
   await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
   return results;
 }
+
+/** True for failures worth retrying: rate limits (429), server errors (5xx) and timeouts. */
+export function isTransientError(error: unknown): boolean {
+  if (error instanceof ProviderHttpError) return error.status === 429 || error.status >= 500;
+  const name = (error as { name?: string } | null)?.name;
+  return name === "TimeoutError" || name === "AbortError" || error instanceof TypeError;
+}
+
+/**
+ * Runs `task`, retrying transient failures with a growing pause (1×, 2×… `delayMs`).
+ * Free plans cut bursts of calls (Finnhub answers 429), so a short wait usually works.
+ */
+export async function retryTransient<T>(
+  task: () => Promise<T>,
+  { attempts = 3, delayMs = 1500, sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms)) } = {},
+): Promise<T> {
+  for (let attempt = 1; ; attempt++) {
+    try {
+      return await task();
+    } catch (error) {
+      if (attempt >= attempts || !isTransientError(error)) throw error;
+      await sleep(delayMs * attempt);
+    }
+  }
+}

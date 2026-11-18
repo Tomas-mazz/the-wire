@@ -3,7 +3,7 @@ import type { Transaction } from "@/domain";
 import { findAssetsByIsin, findAssetsBySymbol, findOrCreateAsset } from "@/lib/portfolio/assets";
 import type { createClient } from "@/lib/supabase/server";
 import { fetchUsdRates } from "@/market-data/fx";
-import { mapLimited } from "@/market-data/http";
+import { mapLimited, retryTransient } from "@/market-data/http";
 import { searchCoins, searchStocks, type SearchConfig } from "@/market-data/search";
 import { assetKey, buildReview, identity, rateKey, type ResolvedAsset, type ReviewRow } from "./review";
 import type { ImportBroker, ImportedAsset, ImportedTransaction } from "./types";
@@ -56,8 +56,15 @@ async function loadRates(transactions: readonly ImportedTransaction[]): Promise<
   return rates;
 }
 
-/** assetKey → the asset it is, from our catalogue first and the price providers second. */
-async function resolveAssets(supabase: Supabase, assets: readonly ImportedAsset[]): Promise<Map<string, ResolvedAsset | null>> {
+/**
+ * assetKey → the asset it is, from our catalogue first and the price providers second.
+ * Provider calls are retried when a free plan cuts a burst of calls (Finnhub answers 429);
+ * if they still fail the row says "couldn't check now" instead of "unknown asset".
+ */
+async function resolveAssets(
+  supabase: Supabase,
+  assets: readonly ImportedAsset[],
+): Promise<Map<string, ResolvedAsset | null | "lookup_failed">> {
   const unique = new Map<string, ImportedAsset>();
   for (const asset of assets) unique.set(assetKey(asset), asset);
 
@@ -65,7 +72,7 @@ async function resolveAssets(supabase: Supabase, assets: readonly ImportedAsset[
   const symbols = [...unique.values()].flatMap((a) => (!a.isin && a.symbol ? [a.symbol] : []));
   const [byIsin, bySymbol] = await Promise.all([findAssetsByIsin(supabase, isins), findAssetsBySymbol(supabase, symbols)]);
 
-  const resolved = new Map<string, ResolvedAsset | null>();
+  const resolved = new Map<string, ResolvedAsset | null | "lookup_failed">();
   const toLookUp: [string, ImportedAsset][] = [];
   for (const [key, asset] of unique) {
     const known = asset.isin
@@ -81,21 +88,22 @@ async function resolveAssets(supabase: Supabase, assets: readonly ImportedAsset[
   }
 
   const config = searchConfig();
-  await mapLimited(toLookUp.slice(0, MAX_LOOKUPS), 3, async ([key, asset]) => {
+  for (const [key] of toLookUp.slice(MAX_LOOKUPS)) resolved.set(key, "lookup_failed");
+  await mapLimited(toLookUp.slice(0, MAX_LOOKUPS), 2, async ([key, asset]) => {
     try {
       if (asset.isin) {
-        const [match] = await searchStocks(asset.isin, config);
+        const [match] = await retryTransient(() => searchStocks(asset.isin!, config));
         resolved.set(key, match ? { ...match, providerRefs: { ...match.providerRefs, isin: asset.isin } } : null);
       } else if (asset.kind === "crypto") {
-        const match = (await searchCoins(asset.symbol!, config)).find((c) => c.symbol === asset.symbol);
+        const match = (await retryTransient(() => searchCoins(asset.symbol!, config))).find((c) => c.symbol === asset.symbol);
         resolved.set(key, match ?? null);
       } else {
-        const match = (await searchStocks(asset.symbol!, config)).find((c) => c.symbol === asset.symbol);
+        const match = (await retryTransient(() => searchStocks(asset.symbol!, config))).find((c) => c.symbol === asset.symbol);
         resolved.set(key, match ?? null);
       }
     } catch (error) {
       console.error("Asset lookup failed:", (error as Error).message);
-      resolved.set(key, null);
+      resolved.set(key, "lookup_failed");
     }
   });
   return resolved;
@@ -167,7 +175,7 @@ export async function reviewImport(
     supabase,
     transactions.map((t) => `${t.broker}:${t.externalId}`),
   );
-  const resolved = [...assets.values()].filter((a): a is ResolvedAsset => a !== null);
+  const resolved = [...assets.values()].filter((a): a is ResolvedAsset => a !== null && a !== "lookup_failed");
   const ledgers = await loadLedgers(supabase, projectId, resolved);
   return buildReview({ transactions, rates, assets, existingKeys, ledgers });
 }

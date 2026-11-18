@@ -359,7 +359,8 @@
         "no_rate": "{count} without exchange rate",
         "oversell": "{count} sell more than held",
         "skipped": "{count} skipped",
-        "errors": "{count} with errors"
+        "errors": "{count} with errors",
+        "lookup_failed": "{count} couldn't be checked"
       },
       "columns": {
         "date": "Date",
@@ -375,12 +376,14 @@
         "duplicate": "Already imported",
         "unresolved": "Unknown asset",
         "no_rate": "No exchange rate",
-        "oversell": "Sells more than held"
+        "oversell": "Sells more than held",
+        "lookup_failed": "Couldn't check"
       },
       "statusHelp": {
         "unresolved": "We couldn't identify this asset. You can add it by hand with \"+ Transaction\".",
         "no_rate": "There was no exchange rate for that day. Try again later.",
-        "oversell": "This sells more than the project holds at that date. Import the buys first (or add them by hand), then this file again."
+        "oversell": "This sells more than the project holds at that date. Import the buys first (or add them by hand), then this file again.",
+        "lookup_failed": "We couldn't reach the price service to identify this asset right now. Upload the same file again in a minute: rows already imported are skipped, so only these are added."
       },
       "converted": "from {currency}",
       "skippedTitle": "Rows not imported ({count})",
