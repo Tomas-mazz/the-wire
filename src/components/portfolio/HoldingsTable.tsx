@@ -63,6 +63,7 @@ export default async function HoldingsTable({ rows }: { rows: HoldingRow[]; loca
     realized: holding.realized.toFixed(),
     income: holding.income.toFixed(),
     fees: holding.fees.toFixed(),
+    invested: holding.invested.toFixed(),
   }));
 
   return (

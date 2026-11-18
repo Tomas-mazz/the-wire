@@ -18,6 +18,13 @@ export {
 } from "./valuation";
 export { computeCash, type CashBalance } from "./cash";
 export {
+  dayChange,
+  bestAndWorst,
+  type DayChange,
+  type DayMoveInput,
+  type DayMover,
+} from "./daily";
+export {
   computeHoldings,
   type Holding,
   type LedgerProblem,

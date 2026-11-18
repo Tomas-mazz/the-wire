@@ -86,3 +86,38 @@ describe("allocation", () => {
     expect(a).toEqual([null]);
   });
 });
+
+describe("invested and total P/L %", () => {
+  it("keeps every buy in `invested`, even after a sell", () => {
+    // Buys: 1 × 100 + 3 × 200 = 700; the sell does not lower it.
+    expect(position.invested.toString()).toBe("700");
+  });
+
+  it("adds reward fees but not the free units", () => {
+    const p = computePosition([tx("buy", "1", "100", { fee: "1" }), tx("reward", "1", "0", { fee: "0.5" })]);
+    expect(p.invested.toString()).toBe("101.5");
+  });
+
+  it("divides total P/L by everything invested", () => {
+    const totals = summarize([valuePosition(position, "200")]);
+    // 198 total P/L / 700 invested
+    expect(totals.invested.toString()).toBe("700");
+    expect(totals.totalPnlPct!.toDecimalPlaces(6).toString()).toBe("0.282857");
+    // "Now" stays unrealized / cost of what is held: 75 / 525
+    expect(totals.unrealizedPct!.toDecimalPlaces(6).toString()).toBe("0.142857");
+  });
+
+  it("counts closed positions but leaves out open ones without a price", () => {
+    const closed = computePosition([tx("buy", "1", "100", { day: 1 }), tx("sell", "1", "150", { day: 2 })]);
+    const unpriced = computePosition([tx("buy", "1", "1000")]);
+    const totals = summarize([valuePosition(closed, null), valuePosition(unpriced, null)]);
+    expect(totals.invested.toString()).toBe("100");
+    expect(totals.totalPnl.toString()).toBe("50");
+    expect(totals.totalPnlPct!.toString()).toBe("0.5");
+    expect(totals.missingPrice).toBe(1);
+  });
+
+  it("has no total % when nothing was invested", () => {
+    expect(summarize([]).totalPnlPct).toBeNull();
+  });
+});

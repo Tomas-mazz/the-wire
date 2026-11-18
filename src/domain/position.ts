@@ -15,6 +15,12 @@ export interface Position {
   income: Dec;
   /** All fees paid on this asset. */
   fees: Dec;
+  /**
+   * Everything ever put into this asset: every buy (q × price + fee) plus
+   * reward fees. Unlike costBasis it does not go down on a sell, so it is
+   * the base of the "Total" P/L % (decision 93).
+   */
+  invested: Dec;
 }
 
 /**
@@ -32,6 +38,7 @@ export interface Position {
  *             share); a fee or withholding only counts in `fees`
  *
  *   avgCost = costBasis / quantity
+ *   invested = sum of (q × price + fee) over buys, plus reward fees
  *
  * deposit / withdrawal only move cash (see cash.ts) and are ignored here.
  */
@@ -41,6 +48,7 @@ export function computePosition(transactions: readonly Transaction[]): Position 
   let realized = ZERO;
   let income = ZERO;
   let fees = ZERO;
+  let invested = ZERO;
 
   for (const tx of sortTransactions(transactions)) {
     const { quantity: q, fee, gross } = parseTransaction(tx);
@@ -49,6 +57,7 @@ export function computePosition(transactions: readonly Transaction[]): Position 
       case "buy":
         quantity = quantity.plus(q);
         costBasis = costBasis.plus(gross).plus(fee);
+        invested = invested.plus(gross).plus(fee);
         fees = fees.plus(fee);
         break;
 
@@ -75,6 +84,7 @@ export function computePosition(transactions: readonly Transaction[]): Position 
       case "reward":
         quantity = quantity.plus(q);
         costBasis = costBasis.plus(fee);
+        invested = invested.plus(fee);
         fees = fees.plus(fee);
         break;
 
@@ -96,5 +106,6 @@ export function computePosition(transactions: readonly Transaction[]): Position 
     realized,
     income,
     fees,
+    invested,
   };
 }

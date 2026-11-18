@@ -59,6 +59,14 @@ export interface PortfolioTotals {
   realized: Dec;
   income: Dec;
   totalPnl: Dec;
+  /**
+   * Everything ever invested in the positions that count in totalPnl
+   * (priced or closed ones; open positions without a price are left out,
+   * like their unrealized P/L).
+   */
+  invested: Dec;
+  /** totalPnl / invested, or null when nothing was invested (decision 93). */
+  totalPnlPct: Dec | null;
   /** Open positions left out of value totals because they have no price. */
   missingPrice: number;
 }
@@ -69,26 +77,33 @@ export interface PortfolioTotals {
  * Open positions without a price are left out of marketValue, costBasis and
  * unrealized, and counted in `missingPrice` so the UI can show a note.
  * Realized P/L and income are known facts, so they always count.
+ *
+ *   unrealizedPct = unrealized / costBasis        ("Now" on the P/L card)
+ *   totalPnlPct   = totalPnl / invested           ("Total" on the P/L card)
  */
 export function summarize(positions: readonly ValuedPosition[]): PortfolioTotals {
   let marketValue = ZERO;
   let costBasis = ZERO;
   let realized = ZERO;
   let income = ZERO;
+  let invested = ZERO;
   let missingPrice = 0;
 
   for (const p of positions) {
     realized = realized.plus(p.realized);
     income = income.plus(p.income);
-    if (p.marketValue === null) {
-      if (!p.quantity.isZero()) missingPrice += 1;
+    if (p.marketValue === null && !p.quantity.isZero()) {
+      missingPrice += 1;
       continue;
     }
+    invested = invested.plus(p.invested);
+    if (p.marketValue === null) continue; // closed position: nothing left to value
     marketValue = marketValue.plus(p.marketValue);
     costBasis = costBasis.plus(p.costBasis);
   }
 
   const unrealized = marketValue.minus(costBasis);
+  const totalPnl = realized.plus(income).plus(unrealized);
   return {
     marketValue,
     costBasis,
@@ -96,7 +111,9 @@ export function summarize(positions: readonly ValuedPosition[]): PortfolioTotals
     unrealizedPct: costBasis.isZero() ? null : unrealized.div(costBasis),
     realized,
     income,
-    totalPnl: realized.plus(income).plus(unrealized),
+    totalPnl,
+    invested,
+    totalPnlPct: invested.isZero() ? null : totalPnl.div(invested),
     missingPrice,
   };
 }

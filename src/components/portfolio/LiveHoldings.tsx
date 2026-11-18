@@ -22,6 +22,7 @@ export interface LiveHoldingRow {
   realized: string;
   income: string;
   fees: string;
+  invested: string;
 }
 
 interface Props {
@@ -41,6 +42,7 @@ function toPosition(row: LiveHoldingRow): Position {
     realized: toDec(row.realized),
     income: toDec(row.income),
     fees: toDec(row.fees),
+    invested: toDec(row.invested),
   };
 }
 
