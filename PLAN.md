@@ -71,6 +71,7 @@ Holdings table columns: asset, quantity, avg cost, last price, market value, unr
   - **Color rule:** the numbers on a section's cards turn green when that section is in profit and red when at a loss (Overview: total P/L; Crypto: BTC price vs BTC average buy price; Stocks: stocks P/L).
   - **News card:** headline of the most important story, very short, plus "Open →" to the story. Uses the sample news until the news product returns.
   - Project views and top winners/losers stay; cards use the `glow-card` hover light.
+  - **Built (pending the user's check):** tabs Overview · Crypto · Stocks · Projects · Transactions (decision 92); "Now / Total" switch on the P/L cards (decision 93); BTC P/L on what is held (decision 94); plain cards plus a thin donut with a bar list and hover labels (decision 95) in brand colors (decision 96). New math in `src/domain/daily.ts` (`dayChange`, `bestAndWorst`) and `invested` / `totalPnlPct`, all tested. Live prices are shared through `useLivePrices`. The News card links to `/news` and is the only card with the `glow-card` light, because it is the only one you can click.
 - **M7. Import:** CSV (Nordnet, Binance, Coinbase) and AI screenshot/PDF import with review table.
 - **M8. Settings + polish:** language, country/time zone, CSV export, disclaimers, custom SMTP for auth emails (editable template that works across devices, higher email limit), one week of real use.
 
