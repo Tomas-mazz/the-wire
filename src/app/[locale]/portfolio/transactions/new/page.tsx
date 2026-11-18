@@ -1,4 +1,6 @@
 import { Suspense } from "react";
+import { FileUp } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { card } from "@/components/portfolio/styles";
 import TransactionForm from "@/components/portfolio/TransactionForm";
@@ -39,7 +41,17 @@ async function NewTransaction({ project }: { project: string }) {
       <h2 id="new-transaction" className="text-xl font-bold text-fg">
         {t("transactionForm.newTitle")}
       </h2>
-      <p className="mt-2 mb-8 text-sm text-muted">{t("transactionForm.intro")}</p>
+      <p className="mt-2 text-sm text-muted">{t("transactionForm.intro")}</p>
+      <Link
+        href="/portfolio/transactions/import"
+        className="mt-4 mb-8 flex items-center gap-3 rounded-xl border border-line px-4 py-3 text-sm transition-colors hover:border-accent hover:bg-surface-hover"
+      >
+        <FileUp size={18} strokeWidth={1.75} aria-hidden="true" className="shrink-0 text-accent" />
+        <span>
+          <span className="font-medium text-fg">{t("transactionForm.importTitle")}</span>{" "}
+          <span className="text-muted">{t("transactionForm.importHint")}</span>
+        </span>
+      </Link>
       <TransactionForm
         transactionId={null}
         projects={choices}

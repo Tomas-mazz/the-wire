@@ -312,7 +312,9 @@
       "searchingProviders": "Searching stocks, ETFs and crypto…",
       "fromProviders": "More results (Finnhub and CoinGecko):",
       "noProviderMatches": "No other matches. You can add it by hand below.",
-      "pickedFromProvider": "Filled in from the search. Check it and save."
+      "pickedFromProvider": "Filled in from the search. Check it and save.",
+      "importTitle": "Have a file from your broker?",
+      "importHint": "Import it from Nordnet, Binance, Coinbase or the The Wire template →"
     },
     "import": {
       "title": "Import transactions",

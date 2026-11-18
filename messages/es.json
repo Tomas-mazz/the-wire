@@ -312,7 +312,9 @@
       "searchingProviders": "Buscando acciones, ETF y cripto…",
       "fromProviders": "Más resultados (Finnhub y CoinGecko):",
       "noProviderMatches": "No hay otros resultados. Podés agregarlo a mano abajo.",
-      "pickedFromProvider": "Completado desde la búsqueda. Revisalo y guardá."
+      "pickedFromProvider": "Completado desde la búsqueda. Revisalo y guardá.",
+      "importTitle": "¿Tenés el archivo de tu broker?",
+      "importHint": "Importalo desde Nordnet, Binance, Coinbase o la plantilla de The Wire →"
     },
     "import": {
       "title": "Importar transacciones",
