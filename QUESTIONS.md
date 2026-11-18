@@ -241,3 +241,5 @@ The portfolio grows into a full investment tracker (a ledger, not a broker: no o
     → Answer: Not imported, because the app doesn't track the account's cash. The review lists them as "skipped" so the user knows they were seen (decided 2026-11-18).
 107. Does the "Total" column of the transactions table include the fee?
     → Answer: Yes. Buy = quantity × price + fee (what was paid); sell and dividend = quantity × price − fee (what was received) (decided 2026-11-18).
+108. Screenshots, PDFs and CSV files from other brokers?
+    → Answer: Later, in v2, read with AI and always confirmed in the review table. M7 covers Nordnet, Binance and Coinbase plus the The Wire CSV template, which works for any broker (decided 2026-11-18).
