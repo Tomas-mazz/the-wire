@@ -254,7 +254,8 @@
         "project": "Proyecto"
       },
       "edit": "Editar",
-      "editLabel": "Editar {type} de {asset} del {date}"
+      "editLabel": "Editar {type} de {asset} del {date}",
+      "importLink": "Importar"
     },
     "transactionForm": {
       "newTitle": "Nueva transacción",
@@ -312,6 +313,102 @@
       "fromProviders": "Más resultados (Finnhub y CoinGecko):",
       "noProviderMatches": "No hay otros resultados. Podés agregarlo a mano abajo.",
       "pickedFromProvider": "Completado desde la búsqueda. Revisalo y guardá."
+    },
+    "import": {
+      "title": "Importar transacciones",
+      "intro": "Subí el archivo que exporta tu broker. Vas a ver cada fila antes de que se guarde nada.",
+      "project": "Proyecto",
+      "file": "Archivo",
+      "fileHint": "CSV de Nordnet, Binance o Coinbase, o la plantilla de The Wire. Hasta 900 KB.",
+      "review": "Revisar archivo",
+      "reviewing": "Leyendo el archivo…",
+      "helpTitle": "¿Qué archivo exporto?",
+      "help": {
+        "nordnet": "Nordnet: exportá tus transacciones en CSV, eligiendo todo el período. Se leen compras, ventas y dividendos de acciones de EE. UU.; los depósitos y las acciones de otros países aparecen como omitidos.",
+        "binance": "Binance: exportá el historial de Fiat Buy, Convert o Spot Trade (un archivo por vez). Dejá el nombre del archivo como lo da Binance: ahí viene la zona horaria.",
+        "coinbase": "Coinbase: descargá el statement de la cuenta en CSV, con todas las cuentas y todo el período.",
+        "other": "Otro broker: descargá la plantilla de The Wire, escribí una fila por transacción y subila."
+      },
+      "templateLink": "Descargar la plantilla",
+      "templateColumns": "Columnas: date (2026-11-13 o 2026-11-13 14:30), type (buy, sell, dividend, reward o compra, venta, dividendo, recompensa), symbol (AAPL, BTC), asset_type (stock, etf, crypto), quantity, price, fee, currency (USD si está vacía), broker, note.",
+      "currencyNote": "Los precios en EUR, DKK u otras monedas se pasan a USD con la cotización del Banco Central Europeo de ese día.",
+      "errors": {
+        "no_file": "Elegí un archivo.",
+        "too_large": "El archivo es muy grande (hasta 900 KB).",
+        "unrecognized_format": "No reconocemos este archivo. Usá un export de Nordnet, Binance o Coinbase, o la plantilla de The Wire.",
+        "no_prices": "Este archivo de Binance no trae precios. Exportá en su lugar el historial de Fiat Buy, Convert o Spot Trade.",
+        "too_many_rows": "El archivo tiene más de {max} transacciones. Dividilo y subí cada parte.",
+        "invalid_project": "Elegí un proyecto.",
+        "unauthorized": "Tu sesión terminó. Volvé a entrar.",
+        "failed": "Algo salió mal. Probá de nuevo en un momento."
+      },
+      "detected": "Archivo de {broker} · {count, plural, one {# transacción} other {# transacciones}}",
+      "brokers": {
+        "nordnet": "Nordnet",
+        "binance": "Binance",
+        "coinbase": "Coinbase",
+        "thewire": "plantilla de The Wire"
+      },
+      "summary": {
+        "new": "{count} nuevas",
+        "duplicate": "{count} ya importadas",
+        "unresolved": "{count} con activo desconocido",
+        "no_rate": "{count} sin cotización",
+        "oversell": "{count} venden más de lo que hay",
+        "skipped": "{count} omitidas",
+        "errors": "{count} con errores"
+      },
+      "columns": {
+        "date": "Fecha",
+        "asset": "Activo",
+        "type": "Tipo",
+        "quantity": "Cantidad",
+        "price": "Precio (USD)",
+        "fee": "Comisión (USD)",
+        "status": "Estado"
+      },
+      "status": {
+        "new": "Nueva",
+        "duplicate": "Ya importada",
+        "unresolved": "Activo desconocido",
+        "no_rate": "Sin cotización",
+        "oversell": "Vende más de lo que hay"
+      },
+      "statusHelp": {
+        "unresolved": "No pudimos identificar este activo. Podés cargarlo a mano con \"+ Transacción\".",
+        "no_rate": "No había cotización para ese día. Probá de nuevo más tarde.",
+        "oversell": "Vende más de lo que el proyecto tiene en esa fecha. Importá primero las compras (o cargalas a mano) y después este archivo de nuevo."
+      },
+      "converted": "desde {currency}",
+      "skippedTitle": "Filas que no se importan ({count})",
+      "skipReasons": {
+        "cash_movement": "Depósito o retiro de efectivo",
+        "zero_value": "Sin valor (por ej. derechos de voto)",
+        "non_us": "Acción fuera de EE. UU.",
+        "unsupported_currency": "Moneda no soportada",
+        "cancelled": "Cancelada",
+        "failed": "Pago no completado",
+        "transfer": "Enviado o recibido entre wallets",
+        "fee_in_other_coin": "Comisión pagada en otra moneda",
+        "orphan_tax": "Impuesto sin su dividendo",
+        "unsupported_type": "Tipo todavía no soportado"
+      },
+      "errorsTitle": "Filas que no se pudieron leer ({count})",
+      "errorRow": "Línea {line}: {field} — {problem}",
+      "problems": {
+        "invalid_number": "número ilegible",
+        "invalid_date": "fecha ilegible",
+        "missing_field": "falta",
+        "invalid_value": "valor no válido"
+      },
+      "confirm": "{count, plural, one {Importar # transacción} other {Importar # transacciones}}",
+      "saving": "Importando…",
+      "nothingNew": "No hay nada nuevo para importar de este archivo.",
+      "chooseOther": "Elegir otro archivo",
+      "saved": "{count, plural, =0 {No se importó nada nuevo.} one {Se importó # transacción.} other {Se importaron # transacciones.}}",
+      "savedPartial": "Algunas filas no se pudieron guardar. Subí el mismo archivo de nuevo: las que ya se importaron se saltean.",
+      "viewTransactions": "Ver transacciones",
+      "importAnother": "Importar otro archivo"
     }
   },
   "Login": {

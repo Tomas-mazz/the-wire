@@ -235,3 +235,11 @@ The portfolio grows into a full investment tracker (a ledger, not a broker: no o
     → Answer: Nordnet, Binance and Coinbase CSV exports, plus a simple The Wire CSV template for any other broker. A help text explains which file to export from each. Uploading the same file again (or a newer export that repeats old rows) never duplicates what was already imported (decided 2026-11-18).
 104. Nordnet rows in DKK?
     → Answer: US stocks bought from a DKK account are converted to USD. Rows for stocks outside the US are not imported; the review shows a notice listing them (decided 2026-11-18).
+105. Nordnet dividends (a UDBYTTE row plus a UDBYTTESKAT withholding-tax row)?
+    → Answer: Imported as one "Dividend" transaction with the gross amount; the withholding tax is its fee, so the user sees both what the company paid and what was withheld (decided 2026-11-18).
+106. Nordnet cash deposits (INDBETALING) and zero-value rows such as the Tesla voting right?
+    → Answer: Not imported, because the app doesn't track the account's cash. The review lists them as "skipped" so the user knows they were seen (decided 2026-11-18).
+107. Does the "Total" column of the transactions table include the fee?
+    → Answer: Yes. Buy = quantity × price + fee (what was paid); sell and dividend = quantity × price − fee (what was received) (decided 2026-11-18).
+108. Screenshots, PDFs and CSV files from other brokers?
+    → Answer: Later, in v2, read with AI and always confirmed in the review table. M7 covers Nordnet, Binance and Coinbase plus the The Wire CSV template, which works for any broker (decided 2026-11-18).

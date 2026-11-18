@@ -69,26 +69,35 @@ export interface SearchConfig {
   fetch?: FetchLike;
 }
 
+/**
+ * US stocks and ETFs on Finnhub. The query can be a ticker, a name or an ISIN
+ * (checked 2026-11-18: "US02079K3059" → GOOGL). Throws on a network failure.
+ */
+export async function searchStocks(query: string, config: SearchConfig): Promise<AssetCandidate[]> {
+  if (!config.finnhubApiKey) return [];
+  const body = await getJson(
+    config.fetch ?? fetch,
+    "finnhub",
+    `${FINNHUB_API}/search?q=${encodeURIComponent(query)}&exchange=US&token=${encodeURIComponent(config.finnhubApiKey)}`,
+  );
+  return parseFinnhubSearch(body);
+}
+
+/** Coins on CoinGecko, biggest first. Throws on a network failure. */
+export async function searchCoins(query: string, config: SearchConfig): Promise<AssetCandidate[]> {
+  const body = await getJson(
+    config.fetch ?? fetch,
+    "coingecko",
+    `${COINGECKO_API}/search?query=${encodeURIComponent(query)}`,
+    config.coingeckoApiKey ? { "x-cg-demo-api-key": config.coingeckoApiKey } : {},
+  );
+  return parseCoinGeckoSearch(body);
+}
+
 /** Searches both providers at once; one failing never hides the other's results. */
 export async function searchAssets(query: string, config: SearchConfig): Promise<AssetCandidate[]> {
   const q = query.trim();
   if (q.length < 2) return [];
-  const fetchImpl = config.fetch ?? fetch;
-
-  const stocks = config.finnhubApiKey
-    ? getJson(
-        fetchImpl,
-        "finnhub",
-        `${FINNHUB_API}/search?q=${encodeURIComponent(q)}&exchange=US&token=${encodeURIComponent(config.finnhubApiKey)}`,
-      ).then(parseFinnhubSearch)
-    : Promise.resolve([]);
-  const crypto = getJson(
-    fetchImpl,
-    "coingecko",
-    `${COINGECKO_API}/search?query=${encodeURIComponent(q)}`,
-    config.coingeckoApiKey ? { "x-cg-demo-api-key": config.coingeckoApiKey } : {},
-  ).then(parseCoinGeckoSearch);
-
-  const [s, c] = await Promise.allSettled([stocks, crypto]);
+  const [s, c] = await Promise.allSettled([searchStocks(q, config), searchCoins(q, config)]);
   return [...(c.status === "fulfilled" ? c.value : []), ...(s.status === "fulfilled" ? s.value : [])];
 }

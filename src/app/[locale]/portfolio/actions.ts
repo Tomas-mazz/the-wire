@@ -20,6 +20,7 @@ import {
   type TransactionField,
   type TransactionInput,
 } from "@/lib/portfolio/parse";
+import { findOrCreateAsset } from "@/lib/portfolio/assets";
 import type { PriceSnapshot } from "@/lib/prices/types";
 import { createClient } from "@/lib/supabase/server";
 
@@ -151,7 +152,8 @@ async function resolveAsset(supabase: Supabase, asset: AssetChoice): Promise<str
     return data?.id ?? null;
   }
 
-  const wanted: { symbol: string; name: string; asset_class: string; provider_refs: Record<string, string> } =
+  return findOrCreateAsset(
+    supabase,
     asset.kind === "cash"
       ? { symbol: "USD", name: "US Dollar", asset_class: "cash", provider_refs: {} }
       : {
@@ -159,26 +161,8 @@ async function resolveAsset(supabase: Supabase, asset: AssetChoice): Promise<str
           name: asset.name,
           asset_class: asset.assetClass,
           provider_refs: asset.providerRefs,
-        };
-
-  const find = () =>
-    supabase
-      .from("assets")
-      .select("id")
-      .eq("asset_class", wanted.asset_class)
-      .eq("symbol", wanted.symbol)
-      .is("exchange", null)
-      .maybeSingle();
-
-  const existing = await find();
-  if (existing.data) return existing.data.id;
-
-  const inserted = await supabase.from("assets").insert(wanted).select("id").single();
-  if (inserted.data) return inserted.data.id;
-  // 23505 = someone added the same asset a moment ago: use theirs.
-  if (inserted.error?.code === "23505") return (await find()).data?.id ?? null;
-  console.error("resolveAsset failed:", inserted.error?.message);
-  return null;
+        },
+  );
 }
 
 /** One project + asset ledger, in domain shape. */

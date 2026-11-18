@@ -254,7 +254,8 @@
         "project": "Project"
       },
       "edit": "Edit",
-      "editLabel": "Edit {asset} {type} from {date}"
+      "editLabel": "Edit {asset} {type} from {date}",
+      "importLink": "Import"
     },
     "transactionForm": {
       "newTitle": "New transaction",
@@ -312,6 +313,102 @@
       "fromProviders": "More results (Finnhub and CoinGecko):",
       "noProviderMatches": "No other matches. You can add it by hand below.",
       "pickedFromProvider": "Filled in from the search. Check it and save."
+    },
+    "import": {
+      "title": "Import transactions",
+      "intro": "Upload the file your broker exports. You'll see every row before anything is saved.",
+      "project": "Project",
+      "file": "File",
+      "fileHint": "CSV from Nordnet, Binance or Coinbase, or the The Wire template. Up to 900 KB.",
+      "review": "Review file",
+      "reviewing": "Reading the file…",
+      "helpTitle": "Which file do I export?",
+      "help": {
+        "nordnet": "Nordnet: export your transactions as CSV, choosing the whole period. Sells, buys and dividends of US stocks are read; deposits and non-US stocks are listed as skipped.",
+        "binance": "Binance: export the Fiat Buy, Convert or Spot Trade history (one file at a time). Keep the file name as Binance gives it: it carries the time zone.",
+        "coinbase": "Coinbase: download the account statement as CSV, with all accounts and the whole period.",
+        "other": "Another broker: download the The Wire template, write one row per transaction and upload it."
+      },
+      "templateLink": "Download the template",
+      "templateColumns": "Columns: date (2026-11-13 or 2026-11-13 14:30), type (buy, sell, dividend, reward), symbol (AAPL, BTC), asset_type (stock, etf, crypto), quantity, price, fee, currency (USD if empty), broker, note.",
+      "currencyNote": "Prices in EUR, DKK or other currencies are converted to USD with the European Central Bank rate of that day.",
+      "errors": {
+        "no_file": "Choose a file.",
+        "too_large": "The file is too big (up to 900 KB).",
+        "unrecognized_format": "We don't recognize this file. Use an export from Nordnet, Binance or Coinbase, or the The Wire template.",
+        "no_prices": "This Binance file has no prices. Export the Fiat Buy, Convert or Spot Trade history instead.",
+        "too_many_rows": "The file has more than {max} transactions. Split it and upload each part.",
+        "invalid_project": "Choose a project.",
+        "unauthorized": "Your session ended. Sign in again.",
+        "failed": "Something went wrong. Try again in a moment."
+      },
+      "detected": "{broker} file · {count, plural, one {# transaction} other {# transactions}}",
+      "brokers": {
+        "nordnet": "Nordnet",
+        "binance": "Binance",
+        "coinbase": "Coinbase",
+        "thewire": "The Wire template"
+      },
+      "summary": {
+        "new": "{count} new",
+        "duplicate": "{count} already imported",
+        "unresolved": "{count} unknown asset",
+        "no_rate": "{count} without exchange rate",
+        "oversell": "{count} sell more than held",
+        "skipped": "{count} skipped",
+        "errors": "{count} with errors"
+      },
+      "columns": {
+        "date": "Date",
+        "asset": "Asset",
+        "type": "Type",
+        "quantity": "Quantity",
+        "price": "Price (USD)",
+        "fee": "Fee (USD)",
+        "status": "Status"
+      },
+      "status": {
+        "new": "New",
+        "duplicate": "Already imported",
+        "unresolved": "Unknown asset",
+        "no_rate": "No exchange rate",
+        "oversell": "Sells more than held"
+      },
+      "statusHelp": {
+        "unresolved": "We couldn't identify this asset. You can add it by hand with \"+ Transaction\".",
+        "no_rate": "There was no exchange rate for that day. Try again later.",
+        "oversell": "This sells more than the project holds at that date. Import the buys first (or add them by hand), then this file again."
+      },
+      "converted": "from {currency}",
+      "skippedTitle": "Rows not imported ({count})",
+      "skipReasons": {
+        "cash_movement": "Cash deposit or withdrawal",
+        "zero_value": "No value (e.g. voting rights)",
+        "non_us": "Stock outside the US",
+        "unsupported_currency": "Currency not supported",
+        "cancelled": "Cancelled",
+        "failed": "Payment not completed",
+        "transfer": "Sent or received between wallets",
+        "fee_in_other_coin": "Fee paid in another coin",
+        "orphan_tax": "Tax without its dividend",
+        "unsupported_type": "Type not supported yet"
+      },
+      "errorsTitle": "Rows that couldn't be read ({count})",
+      "errorRow": "Line {line}: {field} — {problem}",
+      "problems": {
+        "invalid_number": "number not readable",
+        "invalid_date": "date not readable",
+        "missing_field": "missing",
+        "invalid_value": "value not valid"
+      },
+      "confirm": "{count, plural, one {Import # transaction} other {Import # transactions}}",
+      "saving": "Importing…",
+      "nothingNew": "There is nothing new to import from this file.",
+      "chooseOther": "Choose another file",
+      "saved": "{count, plural, =0 {Nothing new was imported.} one {# transaction imported.} other {# transactions imported.}}",
+      "savedPartial": "Some rows could not be saved. Upload the same file again: the ones already imported are skipped.",
+      "viewTransactions": "See transactions",
+      "importAnother": "Import another file"
     }
   },
   "Login": {
