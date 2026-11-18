@@ -102,6 +102,16 @@ describe("readImportFile", () => {
     expect(binance.ok && binance.broker).toBe("binance");
   });
 
+  it("recognizes PDFs and images and says they can't be read yet", () => {
+    const pdf = new Uint8Array(Buffer.from("%PDF-1.7\n%âãÏÓ\n1 0 obj"));
+    const png = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+    const jpeg = new Uint8Array([0xff, 0xd8, 0xff, 0xe0, 0x00, 0x10]);
+    const heic = new Uint8Array(Buffer.from("\0\0\0\x18ftypheic"));
+    for (const file of [pdf, png, jpeg, heic]) {
+      expect(readImportFile(file, "statement", "UTC")).toEqual({ ok: false, error: "unsupported_file" });
+    }
+  });
+
   it("says when it doesn't know the file", () => {
     expect(readImportFile(bytes("hello,world\n1,2"), "x.csv", "UTC")).toEqual({
       ok: false,

@@ -342,7 +342,8 @@
         "too_many_rows": "The file has more than {max} transactions. Split it and upload each part.",
         "invalid_project": "Choose a project.",
         "unauthorized": "Your session ended. Sign in again.",
-        "failed": "Something went wrong. Try again in a moment."
+        "failed": "Something went wrong. Try again in a moment.",
+        "unsupported_file": "PDFs and screenshots can't be read yet (that comes later). Export a CSV from your broker, or copy your transactions into the The Wire template."
       },
       "detected": "{broker} file · {count, plural, one {# transaction} other {# transactions}}",
       "brokers": {
