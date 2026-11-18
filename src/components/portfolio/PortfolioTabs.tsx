@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 
 /**
- * Overview · Projects · Transactions. The active tab follows the URL.
+ * Overview · Crypto · Stocks · Projects · Transactions (decision 92). The active tab follows the URL.
  * Reading the URL is runtime data on dynamic routes, so the layout renders
  * this inside <Suspense> with <TabList pathname={null} /> as the fallback.
  */
@@ -16,6 +16,8 @@ export function TabList({ pathname }: { pathname: string | null }) {
   const t = useTranslations("Portfolio.tabs");
   const tabs = [
     { href: "/portfolio", label: t("overview"), active: pathname === "/portfolio" },
+    { href: "/portfolio/crypto", label: t("crypto"), active: pathname === "/portfolio/crypto" },
+    { href: "/portfolio/stocks", label: t("stocks"), active: pathname === "/portfolio/stocks" },
     {
       href: "/portfolio/projects",
       label: t("projects"),
