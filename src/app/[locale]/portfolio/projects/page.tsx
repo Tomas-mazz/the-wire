@@ -6,14 +6,19 @@ import { card } from "@/components/portfolio/styles";
 import { Link } from "@/i18n/navigation";
 import { requireUser } from "@/lib/auth";
 import { getProjects, getTransactions, type Project } from "@/lib/portfolio/data";
+import { ProjectsSkeleton } from "@/components/portfolio/Skeletons";
 
 /** Projects tab: active projects as cards, a form to add one, archived ones folded away. */
 export default async function ProjectsPage() {
   const t = await getTranslations("Portfolio");
   return (
-    <Suspense fallback={<p className="text-sm text-muted">{t("loading")}</p>}>
-      <Projects />
-    </Suspense>
+    <div className="space-y-8">
+      {/* The intro does not depend on the user, so it shows while the projects load. */}
+      <p className="text-body">{t("projects.intro")}</p>
+      <Suspense fallback={<ProjectsSkeleton />}>
+        <Projects />
+      </Suspense>
+    </div>
   );
 }
 
@@ -34,8 +39,6 @@ async function Projects() {
 
   return (
     <div className="space-y-8">
-      <p className="text-body">{t("projects.intro")}</p>
-
       <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {active.map((project) => (
           <li key={project.id}>

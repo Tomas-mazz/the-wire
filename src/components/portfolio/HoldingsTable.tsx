@@ -4,6 +4,7 @@ import { livePairs, type PriceAsset } from "@/market-data";
 import { getPriceAssets, getPricesForUser, type PriceSnapshot } from "@/lib/prices/service";
 import { toLedger, type Asset, type TransactionRow } from "@/lib/portfolio/data";
 import LiveHoldings, { type LiveHoldingRow } from "./LiveHoldings";
+import type { DashboardInfo } from "./SummaryCards";
 
 export interface HoldingRow {
   asset: Asset;
@@ -42,9 +43,19 @@ async function loadInitialPrices(assets: PriceAsset[]): Promise<{ prices: PriceS
 /**
  * What the user holds, with prices (M5). The first prices are fetched here on
  * the server so the table never starts empty; LiveHoldings keeps them moving
- * in the browser. Render inside <Suspense>.
+ * in the browser. With `dashboard` (the section pages) the summary cards and
+ * the allocation donut are shown above the table. Render inside <Suspense>.
  */
-export default async function HoldingsTable({ rows }: { rows: HoldingRow[]; locale?: string }) {
+export default async function HoldingsTable({
+  rows,
+  dashboard,
+  heading,
+}: {
+  rows: HoldingRow[];
+  locale?: string;
+  dashboard?: DashboardInfo;
+  heading?: React.ReactNode;
+}) {
   await connection(); // prices and "now" are request-time data
   const priced = rows.filter((r) => r.asset.assetClass !== "cash");
   const openIds = priced.filter((r) => !r.holding.quantity.isZero()).map((r) => r.asset.id);
@@ -63,6 +74,7 @@ export default async function HoldingsTable({ rows }: { rows: HoldingRow[]; loca
     realized: holding.realized.toFixed(),
     income: holding.income.toFixed(),
     fees: holding.fees.toFixed(),
+    invested: holding.invested.toFixed(),
   }));
 
   return (
@@ -71,6 +83,8 @@ export default async function HoldingsTable({ rows }: { rows: HoldingRow[]; loca
       initialPrices={initialPrices}
       livePairs={livePairs(assets)}
       renderedAt={renderedAt}
+      dashboard={dashboard}
+      heading={heading}
     />
   );
 }

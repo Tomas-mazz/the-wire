@@ -12,14 +12,14 @@ import { requireUser } from "@/lib/auth";
 import { formatUsd } from "@/lib/format";
 import { getProject, getTimeZone, getTransactions, toLedger } from "@/lib/portfolio/data";
 import { isUuid } from "@/lib/portfolio/parse";
+import { ProjectDetailSkeleton } from "@/components/portfolio/Skeletons";
 
 const RECENT = 20;
 
 /** One project: holdings, cash (if tracked), recent transactions, details and archive. */
 export default async function ProjectPage({ params }: PageProps<"/[locale]/portfolio/projects/[id]">) {
-  const t = await getTranslations("Portfolio");
   return (
-    <Suspense fallback={<p className="text-sm text-muted">{t("loading")}</p>}>
+    <Suspense fallback={<ProjectDetailSkeleton />}>
       {params.then(({ id }) => (
         <ProjectDetail id={id} />
       ))}

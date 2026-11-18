@@ -15,6 +15,7 @@ import {
   type TransactionFilters,
 } from "@/lib/portfolio/data";
 import { isUuid, zonedLocalToUtc } from "@/lib/portfolio/parse";
+import { TransactionsSkeleton } from "@/components/portfolio/Skeletons";
 
 type SearchParams = Record<string, string | string[] | undefined>;
 
@@ -22,9 +23,8 @@ type SearchParams = Record<string, string | string[] | undefined>;
 export default async function TransactionsPage({
   searchParams,
 }: PageProps<"/[locale]/portfolio/transactions">) {
-  const t = await getTranslations("Portfolio");
   return (
-    <Suspense fallback={<p className="text-sm text-muted">{t("loading")}</p>}>
+    <Suspense fallback={<TransactionsSkeleton />}>
       {searchParams.then((params) => (
         <Transactions params={params} />
       ))}

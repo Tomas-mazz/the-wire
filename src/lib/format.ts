@@ -32,6 +32,16 @@ export function formatUsd(value: Exact, locale: string): string {
   }).format(text);
 }
 
+/** Short US dollars for tight spots like the donut's center ("$48.2K"). */
+export function formatUsdCompact(value: Exact, locale: string): string {
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: "USD",
+    notation: "compact",
+    maximumFractionDigits: 1,
+  }).format(exact(value));
+}
+
 /** A date and time in the user's time zone. */
 export function formatDateTime(iso: string, locale: string, timeZone: string): string {
   return new Intl.DateTimeFormat(locale, {

@@ -1,13 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { allocation, Dec, summarize, toDec, valuePosition, type Position } from "@/domain";
-import { BINANCE_STREAM, miniTickerStream } from "@/market-data/binance";
-import { isStale, POLL_INTERVAL_MS } from "@/market-data/freshness";
+import { isStale } from "@/market-data/freshness";
 import { formatAge, formatPercent, formatQuantity, formatUsd } from "@/lib/format";
 import type { PriceSnapshot } from "@/lib/prices/types";
+import AllocationDonut from "./AllocationDonut";
 import ManualPriceEditor from "./ManualPriceEditor";
+import SummaryCards, { type DashboardInfo } from "./SummaryCards";
+import { useLivePrices } from "./useLivePrices";
 import { tdNumber, th } from "./styles";
 
 /** One holding as plain text, so it can travel from the server to the browser. */
@@ -22,6 +24,7 @@ export interface LiveHoldingRow {
   realized: string;
   income: string;
   fees: string;
+  invested: string;
 }
 
 interface Props {
@@ -31,6 +34,10 @@ interface Props {
   livePairs: Record<string, string>;
   /** Server time of the first render, so server and browser agree on "stale". */
   renderedAt: number;
+  /** Set on the section pages: shows the summary cards and the donut. */
+  dashboard?: DashboardInfo;
+  /** Title shown between the donut and the table. */
+  heading?: React.ReactNode;
 }
 
 function toPosition(row: LiveHoldingRow): Position {
@@ -41,21 +48,8 @@ function toPosition(row: LiveHoldingRow): Position {
     realized: toDec(row.realized),
     income: toDec(row.income),
     fees: toDec(row.fees),
+    invested: toDec(row.invested),
   };
-}
-
-/** Keeps whichever price is newer (a live tick or the server cache). */
-function merge(current: Record<string, PriceSnapshot>, incoming: PriceSnapshot[]) {
-  let changed = false;
-  const next = { ...current };
-  for (const price of incoming) {
-    const old = next[price.assetId];
-    if (!old || Date.parse(price.asOf) >= Date.parse(old.asOf)) {
-      next[price.assetId] = price;
-      changed = true;
-    }
-  }
-  return changed ? next : current;
 }
 
 /** Signed money or percent: "+"/"−" plus an arrow, never color alone (STYLE.md). */
@@ -71,24 +65,17 @@ function Signed({ value, children }: { value: Dec; children: React.ReactNode }) 
 }
 
 /**
- * Holdings with live prices (decision 90).
- *  - Crypto: the browser follows Binance's 1-second mini ticker over a
- *    WebSocket (wss://data-stream.binance.vision). Ticks are applied once a
- *    second; the connection reconnects with a growing pause if it drops.
- *  - Everything: every 30 s the page asks /api/prices, which serves the
- *    shared cache and refreshes it (Finnhub for stocks, CoinGecko when
- *    Binance is unavailable). Polling pauses while the tab is hidden.
+ * Holdings with live prices (useLivePrices). In a section (Overview, Crypto,
+ * Stocks) the summary cards and the allocation donut sit above the table
+ * and move with the same prices (M6).
  * All math goes through src/domain with decimal.js; rounding happens only
  * in the formatters.
  */
-export default function LiveHoldings({ rows, initialPrices, livePairs, renderedAt }: Props) {
+export default function LiveHoldings({ rows, initialPrices, livePairs, renderedAt, dashboard, heading }: Props) {
   const t = useTranslations("Portfolio");
   const locale = useLocale();
-  const [prices, setPrices] = useState<Record<string, PriceSnapshot>>(() =>
-    merge({}, initialPrices),
-  );
-  const [now, setNow] = useState(renderedAt);
-  const [live, setLive] = useState(false);
+  const pricedIds = useMemo(() => rows.map((r) => r.assetId), [rows]);
+  const { prices, setPrices, now, live } = useLivePrices(pricedIds, initialPrices, livePairs, renderedAt);
   const [editing, setEditing] = useState<string | null>(null);
 
   /** After saving or removing a manual price. */
@@ -101,108 +88,6 @@ export default function LiveHoldings({ rows, initialPrices, livePairs, renderedA
       return next;
     });
   }
-  const pricedIds = useMemo(() => rows.map((r) => r.assetId), [rows]);
-  // A string, so the stream reconnects only when the set of pairs changes.
-  const pairsKey = JSON.stringify(livePairs);
-
-  // Poll the server cache every 30 s while the tab is visible.
-  useEffect(() => {
-    if (pricedIds.length === 0) return;
-    let stopped = false;
-    async function poll() {
-      setNow(Date.now());
-      if (document.hidden) return;
-      try {
-        const response = await fetch(`/api/prices?ids=${pricedIds.join(",")}`, { cache: "no-store" });
-        if (response.status === 401) {
-          stopped = true;
-          return;
-        }
-        if (!response.ok) return;
-        const body = (await response.json()) as { prices: PriceSnapshot[] };
-        setPrices((current) => merge(current, body.prices));
-      } catch {
-        // Offline or the server is busy: keep the last prices; they turn "stale" with time.
-      }
-    }
-    const timer = setInterval(() => {
-      if (!stopped) void poll();
-    }, POLL_INTERVAL_MS);
-    return () => clearInterval(timer);
-  }, [pricedIds]);
-
-  // Live crypto prices from Binance.
-  useEffect(() => {
-    const pairs = JSON.parse(pairsKey) as Record<string, string>;
-    const idsByPair = new Map<string, string[]>();
-    for (const [assetId, pair] of Object.entries(pairs)) {
-      idsByPair.set(pair, [...(idsByPair.get(pair) ?? []), assetId]);
-    }
-    if (idsByPair.size === 0) return;
-
-    const url = `${BINANCE_STREAM}/stream?streams=${[...idsByPair.keys()].map(miniTickerStream).join("/")}`;
-    const pending = new Map<string, { close: string; open: string }>();
-    let socket: WebSocket | null = null;
-    let retryTimer: ReturnType<typeof setTimeout> | undefined;
-    let attempts = 0;
-    let closedByUs = false;
-
-    function connect() {
-      socket = new WebSocket(url);
-      socket.onopen = () => {
-        attempts = 0;
-        setLive(true);
-      };
-      socket.onmessage = (event) => {
-        try {
-          // Combined stream payload: { stream, data: { s, c (last), o (open 24 h ago), ... } }
-          const { data } = JSON.parse(String(event.data)) as {
-            data?: { s?: unknown; c?: unknown; o?: unknown };
-          };
-          if (data && typeof data.s === "string" && typeof data.c === "string" && typeof data.o === "string") {
-            pending.set(data.s, { close: data.c, open: data.o });
-          }
-        } catch {
-          // Ignore a malformed message.
-        }
-      };
-      socket.onclose = () => {
-        setLive(false);
-        if (closedByUs) return;
-        // Binance closes every connection after 24 h; network drops happen too.
-        retryTimer = setTimeout(connect, Math.min(30_000, 1000 * 2 ** attempts++));
-      };
-      socket.onerror = () => socket?.close();
-    }
-
-    // Apply the ticks gathered in the last second in one render.
-    const flush = setInterval(() => {
-      if (pending.size === 0) return;
-      const asOf = new Date().toISOString();
-      const ticks: PriceSnapshot[] = [];
-      for (const [pair, { close, open }] of pending) {
-        const last = toDec(close);
-        const first = toDec(open);
-        if (last.isZero()) continue;
-        // 24 h change in percent: (last − open) / open × 100, like Binance's own figure.
-        const dayChangePct = first.isZero() ? null : last.minus(first).div(first).times(100).toFixed();
-        for (const assetId of idsByPair.get(pair) ?? []) {
-          ticks.push({ assetId, price: close, dayChangePct, asOf, source: "binance" });
-        }
-      }
-      pending.clear();
-      setNow(Date.now());
-      setPrices((current) => merge(current, ticks));
-    }, 1000);
-
-    connect();
-    return () => {
-      closedByUs = true;
-      clearInterval(flush);
-      clearTimeout(retryTimer);
-      socket?.close();
-    };
-  }, [pairsKey]);
 
   const valued = rows.map((row) => {
     const price = prices[row.assetId] ?? null;
@@ -222,6 +107,23 @@ export default function LiveHoldings({ rows, initialPrices, livePairs, renderedA
 
   return (
     <div className="space-y-3">
+      {dashboard && (
+        <div className="mb-10 space-y-3">
+          <SummaryCards info={dashboard} valued={valued} totals={totals} />
+          <AllocationDonut
+            slices={open
+              .filter((v) => v.position.marketValue !== null)
+              .map((v) => ({
+                assetId: v.row.assetId,
+                symbol: v.row.symbol,
+                name: v.row.name,
+                assetClass: v.row.assetClass,
+                value: v.position.marketValue!,
+              }))}
+          />
+        </div>
+      )}
+      {heading}
       <p className="flex items-center gap-2 text-xs text-muted" aria-live="polite">
         {live ? (
           <>

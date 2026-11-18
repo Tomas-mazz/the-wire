@@ -209,3 +209,19 @@ The portfolio grows into a full investment tracker (a ledger, not a broker: no o
     → Answer: Crypto updates every second in the browser over Binance's WebSocket; everything else (and crypto as a backup) is refreshed every 30 s while the page is open (decided 2026-11-17).
 91. Manual prices?
     → Answer: Set right in the holdings table: an open position with "No price" shows "Set price", which opens a small field in the cell. The price is private to the user, labelled "manual" with its age, can be edited or removed, and is used only while no provider has a price for that asset (decided 2026-11-17).
+92. How to reach the Crypto and Stocks sections?
+    → Answer: Two more tabs in the portfolio sub-bar: Overview · Crypto · Stocks · Projects · Transactions (chosen over a switch inside Overview) (decided 2026-11-18).
+93. Which % does the P/L card show?
+    → Answer: Both, with a "Now / Total" switch on the card. "Now" (the default) is the unrealized P/L of what is held today, divided by its cost. "Total" adds realized P/L and dividends, divided by everything ever invested (buys plus their fees). The same switch is on the Stocks P/L card (decided 2026-11-18).
+94. What does the BTC P/L card count?
+    → Answer: Only what is held: (BTC price − average buy price) × BTC held, matching the color rule of decision 86 (decided 2026-11-18).
+95. What do the cards and the donut look like?
+    → Answer: Plain cards (not tinted green or red; only the numbers change color), and a thin donut with the total in the middle and a list of bars beside it (symbol, bar, %, value). Hovering a slice or a bar highlights both, dims the rest and shows a small label with the asset, its % and its value; on phones a tap does the same. Chosen from options shown side by side (compact cards, tinted cards, one strip) (decided 2026-11-18).
+96. Donut colors?
+    → Answer: Each asset in its brand color (BTC orange, ETH blue, NVDA green…) from a fixed list of common assets in the code; assets not on the list use violet shades. This is the only exception to the rule that green and red mean gains and losses: brand colors appear only in the donut and its bars (decided 2026-11-18).
+97. What does the first Crypto card show?
+    → Answer: The live BTC price first, large, colored by the section's result; the user's BTC average buy price goes underneath in lighter text. Replaces "BTC average buy price" with the current price as a small grey line (decided 2026-11-18).
+98. Where do the BTC average buy price and BTC P/L go?
+    → Answer: In one card, the second of the Crypto section: the average buy price large, and under it, small, the P/L of what is held in dollars and percent. The first card keeps the live BTC price, with its 24 h change underneath (decided 2026-11-18).
+99. Do day moves (today's change, BTC 24 h, best and worst) get their own green or red?
+    → Answer: No. They keep the section's color like every other number on the cards (decision 86); the ▲/▼ arrow shows each one's direction (decided 2026-11-18).

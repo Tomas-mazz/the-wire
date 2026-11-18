@@ -26,7 +26,7 @@ export interface LedgerProblem {
  * because average cost is tracked per project. The results are then summed
  * per asset:
  *
- *   quantity, costBasis, realized, income, fees = sum over projects
+ *   quantity, costBasis, realized, income, fees, invested = sum over projects
  *   avgCost = total costBasis / total quantity
  *
  * A ledger that cannot be replayed (e.g. a sell larger than the holding) is
@@ -66,6 +66,7 @@ export function computeHoldings(transactions: readonly LedgerTransaction[]): {
       realized: ZERO,
       income: ZERO,
       fees: ZERO,
+      invested: ZERO,
     };
     byAsset.set(assetId, {
       assetId,
@@ -74,6 +75,7 @@ export function computeHoldings(transactions: readonly LedgerTransaction[]): {
       realized: sum.realized.plus(position.realized),
       income: sum.income.plus(position.income),
       fees: sum.fees.plus(position.fees),
+      invested: sum.invested.plus(position.invested),
     });
   }
 
