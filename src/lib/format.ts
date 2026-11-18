@@ -32,14 +32,27 @@ export function formatUsd(value: Exact, locale: string): string {
   }).format(text);
 }
 
-/** Short US dollars for tight spots like the donut's center ("$48.2K"). */
+/**
+ * Short US dollars for tight spots like the donut's center: "$161K",
+ * "$1.2M". Same look in every language (Intl's compact style would write
+ * "161 mil US$" in Spanish); only the decimal mark follows the locale.
+ */
 export function formatUsdCompact(value: Exact, locale: string): string {
-  return new Intl.NumberFormat(locale, {
-    style: "currency",
-    currency: "USD",
-    notation: "compact",
-    maximumFractionDigits: 1,
-  }).format(exact(value));
+  const text = exact(value);
+  const n = Math.abs(Number(text)); // display only: picks the suffix
+  const sign = Number(text) < 0 ? "−" : "";
+  const steps: [number, string][] = [
+    [1e12, "T"],
+    [1e9, "B"],
+    [1e6, "M"],
+    [1e3, "K"],
+  ];
+  const step = steps.find(([size]) => n >= size);
+  if (!step) {
+    return `${sign}$${new Intl.NumberFormat(locale, { maximumFractionDigits: n < 1 ? 2 : 0 }).format(n)}`;
+  }
+  const short = new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(n / step[0]);
+  return `${sign}$${short}${step[1]}`;
 }
 
 /** A date and time in the user's time zone. */
