@@ -137,6 +137,23 @@ body {
   animation: glow-spin 2.4s linear infinite;
 }
 
+/*
+ * "Hide amounts" (decision 100). Amounts and quantities are wrapped in
+ * <Private> (.private > .private-value). While <html data-privacy="on"> is
+ * set, the value is removed and six dots take its place, so not even the
+ * number of digits shows. SVG text uses .private-svg / .private-svg-alt.
+ */
+html[data-privacy="on"] .private > .private-value,
+html[data-privacy="on"] .private-svg,
+html:not([data-privacy="on"]) .private-svg-alt {
+  display: none;
+}
+
+html[data-privacy="on"] .private::after {
+  content: "••••••";
+  letter-spacing: 0.05em;
+}
+
 /* Respect the OS "reduce motion" setting: stop everything that moves on its own. */
 @media (prefers-reduced-motion: reduce) {
   *,

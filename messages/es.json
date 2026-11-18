@@ -64,6 +64,12 @@
       "projects": "Proyectos",
       "transactions": "Transacciones"
     },
+    "privacy": {
+      "hide": "Ocultar montos",
+      "show": "Mostrar montos",
+      "hideLabel": "Ocultar montos y cantidades",
+      "showLabel": "Mostrar montos y cantidades"
+    },
     "error": {
       "title": "Algo salió mal",
       "body": "No pudimos cargar esta página. Tus datos están a salvo.",
@@ -77,7 +83,11 @@
       "problems": "Algunas transacciones no se pueden calcular porque una venta es mayor que lo que había: {assets}. Revisá sus fechas y cantidades.",
       "live": "En vivo: la cripto se actualiza cada segundo",
       "polling": "Los precios se actualizan cada 30 segundos",
-      "summary": "G/P realizada: {realized} · Dividendos: {income} · G/P total: {total}",
+      "summaryParts": {
+        "realized": "G/P realizada:",
+        "income": "Dividendos:",
+        "totalPnl": "G/P total:"
+      },
       "missingPrices": "{count, plural, one {# posición no tiene precio y no se suma} other {# posiciones no tienen precio y no se suman}} a los totales.",
       "sources": "Precios: Binance, Finnhub y <coingecko>CoinGecko</coingecko>. La cripto cotiza en USDT (≈ USD). Solo informativo, no es asesoramiento."
     },

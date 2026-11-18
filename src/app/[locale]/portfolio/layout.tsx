@@ -3,6 +3,7 @@ import { Plus } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import Header from "@/components/Header";
 import PortfolioTabs, { TabList } from "@/components/portfolio/PortfolioTabs";
+import PrivacyToggle from "@/components/portfolio/PrivacyToggle";
 import { primaryButton } from "@/components/portfolio/styles";
 import { Link } from "@/i18n/navigation";
 
@@ -24,15 +25,18 @@ export default async function PortfolioLayout({ children }: LayoutProps<"/[local
           <Suspense fallback={<TabList pathname={null} />}>
             <PortfolioTabs />
           </Suspense>
-          <Link
-            href="/portfolio/transactions/new"
-            aria-label={t("addTransactionLabel")}
-            className={`${primaryButton} shrink-0 px-3 py-2`}
-          >
-            <Plus size={16} strokeWidth={2} aria-hidden="true" />
-            {/* On phones only the "+" shows, so everything fits on one line. */}
-            <span className="hidden sm:inline">{t("addTransaction")}</span>
-          </Link>
+          <div className="flex shrink-0 items-center gap-2">
+            <PrivacyToggle />
+            <Link
+              href="/portfolio/transactions/new"
+              aria-label={t("addTransactionLabel")}
+              className={`${primaryButton} shrink-0 px-3 py-2`}
+            >
+              <Plus size={16} strokeWidth={2} aria-hidden="true" />
+              {/* On phones only the "+" shows, so everything fits on one line. */}
+              <span className="hidden sm:inline">{t("addTransaction")}</span>
+            </Link>
+          </div>
         </div>
       </div>
       <main className="mx-auto w-full max-w-[1200px] flex-1 px-4 py-6 sm:px-6 sm:py-8">

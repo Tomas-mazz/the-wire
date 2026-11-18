@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { ZERO, type Dec } from "@/domain";
 import { formatPercent, formatUsd, formatUsdCompact } from "@/lib/format";
 import { brandColors, OTHERS_COLOR } from "./brandColors";
+import Private from "./Private";
 
 export interface DonutSlice {
   assetId: string;
@@ -133,8 +134,11 @@ export default function AllocationDonut({ slices }: { slices: DonutSlice[] }) {
             <text x="21" y="19.6" textAnchor="middle" fontSize="2.6" fill="var(--color-muted)" letterSpacing="0.15">
               {t("total").toUpperCase()}
             </text>
-            <text x="21" y="24.6" textAnchor="middle" fontSize="4" fontWeight="600" fill="var(--color-fg)" className="font-mono">
+            <text x="21" y="24.6" textAnchor="middle" fontSize="4" fontWeight="600" fill="var(--color-fg)" className="private-svg font-mono">
               {formatUsdCompact(total, locale)}
+            </text>
+            <text x="21" y="24.6" textAnchor="middle" fontSize="4" fontWeight="600" fill="var(--color-fg)" className="private-svg-alt font-mono">
+              ••••••
             </text>
           </svg>
           {current && (
@@ -146,7 +150,10 @@ export default function AllocationDonut({ slices }: { slices: DonutSlice[] }) {
               <span className="mr-1.5 inline-block size-2 rounded-full align-middle" style={{ background: current.color }} />
               <span className="mr-1.5 font-mono font-semibold text-accent">{current.label}</span>
               <span className="font-mono text-fg">{formatPercent(current.share, locale)}</span>
-              <span className="font-mono text-muted"> · {formatUsd(current.value, locale)}</span>
+              <span className="font-mono text-muted">
+                {" "}
+                · <Private>{formatUsd(current.value, locale)}</Private>
+              </span>
             </div>
           )}
         </div>
@@ -178,7 +185,7 @@ export default function AllocationDonut({ slices }: { slices: DonutSlice[] }) {
                   </span>
                   <span className="text-right font-mono text-fg">{formatPercent(p.share, locale)}</span>
                   <span className="hidden text-right font-mono text-[13px] text-muted sm:block">
-                    {formatUsd(p.value, locale)}
+                    <Private>{formatUsd(p.value, locale)}</Private>
                   </span>
                 </button>
               </li>

@@ -7,6 +7,7 @@ import { Link } from "@/i18n/navigation";
 import { formatPercent, formatUsd } from "@/lib/format";
 import type { PriceSnapshot } from "@/lib/prices/types";
 import type { LiveHoldingRow } from "./LiveHoldings";
+import Private from "./Private";
 import { summaryCard, summaryLabel } from "./styles";
 
 export type Section = "overview" | "crypto" | "stocks";
@@ -37,7 +38,7 @@ function toneOf(result: Dec | null): string {
  * Signed text with an arrow, so the direction never depends on color alone
  * (STYLE.md). The color comes from the section's result, not from here.
  */
-function signed(value: Dec, text: string): React.ReactNode {
+function signed(value: Dec, text: React.ReactNode): React.ReactNode {
   if (value.isZero()) return text;
   const up = value.isPositive();
   return (
@@ -123,14 +124,16 @@ export default function SummaryCards({
 
   const valueCard = (label: string) => (
     <Card label={label}>
-      <p className={`${bigClass} ${tone}`}>{formatUsd(totals.marketValue, locale)}</p>
+      <p className={`${bigClass} ${tone}`}>
+        <Private>{formatUsd(totals.marketValue, locale)}</Private>
+      </p>
       <p className="mt-1 text-xs text-muted">{t("inAssets", { count: open.length })}</p>
     </Card>
   );
 
   const pnlCard = (label: string) => (
     <Card label={label} action={<ModeSwitch mode={mode} onChange={setMode} />}>
-      <p className={`${bigClass} ${tone}`}>{signed(pnl, usd(pnl))}</p>
+      <p className={`${bigClass} ${tone}`}>{signed(pnl, <Private>{usd(pnl)}</Private>)}</p>
       <p className={`mt-1 text-xs ${tone}`}>
         {pnlPct ? signed(pnlPct, pct(pnlPct)) : "—"}
         <span className="text-muted"> · {t(mode === "now" ? "nowHint" : "totalHint")}</span>
@@ -163,7 +166,9 @@ export default function SummaryCards({
             empty(t("todayNone"))
           ) : (
             <>
-              <p className={`${bigClass} ${tone}`}>{signed(today.change, usd(today.change))}</p>
+              <p className={`${bigClass} ${tone}`}>
+                {signed(today.change, <Private>{usd(today.change)}</Private>)}
+              </p>
               <p className={`mt-1 text-xs ${tone}`}>
                 {today.changePct ? signed(today.changePct, pct(today.changePct)) : "—"}
               </p>
@@ -201,7 +206,7 @@ export default function SummaryCards({
               <p className={`mt-1 text-xs ${tone}`}>
                 {unrealized ? (
                   <>
-                    {signed(unrealized, usd(unrealized))}
+                    {signed(unrealized, <Private>{usd(unrealized)}</Private>)}
                     {unrealizedPct && <> · {signed(unrealizedPct, pct(unrealizedPct))}</>}
                   </>
                 ) : (

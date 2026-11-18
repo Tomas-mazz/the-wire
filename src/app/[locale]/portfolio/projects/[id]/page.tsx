@@ -3,6 +3,7 @@ import { ArrowLeft, Plus } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { setProjectArchived } from "@/app/[locale]/portfolio/actions";
 import HoldingsTable, { holdingsFrom } from "@/components/portfolio/HoldingsTable";
+import Private from "@/components/portfolio/Private";
 import ProjectForm from "@/components/portfolio/ProjectForm";
 import { card, secondaryButton } from "@/components/portfolio/styles";
 import TransactionTable from "@/components/portfolio/TransactionTable";
@@ -68,7 +69,7 @@ async function ProjectDetail({ id }: { id: string }) {
         <div className={card}>
           <p className="text-[13px] font-medium tracking-wide text-muted uppercase">{t("projects.cash")}</p>
           <p className={`mt-2 font-mono text-2xl ${cash.isNegative ? "text-down" : "text-fg"}`}>
-            {formatUsd(cash.balance, locale)}
+            <Private>{formatUsd(cash.balance, locale)}</Private>
           </p>
           {cash.isNegative && <p className="mt-2 text-sm text-down">{t("projects.cashNegative")}</p>}
         </div>

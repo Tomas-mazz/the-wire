@@ -8,6 +8,7 @@ import { formatAge, formatPercent, formatQuantity, formatUsd } from "@/lib/forma
 import type { PriceSnapshot } from "@/lib/prices/types";
 import AllocationDonut from "./AllocationDonut";
 import ManualPriceEditor from "./ManualPriceEditor";
+import Private from "./Private";
 import SummaryCards, { type DashboardInfo } from "./SummaryCards";
 import { useLivePrices } from "./useLivePrices";
 import { tdNumber, th } from "./styles";
@@ -165,7 +166,9 @@ export default function LiveHoldings({ rows, initialPrices, livePairs, renderedA
                       {closed && ` · ${t("holdings.closed")}`}
                     </span>
                   </th>
-                  <td className={tdNumber}>{formatQuantity(position.quantity, locale)}</td>
+                  <td className={tdNumber}>
+                    <Private>{formatQuantity(position.quantity, locale)}</Private>
+                  </td>
                   <td className={tdNumber}>{position.avgCost ? formatUsd(position.avgCost, locale) : "—"}</td>
                   <td className={tdNumber}>
                     {editing === row.assetId ? (
@@ -216,12 +219,14 @@ export default function LiveHoldings({ rows, initialPrices, livePairs, renderedA
                     )}
                   </td>
                   <td className={tdNumber}>
-                    {position.marketValue && !closed ? formatUsd(position.marketValue, locale) : "—"}
+                    {position.marketValue && !closed ? <Private>{formatUsd(position.marketValue, locale)}</Private> : "—"}
                   </td>
                   <td className={tdNumber}>
                     {position.unrealized && !closed ? (
                       <>
-                        <Signed value={position.unrealized}>{formatUsd(position.unrealized.abs(), locale)}</Signed>
+                        <Signed value={position.unrealized}>
+                          <Private>{formatUsd(position.unrealized.abs(), locale)}</Private>
+                        </Signed>
                         {position.unrealizedPct && (
                           <span className="block text-xs">
                             <Signed value={position.unrealizedPct}>{formatPercent(position.unrealizedPct, locale)}</Signed>
@@ -243,9 +248,13 @@ export default function LiveHoldings({ rows, initialPrices, livePairs, renderedA
                 <th scope="row" colSpan={4} className="px-3 py-3 text-left font-semibold text-fg">
                   {t("holdings.total")}
                 </th>
-                <td className={`${tdNumber} font-semibold text-fg`}>{formatUsd(totals.marketValue, locale)}</td>
+                <td className={`${tdNumber} font-semibold text-fg`}>
+                  <Private>{formatUsd(totals.marketValue, locale)}</Private>
+                </td>
                 <td className={tdNumber}>
-                  <Signed value={totals.unrealized}>{formatUsd(totals.unrealized.abs(), locale)}</Signed>
+                  <Signed value={totals.unrealized}>
+                    <Private>{formatUsd(totals.unrealized.abs(), locale)}</Private>
+                  </Signed>
                   {totals.unrealizedPct && (
                     <span className="block text-xs">
                       <Signed value={totals.unrealizedPct}>{formatPercent(totals.unrealizedPct, locale)}</Signed>
@@ -260,11 +269,23 @@ export default function LiveHoldings({ rows, initialPrices, livePairs, renderedA
       </div>
 
       <p className="text-sm text-body">
-        {t("overview.summary", {
-          realized: `${totals.realized.isNegative() ? "−" : ""}${formatUsd(totals.realized.abs(), locale)}`,
-          income: formatUsd(totals.income, locale),
-          total: `${totals.totalPnl.isNegative() ? "−" : ""}${formatUsd(totals.totalPnl.abs(), locale)}`,
-        })}
+        {/* Each amount is its own element so "Hide amounts" can mask it. */}
+        {(
+          [
+            ["realized", totals.realized],
+            ["income", totals.income],
+            ["totalPnl", totals.totalPnl],
+          ] as const
+        ).map(([key, value], i) => (
+          <span key={key}>
+            {i > 0 && " · "}
+            {t(`overview.summaryParts.${key}`)}{" "}
+            <Private>
+              {value.isNegative() ? "−" : ""}
+              {formatUsd(value.abs(), locale)}
+            </Private>
+          </span>
+        ))}
       </p>
       {totals.missingPrice > 0 && (
         <p className="text-sm text-muted">{t("overview.missingPrices", { count: totals.missingPrice })}</p>
