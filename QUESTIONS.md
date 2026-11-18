@@ -221,3 +221,5 @@ The portfolio grows into a full investment tracker (a ledger, not a broker: no o
     → Answer: Each asset in its brand color (BTC orange, ETH blue, NVDA green…) from a fixed list of common assets in the code; assets not on the list use violet shades. This is the only exception to the rule that green and red mean gains and losses: brand colors appear only in the donut and its bars (decided 2026-11-18).
 97. What does the first Crypto card show?
     → Answer: The live BTC price first, large, colored by the section's result; the user's BTC average buy price goes underneath in lighter text. Replaces "BTC average buy price" with the current price as a small grey line (decided 2026-11-18).
+98. Where do the BTC average buy price and BTC P/L go?
+    → Answer: In one card, the second of the Crypto section: the average buy price large, and under it, small, the P/L of what is held in dollars and percent. The first card keeps the live BTC price, with its 24 h change underneath (decided 2026-11-18).

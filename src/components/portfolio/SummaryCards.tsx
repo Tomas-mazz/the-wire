@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { bestAndWorst, dayChange, type Dec, type PortfolioTotals, type ValuedPosition } from "@/domain";
+import { bestAndWorst, dayChange, toDec, type Dec, type PortfolioTotals, type ValuedPosition } from "@/domain";
 import { Link } from "@/i18n/navigation";
 import { formatPercent, formatUsd } from "@/lib/format";
 import type { PriceSnapshot } from "@/lib/prices/types";
@@ -94,6 +94,8 @@ function ModeSwitch({ mode, onChange }: { mode: Mode; onChange: (mode: Mode) => 
  * numbers on the cards share one color: the section's result.
  *   Overview: the P/L shown on the P/L card ("Now" or "Total")
  *   Crypto:   BTC price vs BTC average buy price (else the crypto P/L)
+ * Crypto cards: live BTC price · BTC average buy price with its P/L
+ * underneath · total crypto value · news (decisions 97 and 98).
  *   Stocks:   the P/L shown on the stocks P/L card
  */
 export default function SummaryCards({
@@ -173,35 +175,42 @@ export default function SummaryCards({
   } else if (info.section === "crypto") {
     const unrealized = btc?.position.unrealized ?? null;
     const unrealizedPct = btc?.position.unrealizedPct ?? null;
+    // BTC's 24 h move in percent (1.5 = 1.5 %), as the provider reports it.
+    const btcDay = btc?.price?.dayChangePct ? toDec(btc.price.dayChangePct) : null;
     cards = (
       <>
-        {/* Live BTC price first, then the average buy price it is compared with (decision 97). */}
+        {/* Live BTC price first, with its 24 h move (decision 97). */}
         <Card label={t("btcPrice")}>
-          {btc ? (
+          {btc?.position.lastPrice ? (
             <>
-              <p className={`${bigClass} ${btc.position.lastPrice ? tone : "text-muted"}`}>
-                {btc.position.lastPrice ? formatUsd(btc.position.lastPrice, locale) : "—"}
-              </p>
-              <p className="mt-1 text-xs text-body">
-                {btc.position.avgCost ? t("btcAvg", { price: formatUsd(btc.position.avgCost, locale) }) : null}
-                {!btc.position.lastPrice && <span className="text-muted"> · {t("noPrice")}</span>}
-              </p>
-            </>
-          ) : (
-            empty(t("noBtc"))
-          )}
-        </Card>
-        <Card label={t("btcPnl")}>
-          {unrealized ? (
-            <>
-              <p className={`${bigClass} ${tone}`}>{signed(unrealized, usd(unrealized))}</p>
+              <p className={`${bigClass} ${tone}`}>{formatUsd(btc.position.lastPrice, locale)}</p>
               <p className={`mt-1 text-xs ${tone}`}>
-                {unrealizedPct ? signed(unrealizedPct, pct(unrealizedPct)) : "—"}
-                <span className="text-muted"> · {t("nowHint")}</span>
+                {btcDay ? signed(btcDay, pct(btcDay.div(100))) : "—"}
+                <span className="text-muted"> · {t("day24h")}</span>
               </p>
             </>
           ) : (
             empty(btc ? t("noPrice") : t("noBtc"))
+          )}
+        </Card>
+        {/* Average buy price, with the P/L of what is held underneath (decisions 94, 98). */}
+        <Card label={t("btcAvg")}>
+          {btc?.position.avgCost ? (
+            <>
+              <p className={`${bigClass} ${tone}`}>{formatUsd(btc.position.avgCost, locale)}</p>
+              <p className={`mt-1 text-xs ${tone}`}>
+                {unrealized ? (
+                  <>
+                    {signed(unrealized, usd(unrealized))}
+                    {unrealizedPct && <> · {signed(unrealizedPct, pct(unrealizedPct))}</>}
+                  </>
+                ) : (
+                  <span className="text-muted">{t("noPrice")}</span>
+                )}
+              </p>
+            </>
+          ) : (
+            empty(t("noBtc"))
           )}
         </Card>
         {valueCard(t("cryptoValue"))}

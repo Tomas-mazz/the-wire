@@ -46,7 +46,7 @@ export function TableSkeleton({ rows = 6, columns = 6 }: { rows?: number; column
 /** Card titles of each section, in order (the 4th card is always News). */
 const CARD_LABELS = {
   overview: ["currentValue", "pnl", "today"],
-  crypto: ["btcPrice", "btcPnl", "cryptoValue"],
+  crypto: ["btcPrice", "btcAvg", "cryptoValue"],
   stocks: ["stocksValue", "stocksPnl", "bestWorst"],
 } as const satisfies Record<Section, readonly string[]>;
 
