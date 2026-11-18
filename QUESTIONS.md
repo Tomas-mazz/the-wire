@@ -223,3 +223,5 @@ The portfolio grows into a full investment tracker (a ledger, not a broker: no o
     → Answer: The live BTC price first, large, colored by the section's result; the user's BTC average buy price goes underneath in lighter text. Replaces "BTC average buy price" with the current price as a small grey line (decided 2026-11-18).
 98. Where do the BTC average buy price and BTC P/L go?
     → Answer: In one card, the second of the Crypto section: the average buy price large, and under it, small, the P/L of what is held in dollars and percent. The first card keeps the live BTC price, with its 24 h change underneath (decided 2026-11-18).
+99. Do day moves (today's change, BTC 24 h, best and worst) get their own green or red?
+    → Answer: No. They keep the section's color like every other number on the cards (decision 86); the ▲/▼ arrow shows each one's direction (decided 2026-11-18).
