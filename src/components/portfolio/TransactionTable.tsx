@@ -1,6 +1,6 @@
 import { Pencil } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import { Dec, toDec } from "@/domain";
+import { transactionTotal } from "@/lib/portfolio/total";
 import { Link } from "@/i18n/navigation";
 import { formatDateTime, formatQuantity, formatUsd } from "@/lib/format";
 import type { TransactionRow } from "@/lib/portfolio/data";
@@ -13,18 +13,6 @@ interface TransactionTableProps {
   timeZone: string;
   /** Project names by id; the column is hidden when omitted. */
   projectNames?: Map<string, string>;
-}
-
-/**
- * Money that moved, before fees:
- *   buy / sell / dividend = quantity × unit price
- *   deposit / withdrawal  = quantity (dollars)
- *   reward                = nothing (it is free)
- */
-function total(row: TransactionRow): Dec | null {
-  if (row.type === "reward") return null;
-  if (row.type === "deposit" || row.type === "withdrawal") return toDec(row.quantity);
-  return toDec(row.quantity).times(toDec(row.unitPrice));
 }
 
 const PRICED = new Set(["buy", "sell", "dividend"]);
@@ -58,7 +46,7 @@ export default async function TransactionTable({
         <tbody>
           {rows.map((row) => {
             const date = formatDateTime(row.executedAt, locale, timeZone);
-            const amount = total(row);
+            const amount = transactionTotal(row);
             return (
               <tr key={row.id} className="border-b border-line last:border-0 hover:bg-surface">
                 <td className="px-3 py-3 whitespace-nowrap text-body">{date}</td>
