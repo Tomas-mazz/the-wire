@@ -225,3 +225,13 @@ The portfolio grows into a full investment tracker (a ledger, not a broker: no o
     → Answer: In one card, the second of the Crypto section: the average buy price large, and under it, small, the P/L of what is held in dollars and percent. The first card keeps the live BTC price, with its 24 h change underneath (decided 2026-11-18).
 99. Do day moves (today's change, BTC 24 h, best and worst) get their own green or red?
     → Answer: No. They keep the section's color like every other number on the cards (decision 86); the ▲/▼ arrow shows each one's direction (decided 2026-11-18).
+100. Hide amounts?
+    → Answer: An eye button in the portfolio sub-bar hides every amount of money and every quantity, showing "••••••" instead (chosen over blurred or blacked-out numbers). Percentages and market prices stay visible because they don't reveal how much someone has. The choice is remembered in the browser and applied before the page paints (decided 2026-11-18).
+101. Share performance?
+    → Answer: A "Copy summary" button copies a short text of the results of one holding, all stocks, all crypto or the whole portfolio, in a compact format with ▲/▼ arrows, ready to paste into a chat. The user chooses "with amounts" or "only %"; with amounts hidden, "only %" is preselected (decided 2026-11-18).
+102. Chatbot to load transactions?
+    → Answer: Later, not in M7. M7 is a file upload on the Transactions tab (decided 2026-11-18).
+103. Which files does the first import read?
+    → Answer: Nordnet, Binance and Coinbase CSV exports, plus a simple The Wire CSV template for any other broker. A help text explains which file to export from each. Uploading the same file again (or a newer export that repeats old rows) never duplicates what was already imported (decided 2026-11-18).
+104. Nordnet rows in DKK?
+    → Answer: US stocks bought from a DKK account are converted to USD. Rows for stocks outside the US are not imported; the review shows a notice listing them (decided 2026-11-18).

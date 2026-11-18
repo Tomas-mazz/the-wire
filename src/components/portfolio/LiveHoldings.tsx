@@ -2,13 +2,16 @@
 
 import { useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { allocation, Dec, summarize, toDec, valuePosition, type Position } from "@/domain";
+import { allocation, dayChange, Dec, summarize, toDec, valuePosition, type Position } from "@/domain";
 import { isStale } from "@/market-data/freshness";
 import { formatAge, formatPercent, formatQuantity, formatUsd } from "@/lib/format";
+import { buildSummary, type SummaryItem } from "@/lib/portfolio/summary";
 import type { PriceSnapshot } from "@/lib/prices/types";
 import AllocationDonut from "./AllocationDonut";
 import ManualPriceEditor from "./ManualPriceEditor";
-import SummaryCards, { type DashboardInfo } from "./SummaryCards";
+import Private from "./Private";
+import ShareSummary from "./ShareSummary";
+import SummaryCards, { type DashboardInfo, type Mode, type ValuedRow } from "./SummaryCards";
 import { useLivePrices } from "./useLivePrices";
 import { tdNumber, th } from "./styles";
 
@@ -77,6 +80,8 @@ export default function LiveHoldings({ rows, initialPrices, livePairs, renderedA
   const pricedIds = useMemo(() => rows.map((r) => r.assetId), [rows]);
   const { prices, setPrices, now, live } = useLivePrices(pricedIds, initialPrices, livePairs, renderedAt);
   const [editing, setEditing] = useState<string | null>(null);
+  // "Now / Total" of the P/L cards; the section summary follows it (decision 93).
+  const [mode, setMode] = useState<Mode>("now");
 
   /** After saving or removing a manual price. */
   function applyManual(assetId: string, price: PriceSnapshot | null) {
@@ -105,11 +110,56 @@ export default function LiveHoldings({ rows, initialPrices, livePairs, renderedA
         a.row.symbol.localeCompare(b.row.symbol),
     );
 
+  // "Copy summary" texts (decision 101).
+  const date = new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(now);
+  const dayLine = (items: ValuedRow[]) => {
+    const day = dayChange(
+      items.map((v) => ({
+        quantity: v.position.quantity,
+        lastPrice: v.position.lastPrice,
+        dayChangePct: v.price?.dayChangePct ?? null,
+      })),
+    );
+    return { label: t("share.today"), pct: day.counted > 0 ? day.changePct : null, amount: day.change };
+  };
+  const sectionSummary = (withAmounts: boolean) =>
+    buildSummary({
+      title: t(`share.title.${dashboard?.section ?? "overview"}`),
+      date,
+      lines: [
+        mode === "now"
+          ? { label: t("share.now"), pct: totals.unrealizedPct, amount: totals.unrealized }
+          : { label: t("share.total"), pct: totals.totalPnlPct, amount: totals.totalPnl },
+        dayLine(open),
+      ],
+      items: sorted
+        .filter((v) => !v.position.quantity.isZero())
+        .map((v): SummaryItem => ({ symbol: v.row.symbol, pct: v.position.unrealizedPct, amount: v.position.unrealized })),
+      withAmounts,
+      locale,
+      footer: "The Wire",
+    });
+  const assetSummary = (v: ValuedRow) => (withAmounts: boolean) =>
+    buildSummary({
+      title: `${v.row.symbol} · ${v.row.name}`,
+      date,
+      lines: [{ label: t("share.now"), pct: v.position.unrealizedPct, amount: v.position.unrealized }, dayLine([v])],
+      items: [],
+      withAmounts,
+      locale,
+      footer: "The Wire",
+    });
+
   return (
     <div className="space-y-3">
       {dashboard && (
         <div className="mb-10 space-y-3">
-          <SummaryCards info={dashboard} valued={valued} totals={totals} />
+          {open.some((v) => v.position.unrealizedPct !== null) && (
+            <div className="flex justify-end">
+              <ShareSummary variant="button" label={t("share.sectionButton")} build={sectionSummary} />
+            </div>
+          )}
+          <SummaryCards info={dashboard} valued={valued} totals={totals} mode={mode} onModeChange={setMode} />
           <AllocationDonut
             slices={open
               .filter((v) => v.position.marketValue !== null)
@@ -149,7 +199,8 @@ export default function LiveHoldings({ rows, initialPrices, livePairs, renderedA
             </tr>
           </thead>
           <tbody>
-            {sorted.map(({ row, price, position, share }) => {
+            {sorted.map((item) => {
+              const { row, price, position, share } = item;
               const closed = position.quantity.isZero();
               const manual = price?.source === "manual";
               // A manual price is the user's own figure, so it is never "out of date".
@@ -164,8 +215,17 @@ export default function LiveHoldings({ rows, initialPrices, livePairs, renderedA
                       · {t(`assetClasses.${row.assetClass}`)}
                       {closed && ` · ${t("holdings.closed")}`}
                     </span>
+                    {!closed && position.unrealizedPct && (
+                      <ShareSummary
+                        variant="icon"
+                        label={t("share.assetLabel", { symbol: row.symbol })}
+                        build={assetSummary(item)}
+                      />
+                    )}
                   </th>
-                  <td className={tdNumber}>{formatQuantity(position.quantity, locale)}</td>
+                  <td className={tdNumber}>
+                    <Private>{formatQuantity(position.quantity, locale)}</Private>
+                  </td>
                   <td className={tdNumber}>{position.avgCost ? formatUsd(position.avgCost, locale) : "—"}</td>
                   <td className={tdNumber}>
                     {editing === row.assetId ? (
@@ -216,12 +276,14 @@ export default function LiveHoldings({ rows, initialPrices, livePairs, renderedA
                     )}
                   </td>
                   <td className={tdNumber}>
-                    {position.marketValue && !closed ? formatUsd(position.marketValue, locale) : "—"}
+                    {position.marketValue && !closed ? <Private>{formatUsd(position.marketValue, locale)}</Private> : "—"}
                   </td>
                   <td className={tdNumber}>
                     {position.unrealized && !closed ? (
                       <>
-                        <Signed value={position.unrealized}>{formatUsd(position.unrealized.abs(), locale)}</Signed>
+                        <Private>
+                          <Signed value={position.unrealized}>{formatUsd(position.unrealized.abs(), locale)}</Signed>
+                        </Private>
                         {position.unrealizedPct && (
                           <span className="block text-xs">
                             <Signed value={position.unrealizedPct}>{formatPercent(position.unrealizedPct, locale)}</Signed>
@@ -243,9 +305,13 @@ export default function LiveHoldings({ rows, initialPrices, livePairs, renderedA
                 <th scope="row" colSpan={4} className="px-3 py-3 text-left font-semibold text-fg">
                   {t("holdings.total")}
                 </th>
-                <td className={`${tdNumber} font-semibold text-fg`}>{formatUsd(totals.marketValue, locale)}</td>
+                <td className={`${tdNumber} font-semibold text-fg`}>
+                  <Private>{formatUsd(totals.marketValue, locale)}</Private>
+                </td>
                 <td className={tdNumber}>
-                  <Signed value={totals.unrealized}>{formatUsd(totals.unrealized.abs(), locale)}</Signed>
+                  <Private>
+                    <Signed value={totals.unrealized}>{formatUsd(totals.unrealized.abs(), locale)}</Signed>
+                  </Private>
                   {totals.unrealizedPct && (
                     <span className="block text-xs">
                       <Signed value={totals.unrealizedPct}>{formatPercent(totals.unrealizedPct, locale)}</Signed>
@@ -260,11 +326,23 @@ export default function LiveHoldings({ rows, initialPrices, livePairs, renderedA
       </div>
 
       <p className="text-sm text-body">
-        {t("overview.summary", {
-          realized: `${totals.realized.isNegative() ? "−" : ""}${formatUsd(totals.realized.abs(), locale)}`,
-          income: formatUsd(totals.income, locale),
-          total: `${totals.totalPnl.isNegative() ? "−" : ""}${formatUsd(totals.totalPnl.abs(), locale)}`,
-        })}
+        {/* Each amount is its own element so "Hide amounts" can mask it. */}
+        {(
+          [
+            ["realized", totals.realized],
+            ["income", totals.income],
+            ["totalPnl", totals.totalPnl],
+          ] as const
+        ).map(([key, value], i) => (
+          <span key={key}>
+            {i > 0 && " · "}
+            {t(`overview.summaryParts.${key}`)}{" "}
+            <Private>
+              {value.isNegative() ? "−" : ""}
+              {formatUsd(value.abs(), locale)}
+            </Private>
+          </span>
+        ))}
       </p>
       {totals.missingPrice > 0 && (
         <p className="text-sm text-muted">{t("overview.missingPrices", { count: totals.missingPrice })}</p>

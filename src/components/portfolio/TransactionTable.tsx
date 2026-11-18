@@ -5,6 +5,7 @@ import { Link } from "@/i18n/navigation";
 import { formatDateTime, formatQuantity, formatUsd } from "@/lib/format";
 import type { TransactionRow } from "@/lib/portfolio/data";
 import { tdNumber, th } from "./styles";
+import Private from "./Private";
 
 interface TransactionTableProps {
   rows: TransactionRow[];
@@ -65,12 +66,14 @@ export default async function TransactionTable({
                   <span className="font-mono font-semibold text-accent">{row.asset.symbol}</span>
                 </td>
                 <td className="px-3 py-3 whitespace-nowrap text-body">{t(`types.${row.type}`)}</td>
-                <td className={tdNumber}>{formatQuantity(row.quantity, locale)}</td>
+                <td className={tdNumber}>
+                  <Private>{formatQuantity(row.quantity, locale)}</Private>
+                </td>
                 <td className={tdNumber}>
                   {PRICED.has(row.type) ? formatUsd(row.unitPrice, locale) : "—"}
                 </td>
-                <td className={tdNumber}>{row.fee ? formatUsd(row.fee, locale) : "—"}</td>
-                <td className={tdNumber}>{amount ? formatUsd(amount, locale) : "—"}</td>
+                <td className={tdNumber}>{row.fee ? <Private>{formatUsd(row.fee, locale)}</Private> : "—"}</td>
+                <td className={tdNumber}>{amount ? <Private>{formatUsd(amount, locale)}</Private> : "—"}</td>
                 {projectNames && (
                   <td className="px-3 py-3 whitespace-nowrap text-muted">
                     {projectNames.get(row.projectId) ?? "—"}

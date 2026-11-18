@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { locale as rootLocale } from "next/root-params";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
+import { PRIVACY_SCRIPT } from "@/components/portfolio/Private";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
 
@@ -47,12 +48,17 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[locale]"
   const locale = await rootLocale();
   if (!hasLocale(routing.locales, locale)) notFound();
 
-
   return (
     <html
       lang={locale}
       className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      // The privacy script below may set data-privacy before React hydrates.
+      suppressHydrationWarning
     >
+      <head>
+        {/* "Hide amounts" (decision 100): applied before the first paint so amounts never flash. */}
+        <script dangerouslySetInnerHTML={{ __html: PRIVACY_SCRIPT }} />
+      </head>
       <body className="flex min-h-full flex-col font-sans">
         {/* Makes translations available to Client Components (useTranslations). */}
         <NextIntlClientProvider>{children}</NextIntlClientProvider>

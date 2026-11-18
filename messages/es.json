@@ -64,6 +64,33 @@
       "projects": "Proyectos",
       "transactions": "Transacciones"
     },
+    "privacy": {
+      "hide": "Ocultar montos",
+      "show": "Mostrar montos",
+      "hideLabel": "Ocultar montos y cantidades",
+      "showLabel": "Mostrar montos y cantidades"
+    },
+    "share": {
+      "sectionButton": "Copiar resumen",
+      "assetLabel": "Copiar resumen de {symbol}",
+      "dialogTitle": "Copiar resumen",
+      "formatLabel": "Qué incluir",
+      "withAmounts": "Con montos",
+      "onlyPercent": "Solo %",
+      "copy": "Copiar",
+      "copied": "Copiado",
+      "close": "Cerrar",
+      "copyFailed": "No se pudo copiar solo. Seleccioná el texto y copialo a mano.",
+      "hiddenHint": "Los montos están ocultos en pantalla, pero el texto copiado los incluye.",
+      "now": "Rendimiento",
+      "total": "Total (con ventas y dividendos)",
+      "today": "Hoy",
+      "title": {
+        "overview": "Mi portafolio",
+        "crypto": "Mis cripto",
+        "stocks": "Mis acciones"
+      }
+    },
     "error": {
       "title": "Algo salió mal",
       "body": "No pudimos cargar esta página. Tus datos están a salvo.",
@@ -77,7 +104,11 @@
       "problems": "Algunas transacciones no se pueden calcular porque una venta es mayor que lo que había: {assets}. Revisá sus fechas y cantidades.",
       "live": "En vivo: la cripto se actualiza cada segundo",
       "polling": "Los precios se actualizan cada 30 segundos",
-      "summary": "G/P realizada: {realized} · Dividendos: {income} · G/P total: {total}",
+      "summaryParts": {
+        "realized": "G/P realizada:",
+        "income": "Dividendos:",
+        "totalPnl": "G/P total:"
+      },
       "missingPrices": "{count, plural, one {# posición no tiene precio y no se suma} other {# posiciones no tienen precio y no se suman}} a los totales.",
       "sources": "Precios: Binance, Finnhub y <coingecko>CoinGecko</coingecko>. La cripto cotiza en USDT (≈ USD). Solo informativo, no es asesoramiento."
     },

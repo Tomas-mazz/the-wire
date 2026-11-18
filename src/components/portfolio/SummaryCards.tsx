@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { bestAndWorst, dayChange, toDec, type Dec, type PortfolioTotals, type ValuedPosition } from "@/domain";
 import { Link } from "@/i18n/navigation";
 import { formatPercent, formatUsd } from "@/lib/format";
 import type { PriceSnapshot } from "@/lib/prices/types";
 import type { LiveHoldingRow } from "./LiveHoldings";
+import Private from "./Private";
 import { summaryCard, summaryLabel } from "./styles";
 
 export type Section = "overview" | "crypto" | "stocks";
@@ -25,7 +25,7 @@ export interface ValuedRow {
   position: ValuedPosition;
 }
 
-type Mode = "now" | "total";
+export type Mode = "now" | "total";
 
 /** Text color for a section's result (decision 86): green in profit, red at a loss. */
 function toneOf(result: Dec | null): string {
@@ -37,7 +37,7 @@ function toneOf(result: Dec | null): string {
  * Signed text with an arrow, so the direction never depends on color alone
  * (STYLE.md). The color comes from the section's result, not from here.
  */
-function signed(value: Dec, text: string): React.ReactNode {
+function signed(value: Dec, text: React.ReactNode): React.ReactNode {
   if (value.isZero()) return text;
   const up = value.isPositive();
   return (
@@ -102,14 +102,18 @@ export default function SummaryCards({
   info,
   valued,
   totals,
+  mode,
+  onModeChange,
 }: {
   info: DashboardInfo;
   valued: ValuedRow[];
   totals: PortfolioTotals;
+  /** "Now / Total", kept by LiveHoldings so the copied summary follows it. */
+  mode: Mode;
+  onModeChange: (mode: Mode) => void;
 }) {
   const t = useTranslations("Portfolio.dashboard");
   const locale = useLocale();
-  const [mode, setMode] = useState<Mode>("now");
   const usd = (value: Dec) => formatUsd(value.abs(), locale);
   const pct = (value: Dec) => formatPercent(value, locale);
 
@@ -123,14 +127,16 @@ export default function SummaryCards({
 
   const valueCard = (label: string) => (
     <Card label={label}>
-      <p className={`${bigClass} ${tone}`}>{formatUsd(totals.marketValue, locale)}</p>
+      <p className={`${bigClass} ${tone}`}>
+        <Private>{formatUsd(totals.marketValue, locale)}</Private>
+      </p>
       <p className="mt-1 text-xs text-muted">{t("inAssets", { count: open.length })}</p>
     </Card>
   );
 
   const pnlCard = (label: string) => (
-    <Card label={label} action={<ModeSwitch mode={mode} onChange={setMode} />}>
-      <p className={`${bigClass} ${tone}`}>{signed(pnl, usd(pnl))}</p>
+    <Card label={label} action={<ModeSwitch mode={mode} onChange={onModeChange} />}>
+      <p className={`${bigClass} ${tone}`}><Private>{signed(pnl, usd(pnl))}</Private></p>
       <p className={`mt-1 text-xs ${tone}`}>
         {pnlPct ? signed(pnlPct, pct(pnlPct)) : "—"}
         <span className="text-muted"> · {t(mode === "now" ? "nowHint" : "totalHint")}</span>
@@ -163,7 +169,9 @@ export default function SummaryCards({
             empty(t("todayNone"))
           ) : (
             <>
-              <p className={`${bigClass} ${tone}`}>{signed(today.change, usd(today.change))}</p>
+              <p className={`${bigClass} ${tone}`}>
+                <Private>{signed(today.change, usd(today.change))}</Private>
+              </p>
               <p className={`mt-1 text-xs ${tone}`}>
                 {today.changePct ? signed(today.changePct, pct(today.changePct)) : "—"}
               </p>
@@ -201,7 +209,7 @@ export default function SummaryCards({
               <p className={`mt-1 text-xs ${tone}`}>
                 {unrealized ? (
                   <>
-                    {signed(unrealized, usd(unrealized))}
+                    <Private>{signed(unrealized, usd(unrealized))}</Private>
                     {unrealizedPct && <> · {signed(unrealizedPct, pct(unrealizedPct))}</>}
                   </>
                 ) : (

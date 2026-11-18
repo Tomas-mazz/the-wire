@@ -8,7 +8,7 @@
 
 ## Principles
 1. **Less is more.** On arrival you see only the essentials: headlines and prices. Everything else opens on tap ("read more", tabs, dropdowns). The opposite of Yahoo Finance, which shows everything at once.
-2. **Color has meaning.** Three main colors (decision 83, palette "Amethyst"): **black** for the page, **deep violet** for borders and card tint, and **amethyst** for what you act on (primary buttons, active tabs, links, asset symbols, the logo's "WIRE") and for the hover light. Green/red are only for gains and losses, so the accent is never green or red. A glance is enough to read the market.
+2. **Color has meaning.** Three main colors (decision 83, palette "Amethyst"): **black** for the page, **deep violet** for borders and card tint, and **amethyst** for what you act on (primary buttons, active tabs, links, asset symbols, the logo's "WIRE") and for the hover light. Green/red are only for gains and losses, so the accent is never green or red. A glance is enough to read the market. One exception: the allocation donut and its bars use each asset's brand color (BTC orange, NVDA green…, decision 96); brand colors never color a number.
 3. **Generous spacing.** Wide margins and gaps. If something feels cramped, there is too much content.
 4. **Subtle motion.** Animations support the content and never distract.
 5. **Readable in under 5 minutes.** Every design decision should help with that.
@@ -64,8 +64,17 @@ No gradients, except the hover light on clickable cards (see Animation).
 - A green dot plus "Live" while the crypto WebSocket is connected; otherwise "Prices update every 30 seconds".
 - Under the table: sources (Binance, Finnhub, CoinGecko with a link, as CoinGecko's free plan requires) and "for information only, not advice".
 
+### Section dashboards (M6)
+- A row of 4 compact cards (16px radius): small uppercase label, large monospaced number, a small line under it. All numbers on a section's cards share the section's color: green in profit, red at a loss (decision 86); ▲/▼ arrows show each number's own direction. Only the News card is clickable, so only it gets the `glow-card` light.
+- The P/L cards have a small "Now / Total" pill switch (active option filled with amethyst).
+- Allocation: a thin donut (total in the middle) beside a list of bars (dot, symbol, bar, %, value), in brand colors. Hovering or tapping a slice or a bar highlights both, dims the rest and shows a small label (decision 95).
+- While loading, grey pulsing blocks in the shape of the content; card titles and the sample story show right away.
+
+### Hidden amounts (decision 100)
+- With "Hide amounts" on, every amount and quantity becomes a grey crossed-out eye plus "••••••"; the arrow and sign of a hidden amount hide too, so neither color nor sign gives the result away. Percentages and market prices stay visible. Wrap amounts in `<Private>`.
+
 ### Portfolio sub-bar
-- A sticky bar right under the site header with the tabs (Overview · Projects · Transactions) on the left and "+ Transaction" on the right (only "+" on phones).
+- A sticky bar right under the site header with the tabs (Overview · Crypto · Stocks · Projects · Transactions) on the left and, on the right, the eye button ("Hide amounts") and "+ Transaction" (only icons on phones).
 - It is as wide as the content (max 1200px), not the whole screen like the site header, so it reads as the portfolio's own header.
 - Tabs look like the header links: the active one is white and bold with a 2px amethyst line on the bar's bottom edge. No page title: the header already shows the section.
 
