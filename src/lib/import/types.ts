@@ -15,7 +15,7 @@ export interface ImportedAsset {
   name: string;
 }
 
-/** One transaction ready for the review table. Money is in USD. */
+/** One transaction ready for the review table. */
 export interface ImportedTransaction {
   broker: ImportBroker;
   /** The broker's own id for the row: re-importing the same id never duplicates it. */
@@ -24,8 +24,11 @@ export interface ImportedTransaction {
   asset: ImportedAsset;
   /** Decimal strings with a dot, full precision. */
   quantity: string;
+  /** Price and fee are in `currency`; the server converts them to USD before saving. */
   unitPrice: string;
   fee: string | null;
+  /** ISO code: "USD", "EUR", "DKK"… (stablecoins such as USDC count as USD). */
+  currency: string;
   /** ISO 8601 in UTC. */
   executedAt: string;
   /** 1-based line in the file, to point the user at the source. */
@@ -38,6 +41,9 @@ export type SkipReason =
   | "non_us" // stocks outside the US (decision 104)
   | "unsupported_currency"
   | "cancelled"
+  | "failed" // a payment the broker reports as not completed
+  | "transfer" // crypto sent or received between wallets: not a buy or sell
+  | "fee_in_other_coin" // a trade fee paid in a third coin (e.g. BNB) we cannot value
   | "orphan_tax" // withholding tax whose dividend row is not in the file
   | "unsupported_type";
 
@@ -59,7 +65,8 @@ export interface RowError {
 }
 
 export type ImportResult =
-  | { ok: false; error: "unrecognized_format" }
+  /** no_prices: a known broker file that lacks prices (e.g. Binance's general history). */
+  | { ok: false; error: "unrecognized_format" | "no_prices" }
   | {
       ok: true;
       broker: ImportBroker;

@@ -87,6 +87,7 @@ describe("parseNordnet", () => {
       quantity: "2",
       unitPrice: "169.01",
       fee: "3.6867174942", // 25 DKK / 6.7811
+      currency: "USD",
       executedAt: "2026-11-13T12:00:00.000Z",
     });
   });

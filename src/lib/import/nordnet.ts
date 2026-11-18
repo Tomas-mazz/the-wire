@@ -190,6 +190,7 @@ export function parseNordnet(text: string): ImportResult {
       quantity: quantity.toFixed(),
       unitPrice: price.toFixed(),
       fee,
+      currency: "USD",
       executedAt: dateAtNoonUtc(date),
     });
   };
@@ -231,6 +232,7 @@ export function parseNordnet(text: string): ImportResult {
       quantity: quantity.toFixed(),
       unitPrice: perShare.toFixed(),
       fee,
+      currency: "USD",
       executedAt: dateAtNoonUtc(date),
     });
   };
