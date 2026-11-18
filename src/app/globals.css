@@ -149,9 +149,35 @@ html:not([data-privacy="on"]) .private-svg-alt {
   display: none;
 }
 
+/*
+ * Hidden amounts are grey (so green or red can't give the result away) and
+ * carry a small crossed-out eye, the same icon as the switch (lucide
+ * "eye-off"), drawn with a mask so it takes the text color.
+ */
+html[data-privacy="on"] .private {
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+html[data-privacy="on"] .private::before {
+  content: "";
+  display: inline-block;
+  width: 0.8em;
+  height: 0.8em;
+  margin-right: 0.3em;
+  vertical-align: -0.05em;
+  background-color: currentColor;
+  -webkit-mask: var(--eye-off) center / contain no-repeat;
+  mask: var(--eye-off) center / contain no-repeat;
+}
+
 html[data-privacy="on"] .private::after {
   content: "••••••";
   letter-spacing: 0.05em;
+}
+
+:root {
+  --eye-off: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49'/%3E%3Cpath d='M14.084 14.158a3 3 0 0 1-4.242-4.242'/%3E%3Cpath d='M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143'/%3E%3Cpath d='m2 2 20 20'/%3E%3C/svg%3E");
 }
 
 /* Respect the OS "reduce motion" setting: stop everything that moves on its own. */

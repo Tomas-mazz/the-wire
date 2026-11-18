@@ -281,9 +281,9 @@ export default function LiveHoldings({ rows, initialPrices, livePairs, renderedA
                   <td className={tdNumber}>
                     {position.unrealized && !closed ? (
                       <>
-                        <Signed value={position.unrealized}>
-                          <Private>{formatUsd(position.unrealized.abs(), locale)}</Private>
-                        </Signed>
+                        <Private>
+                          <Signed value={position.unrealized}>{formatUsd(position.unrealized.abs(), locale)}</Signed>
+                        </Private>
                         {position.unrealizedPct && (
                           <span className="block text-xs">
                             <Signed value={position.unrealizedPct}>{formatPercent(position.unrealizedPct, locale)}</Signed>
@@ -309,9 +309,9 @@ export default function LiveHoldings({ rows, initialPrices, livePairs, renderedA
                   <Private>{formatUsd(totals.marketValue, locale)}</Private>
                 </td>
                 <td className={tdNumber}>
-                  <Signed value={totals.unrealized}>
-                    <Private>{formatUsd(totals.unrealized.abs(), locale)}</Private>
-                  </Signed>
+                  <Private>
+                    <Signed value={totals.unrealized}>{formatUsd(totals.unrealized.abs(), locale)}</Signed>
+                  </Private>
                   {totals.unrealizedPct && (
                     <span className="block text-xs">
                       <Signed value={totals.unrealizedPct}>{formatPercent(totals.unrealizedPct, locale)}</Signed>

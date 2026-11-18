@@ -137,7 +137,7 @@ export default function AllocationDonut({ slices }: { slices: DonutSlice[] }) {
             <text x="21" y="24.6" textAnchor="middle" fontSize="4" fontWeight="600" fill="var(--color-fg)" className="private-svg font-mono">
               {formatUsdCompact(total, locale)}
             </text>
-            <text x="21" y="24.6" textAnchor="middle" fontSize="4" fontWeight="600" fill="var(--color-fg)" className="private-svg-alt font-mono">
+            <text x="21" y="24.6" textAnchor="middle" fontSize="4" fontWeight="600" fill="var(--color-muted)" className="private-svg-alt font-mono">
               ••••••
             </text>
           </svg>

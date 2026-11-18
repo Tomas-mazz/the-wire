@@ -136,7 +136,7 @@ export default function SummaryCards({
 
   const pnlCard = (label: string) => (
     <Card label={label} action={<ModeSwitch mode={mode} onChange={onModeChange} />}>
-      <p className={`${bigClass} ${tone}`}>{signed(pnl, <Private>{usd(pnl)}</Private>)}</p>
+      <p className={`${bigClass} ${tone}`}><Private>{signed(pnl, usd(pnl))}</Private></p>
       <p className={`mt-1 text-xs ${tone}`}>
         {pnlPct ? signed(pnlPct, pct(pnlPct)) : "—"}
         <span className="text-muted"> · {t(mode === "now" ? "nowHint" : "totalHint")}</span>
@@ -170,7 +170,7 @@ export default function SummaryCards({
           ) : (
             <>
               <p className={`${bigClass} ${tone}`}>
-                {signed(today.change, <Private>{usd(today.change)}</Private>)}
+                <Private>{signed(today.change, usd(today.change))}</Private>
               </p>
               <p className={`mt-1 text-xs ${tone}`}>
                 {today.changePct ? signed(today.changePct, pct(today.changePct)) : "—"}
@@ -209,7 +209,7 @@ export default function SummaryCards({
               <p className={`mt-1 text-xs ${tone}`}>
                 {unrealized ? (
                   <>
-                    {signed(unrealized, <Private>{usd(unrealized)}</Private>)}
+                    <Private>{signed(unrealized, usd(unrealized))}</Private>
                     {unrealizedPct && <> · {signed(unrealizedPct, pct(unrealizedPct))}</>}
                   </>
                 ) : (
