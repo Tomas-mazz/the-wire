@@ -7,7 +7,7 @@ import type { TransactionType } from "@/domain";
 export type ImportBroker = "nordnet" | "binance" | "coinbase" | "thewire";
 
 export interface ImportedAsset {
-  kind: "stock" | "crypto";
+  kind: "stock" | "etf" | "crypto";
   /** Ticker when the file has one (e.g. "AAPL", "BTC"). */
   symbol?: string;
   /** Nordnet only names stocks by ISIN; the server resolves it to a ticker. */
@@ -33,6 +33,9 @@ export interface ImportedTransaction {
   executedAt: string;
   /** 1-based line in the file, to point the user at the source. */
   line: number;
+  /** Only the The Wire template carries these; otherwise the broker's name is used. */
+  brokerName?: string;
+  note?: string;
 }
 
 export type SkipReason =
@@ -56,7 +59,7 @@ export interface SkippedRow {
   date?: string;
 }
 
-export type RowErrorCode = "invalid_number" | "invalid_date" | "missing_field";
+export type RowErrorCode = "invalid_number" | "invalid_date" | "missing_field" | "invalid_value";
 
 export interface RowError {
   line: number;
