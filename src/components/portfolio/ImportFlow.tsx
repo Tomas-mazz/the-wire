@@ -18,10 +18,10 @@ interface ImportFlowProps {
 }
 
 type Preview = Extract<ImportState, { status: "preview" }>;
-type Problem = "unresolved" | "no_rate" | "oversell";
+type Problem = "lookup_failed" | "unresolved" | "no_rate" | "oversell";
 
 const idle: ImportState = { status: "idle" };
-const PROBLEMS: Problem[] = ["unresolved", "no_rate", "oversell"];
+const PROBLEMS: Problem[] = ["lookup_failed", "unresolved", "no_rate", "oversell"];
 
 /** The browser's time zone, read without an effect (null while server rendering). */
 function useBrowserTimeZone(): string | null {
@@ -37,6 +37,7 @@ const badge: Record<ReviewStatus, string> = {
   new: "border-accent/60 text-accent",
   duplicate: "border-line text-muted",
   unresolved: "border-dashed border-line-strong text-body",
+  lookup_failed: "border-dashed border-line-strong text-body",
   no_rate: "border-dashed border-line-strong text-body",
   oversell: "border-dashed border-line-strong text-body",
 };

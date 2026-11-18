@@ -4,6 +4,7 @@
  *
  *   duplicate    the same broker row was imported before (same external id)
  *   unresolved   the asset could not be identified (e.g. an unknown ISIN)
+ *   lookup_failed  the price provider could not be reached to identify it (try again)
  *   no_rate      no exchange rate for that day and currency
  *   oversell     a sell of more than is held at that moment
  *   new          will be saved
@@ -14,7 +15,7 @@
 import { Dec, sortTransactions, ZERO, type Transaction } from "@/domain";
 import type { ImportedAsset, ImportedTransaction } from "./types";
 
-export type ReviewStatus = "new" | "duplicate" | "unresolved" | "no_rate" | "oversell";
+export type ReviewStatus = "new" | "duplicate" | "unresolved" | "lookup_failed" | "no_rate" | "oversell";
 
 export interface ResolvedAsset {
   symbol: string;
@@ -47,8 +48,8 @@ export interface ReviewInput {
   transactions: readonly ImportedTransaction[];
   /** rateKey(day, currency) → units per USD, or null when the rate could not be fetched. */
   rates: ReadonlyMap<string, string | null>;
-  /** assetKey(asset) → what it resolved to, or null. */
-  assets: ReadonlyMap<string, ResolvedAsset | null>;
+  /** assetKey(asset) → what it resolved to, null when nobody knows it, or "lookup_failed". */
+  assets: ReadonlyMap<string, ResolvedAsset | null | "lookup_failed">;
   /** external_id values already saved for this user. */
   existingKeys: ReadonlySet<string>;
   /** identity(resolved asset) → that asset's ledger in the target project. */
@@ -87,7 +88,8 @@ export function findOversells(existing: readonly Transaction[], incoming: readon
 export function buildReview(input: ReviewInput): ReviewRow[] {
   const rows: ReviewRow[] = input.transactions.map((tx) => {
     const key = externalKey(tx);
-    const asset = input.assets.get(assetKey(tx.asset)) ?? null;
+    const found = input.assets.get(assetKey(tx.asset)) ?? null;
+    const asset = found === "lookup_failed" ? null : found;
 
     let unitPrice: string | null = tx.unitPrice;
     let fee: string | null = tx.fee;
@@ -101,11 +103,13 @@ export function buildReview(input: ReviewInput): ReviewRow[] {
 
     const status: ReviewStatus = input.existingKeys.has(key)
       ? "duplicate"
-      : asset === null
-        ? "unresolved"
-        : !hasRate
-          ? "no_rate"
-          : "new";
+      : found === "lookup_failed"
+        ? "lookup_failed"
+        : asset === null
+          ? "unresolved"
+          : !hasRate
+            ? "no_rate"
+            : "new";
 
     return {
       key,

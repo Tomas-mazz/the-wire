@@ -75,6 +75,16 @@ describe("buildReview", () => {
     expect(rows[2]).toEqual(expect.objectContaining({ unitPrice: null, fee: null }));
   });
 
+  it("tells a failed lookup apart from an unknown asset", () => {
+    const [row] = buildReview(
+      input({
+        transactions: [tx({ asset: { kind: "stock", isin: "US38268T1034", name: "GoPro A" } })],
+        assets: new Map([["isin:US38268T1034", "lookup_failed"]]),
+      }),
+    );
+    expect(row).toEqual(expect.objectContaining({ status: "lookup_failed", asset: null, label: "GoPro A" }));
+  });
+
   it("resolves Nordnet stocks by ISIN", () => {
     const [row] = buildReview(
       input({

@@ -359,7 +359,8 @@
         "no_rate": "{count} sin cotización",
         "oversell": "{count} venden más de lo que hay",
         "skipped": "{count} omitidas",
-        "errors": "{count} con errores"
+        "errors": "{count} con errores",
+        "lookup_failed": "{count} sin verificar"
       },
       "columns": {
         "date": "Fecha",
@@ -375,12 +376,14 @@
         "duplicate": "Ya importada",
         "unresolved": "Activo desconocido",
         "no_rate": "Sin cotización",
-        "oversell": "Vende más de lo que hay"
+        "oversell": "Vende más de lo que hay",
+        "lookup_failed": "No se pudo verificar"
       },
       "statusHelp": {
         "unresolved": "No pudimos identificar este activo. Podés cargarlo a mano con \"+ Transacción\".",
         "no_rate": "No había cotización para ese día. Probá de nuevo más tarde.",
-        "oversell": "Vende más de lo que el proyecto tiene en esa fecha. Importá primero las compras (o cargalas a mano) y después este archivo de nuevo."
+        "oversell": "Vende más de lo que el proyecto tiene en esa fecha. Importá primero las compras (o cargalas a mano) y después este archivo de nuevo.",
+        "lookup_failed": "No pudimos consultar el servicio de precios para identificar este activo en este momento. Subí el mismo archivo de nuevo en un minuto: las filas ya importadas se saltean, así que solo se agregan estas."
       },
       "converted": "desde {currency}",
       "skippedTitle": "Filas que no se importan ({count})",
