@@ -36,9 +36,17 @@ function toneOf(result: Dec | null): string {
  * Signed text with an arrow, so the direction never depends on color alone
  * (STYLE.md). The color comes from the section's result, not from here.
  */
-function signed(value: Dec, text: string): string {
+function signed(value: Dec, text: string): React.ReactNode {
   if (value.isZero()) return text;
-  return value.isPositive() ? `▲ +${text}` : `▼ −${text}`;
+  const up = value.isPositive();
+  return (
+    <>
+      {/* The arrow glyph is large in the monospaced font, so it is drawn smaller. */}
+      <span className="mr-1 align-[0.12em] text-[0.6em]" aria-hidden="true">{up ? "▲" : "▼"}</span>
+      {up ? "+" : "−"}
+      {text}
+    </>
+  );
 }
 
 const cardClass = "flex min-h-[118px] flex-col justify-between rounded-2xl border border-line bg-surface p-4";
@@ -49,7 +57,7 @@ function Card({ label, action, children }: { label: string; action?: React.React
   return (
     <div className={cardClass}>
       <div className="flex items-start justify-between gap-2">
-        <span className={labelClass}>{label}</span>
+        <span className={`${labelClass} min-w-0 break-words`}>{label}</span>
         {action}
       </div>
       <div>{children}</div>

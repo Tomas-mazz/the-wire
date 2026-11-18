@@ -89,7 +89,9 @@ export default function AllocationDonut({ slices }: { slices: DonutSlice[] }) {
   const angle = current ? ((current.start + current.length / 2) / 100) * 2 * Math.PI : 0;
   const tipLeft = 50 + Math.sin(angle) * 40;
   const tipTop = 50 - Math.cos(angle) * 40;
-  const gap = parts.length > 1 ? 0.8 : 0;
+  const gap = parts.length > 1 ? 0.6 : 0;
+  // Tiny holdings still get a visible sliver (drawing only; the % shown stays exact).
+  const MIN_DRAWN = 0.8;
 
   const toggle = (key: string) => setActive((a) => (a === key ? null : key));
 
@@ -119,7 +121,7 @@ export default function AllocationDonut({ slices }: { slices: DonutSlice[] }) {
                   stroke={p.color}
                   strokeWidth={on ? STROKE_ACTIVE : STROKE}
                   // Dash = slice length; the offset starts it at 12 o'clock (25 = a quarter turn back).
-                  strokeDasharray={`${Math.max(p.length - gap, 0.1)} ${100 - p.length + gap}`}
+                  strokeDasharray={`${Math.max(p.length - gap, MIN_DRAWN)} ${100 - Math.max(p.length - gap, MIN_DRAWN)}`}
                   strokeDashoffset={25 - p.start}
                   opacity={active && !on ? 0.35 : 1}
                   className="cursor-pointer transition-[stroke-width,opacity] duration-200"
@@ -170,7 +172,7 @@ export default function AllocationDonut({ slices }: { slices: DonutSlice[] }) {
                   <span className="truncate font-mono font-semibold text-accent">{p.label}</span>
                   <span className="h-2 overflow-hidden rounded-full bg-line/50" aria-hidden="true">
                     <span
-                      className="block h-full rounded-full"
+                      className="block h-full min-w-1.5 rounded-full"
                       style={{ width: `${p.length}%`, background: p.color }}
                     />
                   </span>
