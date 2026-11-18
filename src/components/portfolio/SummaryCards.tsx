@@ -174,14 +174,16 @@ export default function SummaryCards({
     const unrealizedPct = btc?.position.unrealizedPct ?? null;
     cards = (
       <>
-        <Card label={t("btcAvg")}>
-          {btc?.position.avgCost ? (
+        {/* Live BTC price first, then the average buy price it is compared with (decision 97). */}
+        <Card label={t("btcPrice")}>
+          {btc ? (
             <>
-              <p className={`${bigClass} ${tone}`}>{formatUsd(btc.position.avgCost, locale)}</p>
-              <p className="mt-1 text-xs text-muted">
-                {btc.position.lastPrice
-                  ? t("btcNow", { price: formatUsd(btc.position.lastPrice, locale) })
-                  : t("noPrice")}
+              <p className={`${bigClass} ${btc.position.lastPrice ? tone : "text-muted"}`}>
+                {btc.position.lastPrice ? formatUsd(btc.position.lastPrice, locale) : "—"}
+              </p>
+              <p className="mt-1 text-xs text-body">
+                {btc.position.avgCost ? t("btcAvg", { price: formatUsd(btc.position.avgCost, locale) }) : null}
+                {!btc.position.lastPrice && <span className="text-muted"> · {t("noPrice")}</span>}
               </p>
             </>
           ) : (

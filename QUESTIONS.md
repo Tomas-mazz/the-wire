@@ -219,3 +219,5 @@ The portfolio grows into a full investment tracker (a ledger, not a broker: no o
     → Answer: Plain cards (not tinted green or red; only the numbers change color), and a thin donut with the total in the middle and a list of bars beside it (symbol, bar, %, value). Hovering a slice or a bar highlights both, dims the rest and shows a small label with the asset, its % and its value; on phones a tap does the same. Chosen from options shown side by side (compact cards, tinted cards, one strip) (decided 2026-11-18).
 96. Donut colors?
     → Answer: Each asset in its brand color (BTC orange, ETH blue, NVDA green…) from a fixed list of common assets in the code; assets not on the list use violet shades. This is the only exception to the rule that green and red mean gains and losses: brand colors appear only in the donut and its bars (decided 2026-11-18).
+97. What does the first Crypto card show?
+    → Answer: The live BTC price first, large, colored by the section's result; the user's BTC average buy price goes underneath in lighter text. Replaces "BTC average buy price" with the current price as a small grey line (decided 2026-11-18).
