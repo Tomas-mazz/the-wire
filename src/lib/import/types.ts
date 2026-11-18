@@ -68,8 +68,11 @@ export interface RowError {
 }
 
 export type ImportResult =
-  /** no_prices: a known broker file that lacks prices (e.g. Binance's general history). */
-  | { ok: false; error: "unrecognized_format" | "no_prices" }
+  /**
+   * no_prices: a known broker file that lacks prices (e.g. Binance's general history).
+   * unsupported_file: a PDF or an image; reading those with AI comes in v2 (decision 108).
+   */
+  | { ok: false; error: "unrecognized_format" | "no_prices" | "unsupported_file" }
   | {
       ok: true;
       broker: ImportBroker;

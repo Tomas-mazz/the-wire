@@ -312,7 +312,9 @@
       "searchingProviders": "Buscando acciones, ETF y cripto…",
       "fromProviders": "Más resultados (Finnhub y CoinGecko):",
       "noProviderMatches": "No hay otros resultados. Podés agregarlo a mano abajo.",
-      "pickedFromProvider": "Completado desde la búsqueda. Revisalo y guardá."
+      "pickedFromProvider": "Completado desde la búsqueda. Revisalo y guardá.",
+      "importTitle": "¿Tenés el archivo de tu broker?",
+      "importHint": "Importalo desde Nordnet, Binance, Coinbase o la plantilla de The Wire →"
     },
     "import": {
       "title": "Importar transacciones",
@@ -340,7 +342,8 @@
         "too_many_rows": "El archivo tiene más de {max} transacciones. Dividilo y subí cada parte.",
         "invalid_project": "Elegí un proyecto.",
         "unauthorized": "Tu sesión terminó. Volvé a entrar.",
-        "failed": "Algo salió mal. Probá de nuevo en un momento."
+        "failed": "Algo salió mal. Probá de nuevo en un momento.",
+        "unsupported_file": "Los PDF y las capturas todavía no se pueden leer (llega más adelante). Exportá un CSV desde tu broker, o pasá tus operaciones a la plantilla de The Wire."
       },
       "detected": "Archivo de {broker} · {count, plural, one {# transacción} other {# transacciones}}",
       "brokers": {

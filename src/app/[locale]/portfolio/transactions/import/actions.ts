@@ -22,6 +22,7 @@ export type ImportError =
   | "too_large"
   | "unrecognized_format"
   | "no_prices"
+  | "unsupported_file"
   | "too_many_rows"
   | "invalid_project"
   | "unauthorized"

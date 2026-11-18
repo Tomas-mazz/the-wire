@@ -19,7 +19,22 @@ export { TEMPLATE_HEADERS } from "./template";
  */
 export const MAX_IMPORT_BYTES = 900 * 1024;
 
+/** Magic numbers of files people may try instead of a CSV: PDF, PNG, JPEG, GIF, WebP, HEIC. */
+export function isDocumentOrImage(bytes: Uint8Array): boolean {
+  const starts = (...sig: number[]) => sig.every((b, i) => bytes[i] === b);
+  const ascii = (from: number, text: string) => [...text].every((c, i) => bytes[from + i] === c.charCodeAt(0));
+  return (
+    ascii(0, "%PDF") ||
+    starts(0x89, 0x50, 0x4e, 0x47) ||
+    starts(0xff, 0xd8, 0xff) ||
+    ascii(0, "GIF8") ||
+    (ascii(0, "RIFF") && ascii(8, "WEBP")) ||
+    (ascii(4, "ftyp") && (ascii(8, "heic") || ascii(8, "heix") || ascii(8, "mif1")))
+  );
+}
+
 export function readImportFile(bytes: Uint8Array, fileName: string, timeZone: string): ImportResult {
+  if (isDocumentOrImage(bytes)) return { ok: false, error: "unsupported_file" };
   const text = decodeText(bytes);
   const nordnet = parseNordnet(text);
   if (nordnet.ok) return nordnet;

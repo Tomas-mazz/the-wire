@@ -61,6 +61,12 @@ export default function ImportFlow({ projects, defaultProjectId, timeZone }: Imp
   const tz = timeZone ?? browserTimeZone ?? "UTC";
   const current = sent !== null && sent.file === file && sent.projectId === projectId;
   const shown: ImportState = current ? state : idle;
+  // Caught here for a quick answer; the server checks the bytes too.
+  const unreadable =
+    file !== null &&
+    (file.type === "application/pdf" ||
+      file.type.startsWith("image/") ||
+      /\.(pdf|png|jpe?g|heic|webp|gif)$/i.test(file.name));
 
   function send(mode: "preview" | "save") {
     const form = new FormData();
@@ -138,7 +144,8 @@ export default function ImportFlow({ projects, defaultProjectId, timeZone }: Imp
               key={inputKey}
               id="import-file"
               type="file"
-              accept=".csv,.txt,text/csv,text/plain"
+              // PDFs and images can be picked so the user gets an explanation instead of a greyed-out file.
+              accept=".csv,.txt,.pdf,.png,.jpg,.jpeg,.heic,.webp,text/csv,text/plain,application/pdf,image/*"
               onChange={(e) => setFile(e.target.files?.[0] ?? null)}
               aria-describedby="import-file-hint"
               className={`${input} file:mr-3 file:rounded-lg file:border-0 file:bg-surface-hover file:px-3 file:py-1.5 file:text-sm file:text-fg`}
@@ -146,9 +153,14 @@ export default function ImportFlow({ projects, defaultProjectId, timeZone }: Imp
             <p id="import-file-hint" className={hint}>
               {t("fileHint")}
             </p>
+            {unreadable && (
+              <p role="alert" className="mt-2 text-sm text-fg">
+                {t("errors.unsupported_file")}
+              </p>
+            )}
           </div>
           <div className="sm:col-span-2">
-            <button type="submit" disabled={pending || !file} className={primaryButton}>
+            <button type="submit" disabled={pending || !file || unreadable} className={primaryButton}>
               <FileUp size={16} strokeWidth={1.75} aria-hidden="true" />
               {pending && sent?.mode === "preview" ? t("reviewing") : t("review")}
             </button>
