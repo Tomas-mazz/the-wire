@@ -2,14 +2,16 @@
 
 import { useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { allocation, Dec, summarize, toDec, valuePosition, type Position } from "@/domain";
+import { allocation, dayChange, Dec, summarize, toDec, valuePosition, type Position } from "@/domain";
 import { isStale } from "@/market-data/freshness";
 import { formatAge, formatPercent, formatQuantity, formatUsd } from "@/lib/format";
+import { buildSummary, type SummaryItem } from "@/lib/portfolio/summary";
 import type { PriceSnapshot } from "@/lib/prices/types";
 import AllocationDonut from "./AllocationDonut";
 import ManualPriceEditor from "./ManualPriceEditor";
 import Private from "./Private";
-import SummaryCards, { type DashboardInfo } from "./SummaryCards";
+import ShareSummary from "./ShareSummary";
+import SummaryCards, { type DashboardInfo, type Mode, type ValuedRow } from "./SummaryCards";
 import { useLivePrices } from "./useLivePrices";
 import { tdNumber, th } from "./styles";
 
@@ -78,6 +80,8 @@ export default function LiveHoldings({ rows, initialPrices, livePairs, renderedA
   const pricedIds = useMemo(() => rows.map((r) => r.assetId), [rows]);
   const { prices, setPrices, now, live } = useLivePrices(pricedIds, initialPrices, livePairs, renderedAt);
   const [editing, setEditing] = useState<string | null>(null);
+  // "Now / Total" of the P/L cards; the section summary follows it (decision 93).
+  const [mode, setMode] = useState<Mode>("now");
 
   /** After saving or removing a manual price. */
   function applyManual(assetId: string, price: PriceSnapshot | null) {
@@ -106,11 +110,56 @@ export default function LiveHoldings({ rows, initialPrices, livePairs, renderedA
         a.row.symbol.localeCompare(b.row.symbol),
     );
 
+  // "Copy summary" texts (decision 101).
+  const date = new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(now);
+  const dayLine = (items: ValuedRow[]) => {
+    const day = dayChange(
+      items.map((v) => ({
+        quantity: v.position.quantity,
+        lastPrice: v.position.lastPrice,
+        dayChangePct: v.price?.dayChangePct ?? null,
+      })),
+    );
+    return { label: t("share.today"), pct: day.counted > 0 ? day.changePct : null, amount: day.change };
+  };
+  const sectionSummary = (withAmounts: boolean) =>
+    buildSummary({
+      title: t(`share.title.${dashboard?.section ?? "overview"}`),
+      date,
+      lines: [
+        mode === "now"
+          ? { label: t("share.now"), pct: totals.unrealizedPct, amount: totals.unrealized }
+          : { label: t("share.total"), pct: totals.totalPnlPct, amount: totals.totalPnl },
+        dayLine(open),
+      ],
+      items: sorted
+        .filter((v) => !v.position.quantity.isZero())
+        .map((v): SummaryItem => ({ symbol: v.row.symbol, pct: v.position.unrealizedPct, amount: v.position.unrealized })),
+      withAmounts,
+      locale,
+      footer: "The Wire",
+    });
+  const assetSummary = (v: ValuedRow) => (withAmounts: boolean) =>
+    buildSummary({
+      title: `${v.row.symbol} · ${v.row.name}`,
+      date,
+      lines: [{ label: t("share.now"), pct: v.position.unrealizedPct, amount: v.position.unrealized }, dayLine([v])],
+      items: [],
+      withAmounts,
+      locale,
+      footer: "The Wire",
+    });
+
   return (
     <div className="space-y-3">
       {dashboard && (
         <div className="mb-10 space-y-3">
-          <SummaryCards info={dashboard} valued={valued} totals={totals} />
+          {open.some((v) => v.position.unrealizedPct !== null) && (
+            <div className="flex justify-end">
+              <ShareSummary variant="button" label={t("share.sectionButton")} build={sectionSummary} />
+            </div>
+          )}
+          <SummaryCards info={dashboard} valued={valued} totals={totals} mode={mode} onModeChange={setMode} />
           <AllocationDonut
             slices={open
               .filter((v) => v.position.marketValue !== null)
@@ -150,7 +199,8 @@ export default function LiveHoldings({ rows, initialPrices, livePairs, renderedA
             </tr>
           </thead>
           <tbody>
-            {sorted.map(({ row, price, position, share }) => {
+            {sorted.map((item) => {
+              const { row, price, position, share } = item;
               const closed = position.quantity.isZero();
               const manual = price?.source === "manual";
               // A manual price is the user's own figure, so it is never "out of date".
@@ -165,6 +215,13 @@ export default function LiveHoldings({ rows, initialPrices, livePairs, renderedA
                       · {t(`assetClasses.${row.assetClass}`)}
                       {closed && ` · ${t("holdings.closed")}`}
                     </span>
+                    {!closed && position.unrealizedPct && (
+                      <ShareSummary
+                        variant="icon"
+                        label={t("share.assetLabel", { symbol: row.symbol })}
+                        build={assetSummary(item)}
+                      />
+                    )}
                   </th>
                   <td className={tdNumber}>
                     <Private>{formatQuantity(position.quantity, locale)}</Private>

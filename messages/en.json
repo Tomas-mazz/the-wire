@@ -70,6 +70,27 @@
       "hideLabel": "Hide amounts and quantities",
       "showLabel": "Show amounts and quantities"
     },
+    "share": {
+      "sectionButton": "Copy summary",
+      "assetLabel": "Copy {symbol} summary",
+      "dialogTitle": "Copy summary",
+      "formatLabel": "What to include",
+      "withAmounts": "With amounts",
+      "onlyPercent": "Only %",
+      "copy": "Copy",
+      "copied": "Copied",
+      "close": "Close",
+      "copyFailed": "Couldn't copy automatically. Select the text and copy it by hand.",
+      "hiddenHint": "Amounts are hidden on screen, but the copied text includes them.",
+      "now": "Return",
+      "total": "Total (incl. sales and dividends)",
+      "today": "Today",
+      "title": {
+        "overview": "My portfolio",
+        "crypto": "My crypto",
+        "stocks": "My stocks"
+      }
+    },
     "error": {
       "title": "Something went wrong",
       "body": "We couldn't load this page. Your data is safe.",

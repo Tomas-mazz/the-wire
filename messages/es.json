@@ -70,6 +70,27 @@
       "hideLabel": "Ocultar montos y cantidades",
       "showLabel": "Mostrar montos y cantidades"
     },
+    "share": {
+      "sectionButton": "Copiar resumen",
+      "assetLabel": "Copiar resumen de {symbol}",
+      "dialogTitle": "Copiar resumen",
+      "formatLabel": "Qué incluir",
+      "withAmounts": "Con montos",
+      "onlyPercent": "Solo %",
+      "copy": "Copiar",
+      "copied": "Copiado",
+      "close": "Cerrar",
+      "copyFailed": "No se pudo copiar solo. Seleccioná el texto y copialo a mano.",
+      "hiddenHint": "Los montos están ocultos en pantalla, pero el texto copiado los incluye.",
+      "now": "Rendimiento",
+      "total": "Total (con ventas y dividendos)",
+      "today": "Hoy",
+      "title": {
+        "overview": "Mi portafolio",
+        "crypto": "Mis cripto",
+        "stocks": "Mis acciones"
+      }
+    },
     "error": {
       "title": "Algo salió mal",
       "body": "No pudimos cargar esta página. Tus datos están a salvo.",

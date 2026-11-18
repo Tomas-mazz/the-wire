@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { bestAndWorst, dayChange, toDec, type Dec, type PortfolioTotals, type ValuedPosition } from "@/domain";
 import { Link } from "@/i18n/navigation";
@@ -26,7 +25,7 @@ export interface ValuedRow {
   position: ValuedPosition;
 }
 
-type Mode = "now" | "total";
+export type Mode = "now" | "total";
 
 /** Text color for a section's result (decision 86): green in profit, red at a loss. */
 function toneOf(result: Dec | null): string {
@@ -103,14 +102,18 @@ export default function SummaryCards({
   info,
   valued,
   totals,
+  mode,
+  onModeChange,
 }: {
   info: DashboardInfo;
   valued: ValuedRow[];
   totals: PortfolioTotals;
+  /** "Now / Total", kept by LiveHoldings so the copied summary follows it. */
+  mode: Mode;
+  onModeChange: (mode: Mode) => void;
 }) {
   const t = useTranslations("Portfolio.dashboard");
   const locale = useLocale();
-  const [mode, setMode] = useState<Mode>("now");
   const usd = (value: Dec) => formatUsd(value.abs(), locale);
   const pct = (value: Dec) => formatPercent(value, locale);
 
@@ -132,7 +135,7 @@ export default function SummaryCards({
   );
 
   const pnlCard = (label: string) => (
-    <Card label={label} action={<ModeSwitch mode={mode} onChange={setMode} />}>
+    <Card label={label} action={<ModeSwitch mode={mode} onChange={onModeChange} />}>
       <p className={`${bigClass} ${tone}`}>{signed(pnl, <Private>{usd(pnl)}</Private>)}</p>
       <p className={`mt-1 text-xs ${tone}`}>
         {pnlPct ? signed(pnlPct, pct(pnlPct)) : "—"}
