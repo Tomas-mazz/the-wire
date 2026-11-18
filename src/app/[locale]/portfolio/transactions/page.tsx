@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import Form from "next/form";
+import { FileUp } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { input, label, primaryButton, secondaryButton } from "@/components/portfolio/styles";
 import TransactionTable from "@/components/portfolio/TransactionTable";
@@ -73,6 +74,12 @@ async function Transactions({ params }: { params: SearchParams }) {
 
   return (
     <div className="space-y-6">
+      <div className="flex justify-end">
+        <Link href="/portfolio/transactions/import" className={secondaryButton}>
+          <FileUp size={16} strokeWidth={1.75} aria-hidden="true" />
+          {t("transactions.importLink")}
+        </Link>
+      </div>
       <Form action="" replace className="grid gap-4 sm:grid-cols-2 lg:grid-cols-6 lg:items-end">
         <div className="lg:col-span-2">
           <label htmlFor="f-project" className={label}>
