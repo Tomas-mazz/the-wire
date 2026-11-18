@@ -243,3 +243,5 @@ The portfolio grows into a full investment tracker (a ledger, not a broker: no o
     → Answer: Yes. Buy = quantity × price + fee (what was paid); sell and dividend = quantity × price − fee (what was received) (decided 2026-11-18).
 108. Screenshots, PDFs and CSV files from other brokers?
     → Answer: Later, in v2, read with AI and always confirmed in the review table. M7 covers Nordnet, Binance and Coinbase plus the The Wire CSV template, which works for any broker (decided 2026-11-18).
+109. Which side of the "Now / Total" switch shows first?
+    → Answer: "Total" (realized P/L and dividends included, over everything ever invested) is now the default on the Overview and Stocks P/L cards; "Now" (unrealized P/L of what is held) is one click away. Changes decision 93 (decided 2026-11-18).

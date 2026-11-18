@@ -80,8 +80,8 @@ export default function LiveHoldings({ rows, initialPrices, livePairs, renderedA
   const pricedIds = useMemo(() => rows.map((r) => r.assetId), [rows]);
   const { prices, setPrices, now, live } = useLivePrices(pricedIds, initialPrices, livePairs, renderedAt);
   const [editing, setEditing] = useState<string | null>(null);
-  // "Now / Total" of the P/L cards; the section summary follows it (decision 93).
-  const [mode, setMode] = useState<Mode>("now");
+  // "Now / Total" of the P/L cards; the section summary follows it (decisions 93 and 109: Total first).
+  const [mode, setMode] = useState<Mode>("total");
 
   /** After saving or removing a manual price. */
   function applyManual(assetId: string, price: PriceSnapshot | null) {
