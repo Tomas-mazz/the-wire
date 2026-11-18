@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { computePosition } from "@/domain";
 import { decodeText } from "./delimited";
 import { parseNordnet } from "./nordnet";
 
@@ -14,7 +15,7 @@ const HEADER = [
 type Cells = Partial<{
   id: string; booked: string; trade: string; value: string; type: string; name: string;
   isin: string; qty: string; price: string; fees: string; feesCcy: string; amount: string;
-  amountCcy: string; cost: string; costCcy: string; fx: string; text: string;
+  amountCcy: string; cost: string; costCcy: string; res: string; resCcy: string; fx: string; text: string;
   cancelled: string; verification: string;
 }>;
 
@@ -22,7 +23,7 @@ function row(c: Cells): string {
   const cells = [
     c.id ?? "", c.booked ?? c.trade ?? "", c.trade ?? "", c.value ?? c.trade ?? "", "11111111",
     c.type ?? "", c.name ?? "", c.isin ?? "", c.qty ?? "", c.price ?? "", "", c.fees ?? "",
-    c.feesCcy ?? "", c.amount ?? "", c.amountCcy ?? "", c.cost ?? "", c.costCcy ?? "", "", "",
+    c.feesCcy ?? "", c.amount ?? "", c.amountCcy ?? "", c.cost ?? "", c.costCcy ?? "", c.res ?? "", c.resCcy ?? "",
     "", "", c.fx ?? "", c.text ?? "", c.cancelled ?? "", "", c.verification ?? "", "", "", "", "",
   ];
   return cells.join("\t");
@@ -159,12 +160,39 @@ describe("parseNordnet", () => {
     expect(parsed(file(cancelled)).skipped[0].reason).toBe("cancelled");
   });
 
-  it("leaves sells out until a real sell row has been checked", () => {
-    const sell = row({
-      id: "5000000013", trade: "2026-04-21", type: "SOLGT", name: "Alphabet A",
-      isin: "US02079K3059", qty: "1", price: "338,7", amount: "2120,62", amountCcy: "DKK",
-    });
-    expect(parsed(file(sell)).skipped[0].reason).toBe("unsupported_type");
+  // A sell leaves "Indkøbsværdi" empty and fills "Resultat" (Nordnet's realized P/L) instead.
+  const buyGoogl = row({
+    id: "5000000020", trade: "2025-04-07", value: "2025-04-08", type: "KØBT", name: "Alphabet A",
+    isin: "US02079K3059", qty: "1", price: "141,24", fees: "25", feesCcy: "DKK",
+    amount: "-988,27", amountCcy: "DKK", cost: "144,91", costCcy: "USD", fx: "6,8201",
+  });
+  const sellGoogl = row({
+    id: "5000000021", trade: "2026-04-21", value: "2026-04-22", type: "SOLGT", name: "Alphabet A",
+    isin: "US02079K3059", qty: "1", price: "338,7", fees: "25", feesCcy: "DKK",
+    amount: "2120,62", amountCcy: "DKK", res: "189,84", resCcy: "USD", fx: "6,3348",
+  });
+
+  it("reads a sell like a buy, finding the price currency next to Resultat", () => {
+    const result = parsed(file(sellGoogl));
+    expect(result.transactions).toEqual([
+      expect.objectContaining({
+        type: "sell",
+        quantity: "1",
+        unitPrice: "338.7",
+        fee: "3.9464545053", // 25 DKK / 6.3348
+        executedAt: "2026-04-21T12:00:00.000Z",
+      }),
+    ]);
+  });
+
+  it("gives the same realized P/L as Nordnet's own Resultat column", () => {
+    const { transactions } = parsed(file(sellGoogl, buyGoogl));
+    const position = computePosition(
+      transactions.map((t) => ({ ...t, id: t.externalId, createdAt: t.executedAt })),
+    );
+    // Nordnet rounds each leg to cents first (334.75 − 144.91 = 189.84); we keep
+    // every decimal (189.8479…), so the two may differ by less than a cent.
+    expect(position.realized.minus("189.84").abs().lt("0.01")).toBe(true);
   });
 
   it("rejects numbers it would have to guess, without importing the row", () => {

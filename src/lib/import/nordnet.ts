@@ -10,7 +10,8 @@
  *   - stocks are named, not tickered ("Alphabet A"), plus their ISIN
  *
  * Conversions (decision 104: US stocks bought from a DKK account → USD):
- *   buy (KØBT):  price = Kurs (already in the stock's currency, must be USD)
+ *   buy (KØBT) and sell (SOLGT):
+ *                price = Kurs (already in the stock's currency, must be USD)
  *                fee   = Samlede afgifter / Vekslingskurs   (DKK ÷ DKK-per-USD)
  *   dividend (UDBYTTE + UDBYTTESKAT with the same Verifikationsnummer,
  *   decision 105):
@@ -101,7 +102,8 @@ export function parseNordnet(text: string): ImportResult {
     feesCurrency: currencyOf("Samlede afgifter"),
     amount: col("Beløb"),
     amountCurrency: currencyOf("Beløb"),
-    priceCurrency: currencyOf("Indkøbsværdi"),
+    costCurrency: currencyOf("Indkøbsværdi"),
+    resultCurrency: currencyOf("Resultat"),
     fx: col("Vekslingskurs"),
     text: col("Transaktionstekst"),
     cancelled: col("Makuleringsdato"),
@@ -157,7 +159,13 @@ export function parseNordnet(text: string): ImportResult {
     };
   };
 
-  const readBuy = (row: Row) => {
+  /**
+   * Currency of Kurs. Buys fill "Indkøbsværdi" (cost) and its currency; sells
+   * leave it empty and fill "Resultat" (realized P/L) and its currency instead.
+   */
+  const priceCurrency = (row: Row) => row.get(C.costCurrency) || row.get(C.resultCurrency);
+
+  const readTrade = (row: Row, type: "buy" | "sell") => {
     const date = tradeDate(row);
     const quantity = required(nordnetNumber(row.get(C.quantity), "Antal"), "Antal");
     const price = required(nordnetNumber(row.get(C.price), "Kurs"), "Kurs");
@@ -178,7 +186,7 @@ export function parseNordnet(text: string): ImportResult {
 
     transactions.push({
       ...base(row),
-      type: "buy",
+      type,
       quantity: quantity.toFixed(),
       unitPrice: price.toFixed(),
       fee,
@@ -236,7 +244,7 @@ export function parseNordnet(text: string): ImportResult {
         continue;
       }
 
-      if (type === "KØBT" || type === "UDBYTTE") {
+      if (type === "KØBT" || type === "SOLGT" || type === "UDBYTTE") {
         if (type === "UDBYTTE") usedTaxes.add(taxKey(row));
         const isin = row.get(C.isin);
         if (isin === "") throw new RowProblem("missing_field", "ISIN");
@@ -244,14 +252,12 @@ export function parseNordnet(text: string): ImportResult {
           skip(row, "non_us");
           continue;
         }
-        if (type === "KØBT") {
-          if (row.get(C.priceCurrency) !== "USD") {
-            skip(row, "unsupported_currency");
-            continue;
-          }
-          readBuy(row);
-        } else {
+        if (type === "UDBYTTE") {
           readDividend(row);
+        } else if (priceCurrency(row) !== "USD") {
+          skip(row, "unsupported_currency");
+        } else {
+          readTrade(row, type === "KØBT" ? "buy" : "sell");
         }
       } else if (type === "INDBETALING") {
         skip(row, "cash_movement");
