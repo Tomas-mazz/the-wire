@@ -6,14 +6,14 @@ import TransactionForm from "@/components/portfolio/TransactionForm";
 import { requireUser } from "@/lib/auth";
 import { getAssets, getProjects, getTimeZone, getTransaction } from "@/lib/portfolio/data";
 import { isUuid, utcToZonedLocal } from "@/lib/portfolio/parse";
+import { FormSkeleton } from "@/components/portfolio/Skeletons";
 
 /** Edit or delete one transaction. */
 export default async function EditTransactionPage({
   params,
 }: PageProps<"/[locale]/portfolio/transactions/[id]">) {
-  const t = await getTranslations("Portfolio");
   return (
-    <Suspense fallback={<p className="text-sm text-muted">{t("loading")}</p>}>
+    <Suspense fallback={<FormSkeleton />}>
       {params.then(({ id }) => (
         <EditTransaction id={id} />
       ))}

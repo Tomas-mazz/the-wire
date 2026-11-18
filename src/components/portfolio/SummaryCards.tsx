@@ -7,6 +7,7 @@ import { Link } from "@/i18n/navigation";
 import { formatPercent, formatUsd } from "@/lib/format";
 import type { PriceSnapshot } from "@/lib/prices/types";
 import type { LiveHoldingRow } from "./LiveHoldings";
+import { summaryCard, summaryLabel } from "./styles";
 
 export type Section = "overview" | "crypto" | "stocks";
 
@@ -49,8 +50,8 @@ function signed(value: Dec, text: string): React.ReactNode {
   );
 }
 
-const cardClass = "flex min-h-[118px] flex-col justify-between rounded-2xl border border-line bg-surface p-4";
-const labelClass = "text-xs font-medium tracking-wide text-muted uppercase";
+const cardClass = summaryCard;
+const labelClass = summaryLabel;
 const bigClass = "mt-2.5 font-mono text-xl font-semibold lg:text-2xl";
 
 function Card({ label, action, children }: { label: string; action?: React.ReactNode; children: React.ReactNode }) {

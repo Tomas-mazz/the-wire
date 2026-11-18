@@ -1,3 +1,4 @@
+import type { Locale } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 import { SAMPLE_NEWS } from "@/data/sample-news";
 import type { Topic } from "@/data/types";
@@ -17,6 +18,13 @@ const CLASSES: Record<Section, readonly string[]> = {
 
 /** News topic of each section's News card; Overview takes the top story of any topic. */
 const TOPIC: Record<Section, Topic | null> = { overview: null, crypto: "crypto", stocks: "stocks" };
+
+/** The most important sample story for a section, until the news product returns (decision 87). */
+export function sectionStory(section: Section, locale: Locale): { title: string } | null {
+  const topic = TOPIC[section];
+  const story = SAMPLE_NEWS[locale].find((n) => n.importance === "top" && (topic === null || n.topic === topic));
+  return story ? { title: story.title } : null;
+}
 
 /**
  * One portfolio section (Overview, Crypto or Stocks): summary cards, the
@@ -58,10 +66,6 @@ export default async function SectionDashboard({ section }: { section: Section }
     );
   }
 
-  // The most important sample story until the news product returns (decision 87).
-  const topic = TOPIC[section];
-  const story = SAMPLE_NEWS[locale].find((n) => n.importance === "top" && (topic === null || n.topic === topic));
-
   return (
     <div className="space-y-4">
       {problemSymbols.length > 0 && (
@@ -72,7 +76,7 @@ export default async function SectionDashboard({ section }: { section: Section }
       {rows.length > 0 && (
         <HoldingsTable
           rows={rows}
-          dashboard={{ section, news: story ? { title: story.title } : null }}
+          dashboard={{ section, news: sectionStory(section, locale) }}
           heading={
             <h2 id="holdings-title" className="text-xl font-bold text-fg">
               {t("overview.holdingsTitle")}

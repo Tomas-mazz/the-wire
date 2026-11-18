@@ -22,3 +22,10 @@ export const th = "px-3 py-3 text-left text-xs font-medium tracking-wide whitesp
 
 /** Numeric cell: monospaced, right aligned. */
 export const tdNumber = "px-3 py-3 text-right font-mono whitespace-nowrap text-body";
+
+/** Summary card at the top of a section (M6) and its label. */
+export const summaryCard = "flex min-h-[118px] flex-col justify-between rounded-2xl border border-line bg-surface p-4";
+export const summaryLabel = "text-xs font-medium tracking-wide text-muted uppercase";
+
+/** Grey placeholder block for loading skeletons (pulses unless "reduce motion" is on). */
+export const bone = "animate-pulse rounded-md bg-line/45";

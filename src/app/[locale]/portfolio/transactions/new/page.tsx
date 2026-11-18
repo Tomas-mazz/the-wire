@@ -4,14 +4,14 @@ import { card } from "@/components/portfolio/styles";
 import TransactionForm from "@/components/portfolio/TransactionForm";
 import { requireUser } from "@/lib/auth";
 import { getAssets, getProjects, getTimeZone } from "@/lib/portfolio/data";
+import { FormSkeleton } from "@/components/portfolio/Skeletons";
 
 /** New transaction. `?project=<id>` preselects a project (from the project page). */
 export default async function NewTransactionPage({
   searchParams,
 }: PageProps<"/[locale]/portfolio/transactions/new">) {
-  const t = await getTranslations("Portfolio");
   return (
-    <Suspense fallback={<p className="text-sm text-muted">{t("loading")}</p>}>
+    <Suspense fallback={<FormSkeleton />}>
       {searchParams.then((params) => (
         <NewTransaction project={typeof params.project === "string" ? params.project : ""} />
       ))}

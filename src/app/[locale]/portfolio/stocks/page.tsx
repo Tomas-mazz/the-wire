@@ -1,12 +1,11 @@
 import { Suspense } from "react";
-import { getTranslations } from "next-intl/server";
 import SectionDashboard from "@/components/portfolio/SectionDashboard";
+import { SectionSkeleton } from "@/components/portfolio/Skeletons";
 
 /** Stocks tab: US stocks and ETFs (M6). */
 export default async function StocksPage() {
-  const t = await getTranslations("Portfolio");
   return (
-    <Suspense fallback={<p className="text-sm text-muted">{t("loading")}</p>}>
+    <Suspense fallback={<SectionSkeleton section="stocks" />}>
       <SectionDashboard section="stocks" />
     </Suspense>
   );
