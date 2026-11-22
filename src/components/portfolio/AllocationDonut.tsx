@@ -42,12 +42,26 @@ interface Part {
  * focusing with the keyboard) a slice or a bar highlights both, dims the
  * rest and shows a label with the symbol, % and value.
  *
+ * Beside the performance chart (decision 116) it is compact: the donut on
+ * top and the list below, and clicking a holding picks it for the chart
+ * (`onSelect`; click it again for the total). "Others" can't be picked.
+ *
  *   share = value / Σ value   (exact, with decimal.js; floats only draw the ring)
  */
-export default function AllocationDonut({ slices }: { slices: DonutSlice[] }) {
+export default function AllocationDonut({
+  slices,
+  selected = null,
+  onSelect,
+}: {
+  slices: DonutSlice[];
+  selected?: string | null;
+  onSelect?: (assetId: string | null) => void;
+}) {
   const t = useTranslations("Portfolio.dashboard");
   const locale = useLocale();
-  const [active, setActive] = useState<string | null>(null);
+  const [hovered, setActive] = useState<string | null>(null);
+  // Hover wins; otherwise the holding picked for the chart stays highlighted.
+  const active = hovered ?? selected;
 
   const total = slices.reduce((sum, s) => sum.plus(s.value), ZERO);
   if (slices.length === 0 || total.isZero()) {
@@ -84,7 +98,8 @@ export default function AllocationDonut({ slices }: { slices: DonutSlice[] }) {
     return part;
   });
 
-  const current = parts.find((p) => p.key === active) ?? null;
+  // The label only shows while hovering, not for the holding picked for the chart.
+  const current = parts.find((p) => p.key === hovered) ?? null;
   // Label position: the middle of the active slice, a bit outside the ring
   // (percent of the box; 0 % of the circle is 12 o'clock, clockwise).
   const angle = current ? ((current.start + current.length / 2) / 100) * 2 * Math.PI : 0;
@@ -94,13 +109,16 @@ export default function AllocationDonut({ slices }: { slices: DonutSlice[] }) {
   // Tiny holdings still get a visible sliver (drawing only; the % shown stays exact).
   const MIN_DRAWN = 0.8;
 
-  const toggle = (key: string) => setActive((a) => (a === key ? null : key));
+  const toggle = (key: string) => {
+    if (onSelect && key !== "others") onSelect(selected === key ? null : key);
+    else setActive((a) => (a === key ? null : key));
+  };
 
   return (
     <section aria-labelledby="allocation-title" className="rounded-3xl border border-line bg-surface p-5">
       <h2 id="allocation-title" className="mb-4 text-base font-semibold text-fg">{t("allocation")}</h2>
-      <div className="flex flex-wrap items-center gap-8 sm:gap-10">
-        <div className="relative mx-auto size-44 shrink-0 sm:mx-0 sm:size-48" onMouseLeave={() => setActive(null)}>
+      <div className="flex flex-col items-center gap-6">
+        <div className="relative size-40 shrink-0" onMouseLeave={() => setActive(null)}>
           <svg
             viewBox="0 0 42 42"
             className="size-full"
@@ -158,7 +176,7 @@ export default function AllocationDonut({ slices }: { slices: DonutSlice[] }) {
           )}
         </div>
 
-        <ul className="grid min-w-0 flex-1 basis-64 gap-1" onMouseLeave={() => setActive(null)}>
+        <ul className="grid w-full min-w-0 gap-1" onMouseLeave={() => setActive(null)}>
           {parts.map((p) => {
             const on = active === p.key;
             return (
@@ -171,9 +189,9 @@ export default function AllocationDonut({ slices }: { slices: DonutSlice[] }) {
                   onFocus={() => setActive(p.key)}
                   onBlur={() => setActive(null)}
                   onClick={() => toggle(p.key)}
-                  className={`grid w-full grid-cols-[12px_56px_1fr_64px] items-center gap-3 rounded-lg px-2 py-1.5 text-left text-sm transition-opacity duration-200 sm:grid-cols-[12px_64px_1fr_64px_104px] ${
+                  className={`grid w-full grid-cols-[12px_56px_1fr_64px] items-center gap-3 rounded-lg px-2 py-1.5 text-left text-sm transition-opacity duration-200 ${
                     active && !on ? "opacity-45" : ""
-                  }`}
+                  } ${on && selected === p.key ? "bg-surface-hover" : ""}`}
                 >
                   <span className="size-3 rounded-full" style={{ background: p.color }} aria-hidden="true" />
                   <span className="truncate font-mono font-semibold text-accent">{p.label}</span>
@@ -184,9 +202,6 @@ export default function AllocationDonut({ slices }: { slices: DonutSlice[] }) {
                     />
                   </span>
                   <span className="text-right font-mono text-fg">{formatPercent(p.share, locale)}</span>
-                  <span className="hidden text-right font-mono text-[13px] text-muted sm:block">
-                    <Private>{formatUsd(p.value, locale)}</Private>
-                  </span>
                 </button>
               </li>
             );
