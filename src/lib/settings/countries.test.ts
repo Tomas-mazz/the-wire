@@ -1,11 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  countryForZone,
-  groupZones,
-  listCountries,
-  regionTimeZones,
-  zoneBelongsTo,
-} from "./countries";
+import { countryForZone, groupZones, listCountries, regionTimeZones, zoneBelongsTo } from "./countries";
 
 const NOW = Date.UTC(2026, 10, 18, 12); // a November day: northern winter time
 
@@ -38,9 +32,7 @@ describe("groupZones", () => {
     expect(ids).toContain("America/Chicago");
     expect(ids).toContain("America/Los_Angeles");
     expect(ids).toContain("America/Phoenix");
-    expect(us.find((z) => z.id === "America/New_York")?.label).toBe(
-      "Eastern Time (GMT−5)",
-    );
+    expect(us.find((z) => z.id === "America/New_York")?.label).toBe("Eastern Time (GMT−5)");
     expect(new Set(us.map((z) => z.label)).size).toBe(us.length);
   });
 
@@ -80,12 +72,7 @@ describe("countryForZone / zoneBelongsTo", () => {
 describe("zone aliases", () => {
   it("treats the old and new spellings of a zone as the same", () => {
     expect(zoneBelongsTo("Europe/Kyiv", "UA")).toBe(true);
-    const ar = groupZones(
-      regionTimeZones("AR"),
-      "es",
-      NOW,
-      "America/Argentina/Buenos_Aires",
-    );
+    const ar = groupZones(regionTimeZones("AR"), "es", NOW, "America/Argentina/Buenos_Aires");
     expect(ar.map((z) => z.id)).toEqual(["America/Argentina/Buenos_Aires"]);
   });
 });

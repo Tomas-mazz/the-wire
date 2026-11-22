@@ -34,10 +34,7 @@ export default async function SettingsPage() {
 async function Settings() {
   const locale = await getLocale();
   const user = await requireUser(locale);
-  const { countries, initial } = await getSettingsForm(
-    user.id,
-    isLocale(locale) ? locale : "en",
-  );
+  const { countries, initial } = await getSettingsForm(user.id, isLocale(locale) ? locale : "en");
 
   return (
     <section className={`${card} max-w-xl`}>

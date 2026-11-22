@@ -2,17 +2,8 @@
 
 import { useActionState, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import {
-  saveSettings,
-  type SettingsFormState,
-} from "@/app/[locale]/settings/actions";
-import {
-  fieldError,
-  hint,
-  input,
-  label,
-  primaryButton,
-} from "@/components/portfolio/styles";
+import { saveSettings, type SettingsFormState } from "@/app/[locale]/settings/actions";
+import { fieldError, hint, input, label, primaryButton } from "@/components/portfolio/styles";
 import { routing } from "@/i18n/routing";
 import type { CountryChoice } from "@/lib/settings/countries";
 import type { SettingsField } from "@/lib/settings/parse";
@@ -29,25 +20,17 @@ const initialState: SettingsFormState = { status: "idle" };
  * Picking a country fills in its time zone; only countries with more than one
  * clock (the US, Spain with the Canaries…) show a time zone list.
  */
-export default function SettingsForm({
-  countries,
-  initial,
-}: SettingsFormProps) {
+export default function SettingsForm({ countries, initial }: SettingsFormProps) {
   const t = useTranslations("Settings");
   const pageLocale = useLocale();
-  const [state, action, pending] = useActionState(
-    saveSettings.bind(null, pageLocale),
-    initialState,
-  );
+  const [state, action, pending] = useActionState(saveSettings.bind(null, pageLocale), initialState);
 
   // Controlled fields, so a failed save keeps what was picked.
   const [locale, setLocale] = useState(initial.locale);
   const [countryCode, setCountryCode] = useState(initial.country);
   const country = countries.find((c) => c.code === countryCode);
   const [timeZone, setTimeZone] = useState(
-    country?.zones.some((z) => z.id === initial.timeZone)
-      ? initial.timeZone
-      : (country?.zones[0]?.id ?? ""),
+    country?.zones.some((z) => z.id === initial.timeZone) ? initial.timeZone : (country?.zones[0]?.id ?? ""),
   );
 
   function chooseCountry(code: string) {
@@ -156,15 +139,8 @@ export default function SettingsForm({
         <button type="submit" disabled={pending} className={primaryButton}>
           {pending ? t("saving") : t("save")}
         </button>
-        <p
-          role="status"
-          className={`text-sm ${message ? "text-down" : "text-muted"}`}
-        >
-          {state.status === "saved"
-            ? t("saved")
-            : message
-              ? t(`errors.${message}`)
-              : ""}
+        <p role="status" className={`text-sm ${message ? "text-down" : "text-muted"}`}>
+          {state.status === "saved" ? t("saved") : message ? t(`errors.${message}`) : ""}
         </p>
       </div>
     </form>

@@ -1,16 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { isLocale, parseSettings } from "./parse";
 
-const form = (values: Record<string, string>) =>
-  new Map(Object.entries(values));
+const form = (values: Record<string, string>) => new Map(Object.entries(values));
 
 describe("parseSettings", () => {
   it("accepts a language, a country and one of its time zones", () => {
-    expect(
-      parseSettings(
-        form({ locale: "es", country: "dk", timeZone: "Europe/Copenhagen" }),
-      ),
-    ).toEqual({
+    expect(parseSettings(form({ locale: "es", country: "dk", timeZone: "Europe/Copenhagen" }))).toEqual({
       ok: true,
       value: { locale: "es", country: "DK", timeZone: "Europe/Copenhagen" },
     });
@@ -24,22 +19,14 @@ describe("parseSettings", () => {
   });
 
   it("rejects an unknown language or a zone from another country", () => {
-    expect(
-      parseSettings(
-        form({ locale: "fr", country: "DK", timeZone: "Europe/Madrid" }),
-      ),
-    ).toEqual({
+    expect(parseSettings(form({ locale: "fr", country: "DK", timeZone: "Europe/Madrid" }))).toEqual({
       ok: false,
       errors: { locale: "invalid", timeZone: "invalid" },
     });
   });
 
   it("rejects a malformed country", () => {
-    expect(
-      parseSettings(
-        form({ locale: "en", country: "DNK", timeZone: "Europe/Copenhagen" }),
-      ),
-    ).toEqual({
+    expect(parseSettings(form({ locale: "en", country: "DNK", timeZone: "Europe/Copenhagen" }))).toEqual({
       ok: false,
       errors: { country: "invalid" },
     });

@@ -2,22 +2,14 @@ import type { EmailOtpType } from "@supabase/supabase-js";
 import { NextResponse, type NextRequest } from "next/server";
 import { hasLocale } from "next-intl";
 import { routing } from "@/i18n/routing";
-import {
-  LOCALE_COOKIE,
-  LOCALE_COOKIE_OPTIONS,
-} from "@/lib/settings/locale-cookie";
+import { LOCALE_COOKIE, LOCALE_COOKIE_OPTIONS } from "@/lib/settings/locale-cookie";
 import { isLocale } from "@/lib/settings/parse";
 import { createClient } from "@/lib/supabase/server";
 
 /** Only same-site paths that start with a known locale, e.g. "/es/portfolio". */
 function safeNext(next: string | null) {
   const locale = next?.split("/")[1] ?? "";
-  if (
-    next &&
-    next.startsWith("/") &&
-    !next.startsWith("//") &&
-    hasLocale(routing.locales, locale)
-  ) {
+  if (next && next.startsWith("/") && !next.startsWith("//") && hasLocale(routing.locales, locale)) {
     return { path: next, locale };
   }
   return {
@@ -70,21 +62,12 @@ export async function GET(request: NextRequest) {
   }
 
   console.error("Auth callback failed:", error.message);
-  return NextResponse.redirect(
-    new URL(`/${next.locale}/login?error=link`, origin),
-  );
+  return NextResponse.redirect(new URL(`/${next.locale}/login?error=link`, origin));
 }
 
 /** The language in the user's settings, or null (none yet, or the read failed). */
-async function savedLocale(
-  supabase: Awaited<ReturnType<typeof createClient>>,
-  userId: string,
-) {
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("locale")
-    .eq("user_id", userId)
-    .maybeSingle();
+async function savedLocale(supabase: Awaited<ReturnType<typeof createClient>>, userId: string) {
+  const { data, error } = await supabase.from("profiles").select("locale").eq("user_id", userId).maybeSingle();
   if (error) console.error("Reading the saved language failed:", error.message);
   return isLocale(data?.locale) ? data.locale : null;
 }

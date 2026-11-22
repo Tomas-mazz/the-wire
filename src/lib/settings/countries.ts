@@ -117,12 +117,7 @@ function genericName(zone: string, locale: string, instant: number): string {
  * form shows it selected and saving again changes nothing.
  * Groups go from west to east (by January offset).
  */
-export function groupZones(
-  zones: readonly string[],
-  locale: string,
-  now: number,
-  keep?: string | null,
-): ZoneChoice[] {
+export function groupZones(zones: readonly string[], locale: string, now: number, keep?: string | null): ZoneChoice[] {
   const year = new Date(now).getUTCFullYear();
   const january = Date.UTC(year, 0, 15);
   const july = Date.UTC(year, 6, 15);
@@ -142,10 +137,8 @@ export function groupZones(
   const choices = [...groups.values()]
     .sort((a, b) => a.winter - b.winter)
     .map(({ members }) => {
-      const kept =
-        keep && members.some((z) => sameZone(z, keep)) ? keep : undefined;
-      const id =
-        kept ?? members.find((z) => PREFERRED.has(z)) ?? [...members].sort()[0];
+      const kept = keep && members.some((z) => sameZone(z, keep)) ? keep : undefined;
+      const id = kept ?? members.find((z) => PREFERRED.has(z)) ?? [...members].sort()[0];
       return {
         id,
         name: genericName(id, locale, now),
@@ -165,11 +158,7 @@ export function groupZones(
 }
 
 /** Every country ICU knows with at least one time zone, sorted by name in `locale`. */
-export function listCountries(
-  locale: string,
-  now: number,
-  savedZone?: string | null,
-): CountryChoice[] {
+export function listCountries(locale: string, now: number, savedZone?: string | null): CountryChoice[] {
   const names = new Intl.DisplayNames([locale], {
     type: "region",
     fallback: "code",

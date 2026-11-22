@@ -3,16 +3,8 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getActionUser } from "@/lib/auth";
-import {
-  LOCALE_COOKIE,
-  LOCALE_COOKIE_OPTIONS,
-} from "@/lib/settings/locale-cookie";
-import {
-  isLocale,
-  parseSettings,
-  type SettingsError,
-  type SettingsField,
-} from "@/lib/settings/parse";
+import { LOCALE_COOKIE, LOCALE_COOKIE_OPTIONS } from "@/lib/settings/locale-cookie";
+import { isLocale, parseSettings, type SettingsError, type SettingsField } from "@/lib/settings/parse";
 import { createClient } from "@/lib/supabase/server";
 
 /*
@@ -81,9 +73,6 @@ export async function rememberLocale(locale: string): Promise<void> {
   const user = await getActionUser();
   if (!user) return;
   const supabase = await createClient();
-  const { error } = await supabase
-    .from("profiles")
-    .update({ locale })
-    .eq("user_id", user.id);
+  const { error } = await supabase.from("profiles").update({ locale }).eq("user_id", user.id);
   if (error) console.error("Saving the language failed:", error.message);
 }

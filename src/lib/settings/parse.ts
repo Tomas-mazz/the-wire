@@ -19,20 +19,14 @@ export type SettingsField = keyof Settings;
 export type SettingsError = "required" | "invalid";
 
 export type SettingsParse =
-  | { ok: true; value: Settings }
-  | { ok: false; errors: Partial<Record<SettingsField, SettingsError>> };
+  { ok: true; value: Settings } | { ok: false; errors: Partial<Record<SettingsField, SettingsError>> };
 
 export function isLocale(value: unknown): value is Locale {
-  return (
-    typeof value === "string" &&
-    (routing.locales as readonly string[]).includes(value)
-  );
+  return typeof value === "string" && (routing.locales as readonly string[]).includes(value);
 }
 
 /** Checks the language, the country and that the time zone is one of that country's. */
-export function parseSettings(form: {
-  get(name: string): unknown;
-}): SettingsParse {
+export function parseSettings(form: { get(name: string): unknown }): SettingsParse {
   const text = (name: string) => {
     const value = form.get(name);
     return typeof value === "string" ? value.trim() : "";
@@ -49,8 +43,7 @@ export function parseSettings(form: {
   else if (!/^[A-Z]{2}$/.test(country)) errors.country = "invalid";
 
   if (!timeZone) errors.timeZone = "required";
-  else if (!errors.country && !zoneBelongsTo(timeZone, country))
-    errors.timeZone = "invalid";
+  else if (!errors.country && !zoneBelongsTo(timeZone, country)) errors.timeZone = "invalid";
 
   if (Object.keys(errors).length > 0) return { ok: false, errors };
   return { ok: true, value: { locale: locale as Locale, country, timeZone } };
