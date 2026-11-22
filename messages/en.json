@@ -142,7 +142,32 @@
       "others": "Others",
       "noAllocation": "The chart appears when your holdings have prices.",
       "emptyCrypto": "No crypto yet. Add a buy of BTC or any other coin to see it here.",
-      "emptyStocks": "No stocks or ETFs yet. Add a buy to see them here."
+      "emptyStocks": "No stocks or ETFs yet. Add a buy to see them here.",
+      "chart": {
+        "title": "Portfolio value",
+        "assetTitle": "{symbol} price",
+        "showTotal": "Show total",
+        "range": "Period",
+        "ranges": {
+          "1w": "1W",
+          "1m": "1M",
+          "3m": "3M",
+          "1y": "1Y",
+          "all": "All"
+        },
+        "rangeLong": {
+          "1w": "past week",
+          "1m": "past month",
+          "3m": "past 3 months",
+          "1y": "past year",
+          "all": "since the start"
+        },
+        "loading": "Loading the chart",
+        "error": "The chart could not load. Try again later.",
+        "empty": "The chart appears after your first full day with prices.",
+        "missing": "No price history for {assets}: left out of the line.",
+        "label": "Value from {from} to {to}"
+      }
     },
     "holdings": {
       "asset": "Asset",

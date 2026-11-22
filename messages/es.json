@@ -142,7 +142,32 @@
       "others": "Otros",
       "noAllocation": "El gráfico aparece cuando tus activos tienen precio.",
       "emptyCrypto": "Todavía no tenés cripto. Agregá una compra de BTC u otra moneda para verla acá.",
-      "emptyStocks": "Todavía no tenés acciones ni ETFs. Agregá una compra para verlas acá."
+      "emptyStocks": "Todavía no tenés acciones ni ETFs. Agregá una compra para verlas acá.",
+      "chart": {
+        "title": "Valor de la cartera",
+        "assetTitle": "Precio de {symbol}",
+        "showTotal": "Ver total",
+        "range": "Periodo",
+        "ranges": {
+          "1w": "1S",
+          "1m": "1M",
+          "3m": "3M",
+          "1y": "1A",
+          "all": "Todo"
+        },
+        "rangeLong": {
+          "1w": "última semana",
+          "1m": "último mes",
+          "3m": "últimos 3 meses",
+          "1y": "último año",
+          "all": "desde el inicio"
+        },
+        "loading": "Cargando el gráfico",
+        "error": "No se pudo cargar el gráfico. Inténtalo más tarde.",
+        "empty": "El gráfico aparece tras tu primer día completo con precios.",
+        "missing": "Sin historial de precios para {assets}: no entran en la línea.",
+        "label": "Valor desde el {from} hasta el {to}"
+      }
     },
     "holdings": {
       "asset": "Activo",

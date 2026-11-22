@@ -77,7 +77,8 @@ Holdings table columns: asset, quantity, avg cost, last price, market value, unr
 - **M8. Settings + polish:** language, country/time zone, CSV export, disclaimers, custom SMTP for auth emails (editable template that works across devices, higher email limit), one week of real use.
 
 ### Later
-- **v2:** AI import of screenshots, PDFs and unknown CSV files (decision 108), daily price history, insights (seasonality by day of month/week and month of year, drawdowns, volatility), portfolio value chart, split transactions, display currencies with FX, non-US stocks, quick DCA entry.
+- **Performance chart (brought forward from v2, branch `feat/price-chart`, built 2026-11-22, waiting for the user's check):** on each section, a chart on the left (2/3) with the allocation on the right (1/3, donut above its list), decisions 113–116. The line is the section's value day by day, green or red by the period's result, which leaves out money added or taken out; clicking a holding shows its market price. Periods 1W · 1M · 3M · 1Y · All. Daily closes from Binance (crypto) and Tiingo (stocks, free plan for personal use), cached in `price_history` (migration `20261122120000`).
+- **v2:** AI import of screenshots, PDFs and unknown CSV files (decision 108), insights (seasonality by day of month/week and month of year, drawdowns, volatility), split transactions, display currencies with FX, non-US stocks, quick DCA entry.
 - **v3:** benchmarks (SPY, BTC), time-weighted / money-weighted returns, price alerts.
 
 ### Housekeeping
