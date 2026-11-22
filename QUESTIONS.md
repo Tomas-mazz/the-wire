@@ -245,3 +245,9 @@ The portfolio grows into a full investment tracker (a ledger, not a broker: no o
     → Answer: Later, in v2, read with AI and always confirmed in the review table. M7 covers Nordnet, Binance and Coinbase plus the The Wire CSV template, which works for any broker (decided 2026-11-18).
 109. Which side of the "Now / Total" switch shows first?
     → Answer: "Total" (realized P/L and dividends included, over everything ever invested) is now the default on the Overview and Stocks P/L cards; "Now" (unrealized P/L of what is held) is one click away. Changes decision 93 (decided 2026-11-18).
+110. Where are the settings, and how are they saved?
+    → Answer: A "Settings" page at /settings, opened from the account menu (between Portfolio and Sign out). Changes are saved with a "Save" button that shows "Saved" (decided 2026-11-22).
+111. What does the saved language do?
+    → Answer: Signing in takes the user to their saved language even if the browser is in another one, and it is remembered for a year on that browser so opening the site lands there too. The EN | ES switch in the header also updates it for signed-in users (decided 2026-11-22).
+112. How is the time zone chosen?
+    → Answer: Pick a country first. A country with one clock (Denmark, Argentina) sets the zone by itself; one with several (the US, Spain with the Canaries) shows a short list. Zones that keep the same time all year are grouped into one choice, e.g. "Eastern Time (GMT−5)" (decided 2026-11-22).

@@ -16,6 +16,7 @@
       "menu": "Menú de cuenta",
       "signedInAs": "Sesión iniciada como",
       "portfolio": "Portafolio",
+      "settings": "Ajustes",
       "signOut": "Cerrar sesión"
     }
   },
@@ -429,5 +430,29 @@
     "invalidEmail": "Ingresá un email válido.",
     "sendError": "No pudimos enviar el link. Esperá un minuto y probá de nuevo.",
     "linkError": "Ese link no es válido o ya venció. Pedí uno nuevo."
+  },
+  "Settings": {
+    "title": "Ajustes",
+    "intro": "Tu idioma y dónde estás. Las fechas se guardan en UTC y se muestran en tu zona horaria.",
+    "language": "Idioma",
+    "languages": {
+      "en": "English",
+      "es": "Español"
+    },
+    "languageHint": "Al iniciar sesión vas a este idioma. El selector EN | ES de arriba también lo cambia.",
+    "country": "País",
+    "chooseCountry": "Elige un país",
+    "timeZone": "Zona horaria",
+    "timeZoneHint": "Todas las fechas y horas de la app se muestran en esta zona horaria.",
+    "oneTimeZone": "{country} tiene una sola zona horaria: {zone}.",
+    "save": "Guardar",
+    "saving": "Guardando…",
+    "saved": "Guardado.",
+    "errors": {
+      "required": "Elige una opción.",
+      "invalid": "Elige una opción de la lista.",
+      "unauthorized": "Tu sesión terminó. Vuelve a iniciar sesión.",
+      "save_failed": "No se pudo guardar. Inténtalo de nuevo."
+    }
   }
 }

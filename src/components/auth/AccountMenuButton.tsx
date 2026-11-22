@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { ChartPie, LogOut } from "lucide-react";
+import { ChartPie, LogOut, Settings } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { signOut } from "@/app/auth/actions";
 import { Link } from "@/i18n/navigation";
@@ -70,6 +70,15 @@ export default function AccountMenuButton({ email, locale }: AccountMenuButtonPr
           >
             <ChartPie size={16} strokeWidth={1.5} aria-hidden="true" />
             {t("portfolio")}
+          </Link>
+          <Link
+            href="/settings"
+            role="menuitem"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-body hover:bg-surface-hover hover:text-fg"
+          >
+            <Settings size={16} strokeWidth={1.5} aria-hidden="true" />
+            {t("settings")}
           </Link>
           <form action={signOut.bind(null, locale)}>
             <button

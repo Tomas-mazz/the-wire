@@ -16,6 +16,7 @@
       "menu": "Account menu",
       "signedInAs": "Signed in as",
       "portfolio": "Portfolio",
+      "settings": "Settings",
       "signOut": "Sign out"
     }
   },
@@ -429,5 +430,29 @@
     "invalidEmail": "Enter a valid email address.",
     "sendError": "We couldn't send the link. Wait a minute and try again.",
     "linkError": "That link is invalid or expired. Request a new one."
+  },
+  "Settings": {
+    "title": "Settings",
+    "intro": "Your language and where you are. Dates are saved in UTC and shown in your time zone.",
+    "language": "Language",
+    "languages": {
+      "en": "English",
+      "es": "Español"
+    },
+    "languageHint": "Signing in takes you to this language. The EN | ES switch in the header changes it too.",
+    "country": "Country",
+    "chooseCountry": "Choose a country",
+    "timeZone": "Time zone",
+    "timeZoneHint": "Every date and time in the app is shown in this time zone.",
+    "oneTimeZone": "{country} has one time zone: {zone}.",
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Saved.",
+    "errors": {
+      "required": "Choose an option.",
+      "invalid": "Choose an option from the list.",
+      "unauthorized": "Your session ended. Sign in again.",
+      "save_failed": "Could not save. Try again."
+    }
   }
 }
