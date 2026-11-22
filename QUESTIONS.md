@@ -253,3 +253,5 @@ The portfolio grows into a full investment tracker (a ledger, not a broker: no o
     → Answer: 1W · 1M · 3M · 1Y · All, starting on 1M. The line is in dollars with the period's change in dollars and percent above it; "Hide amounts" hides the dollars of the total view (decided 2026-11-22).
 116. What does the chart look like, and what happens when a holding is clicked?
     → Answer: The chart on the left (two thirds) and the allocation on the right (one third, donut above its list, as option A of the preview), with the line and its fill green when the period gained and red when it lost (option B). Clicking a holding in the allocation shows its market price; clicking it again or "Show total" goes back (decided 2026-11-22).
+117. How do the summary cards look on phones?
+    → Answer: Three cards side by side with smaller text and less padding, and the News card below them across the whole width. From large screens the four cards share one row as before (decided 2026-11-22).

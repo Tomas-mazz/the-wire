@@ -23,9 +23,17 @@ export const th = "px-3 py-3 text-left text-xs font-medium tracking-wide whitesp
 /** Numeric cell: monospaced, right aligned. */
 export const tdNumber = "px-3 py-3 text-right font-mono whitespace-nowrap text-body";
 
-/** Summary card at the top of a section (M6) and its label. */
-export const summaryCard = "flex min-h-[118px] flex-col justify-between rounded-2xl border border-line bg-surface p-4";
-export const summaryLabel = "text-xs font-medium tracking-wide text-muted uppercase";
+/**
+ * Summary cards at the top of a section (M6) and their label. On phones three
+ * cards share a row with smaller text and News goes below, full width
+ * (decision 117); from `lg` the four sit in one row.
+ */
+export const summaryGrid = "grid grid-cols-3 gap-2 sm:gap-3 lg:grid-cols-4";
+export const summaryCard =
+  "flex min-h-[96px] min-w-0 flex-col justify-between rounded-2xl border border-line bg-surface p-3 sm:p-4 lg:min-h-[118px]";
+export const summaryLabel = "text-[10px] leading-tight font-medium tracking-wide text-muted uppercase sm:text-xs";
+/** The News card: its own row on phones, the 4th card from `lg`. */
+export const summaryNewsCard = "col-span-3 lg:col-span-1";
 
 /** Grey placeholder block for loading skeletons (pulses unless "reduce motion" is on). */
 export const bone = "animate-pulse rounded-md bg-line/45";
