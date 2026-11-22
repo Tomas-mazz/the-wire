@@ -52,7 +52,7 @@ function signed(value: Dec, text: React.ReactNode): React.ReactNode {
 
 const cardClass = summaryCard;
 const labelClass = summaryLabel;
-const bigClass = "mt-2 font-mono text-[13px] font-semibold sm:mt-2.5 sm:text-lg lg:text-2xl";
+const bigClass = "mt-2 font-mono text-[15px] font-semibold sm:mt-2.5 sm:text-lg lg:text-2xl";
 
 function Card({ label, action, children }: { label: string; action?: React.ReactNode; children: React.ReactNode }) {
   return (
@@ -131,14 +131,14 @@ export default function SummaryCards({
       <p className={`${bigClass} ${tone}`}>
         <Private>{formatUsd(totals.marketValue, locale)}</Private>
       </p>
-      <p className="mt-1 text-[10px] sm:text-xs text-muted">{t("inAssets", { count: open.length })}</p>
+      <p className="mt-1 text-[11px] sm:text-xs text-muted">{t("inAssets", { count: open.length })}</p>
     </Card>
   );
 
   const pnlCard = (label: string) => (
     <Card label={label} action={<ModeSwitch mode={mode} onChange={onModeChange} />}>
       <p className={`${bigClass} ${tone}`}><Private>{signed(pnl, usd(pnl))}</Private></p>
-      <p className={`mt-1 text-[10px] sm:text-xs ${tone}`}>
+      <p className={`mt-1 text-[11px] sm:text-xs ${tone}`}>
         {pnlPct ? signed(pnlPct, pct(pnlPct)) : "—"}
         <span className="text-muted"> · {t(mode === "now" ? "nowHint" : "totalHint")}</span>
       </p>
@@ -148,7 +148,7 @@ export default function SummaryCards({
   const empty = (hint: string) => (
     <>
       <p className={`${bigClass} text-muted`}>—</p>
-      <p className="mt-1 text-[10px] sm:text-xs text-muted">{hint}</p>
+      <p className="mt-1 text-[11px] sm:text-xs text-muted">{hint}</p>
     </>
   );
 
@@ -173,7 +173,7 @@ export default function SummaryCards({
               <p className={`${bigClass} ${tone}`}>
                 <Private>{signed(today.change, usd(today.change))}</Private>
               </p>
-              <p className={`mt-1 text-[10px] sm:text-xs ${tone}`}>
+              <p className={`mt-1 text-[11px] sm:text-xs ${tone}`}>
                 {today.changePct ? signed(today.changePct, pct(today.changePct)) : "—"}
               </p>
             </>
@@ -193,7 +193,7 @@ export default function SummaryCards({
           {btc?.position.lastPrice ? (
             <>
               <p className={`${bigClass} ${tone}`}>{formatUsd(btc.position.lastPrice, locale)}</p>
-              <p className={`mt-1 text-[10px] sm:text-xs ${tone}`}>
+              <p className={`mt-1 text-[11px] sm:text-xs ${tone}`}>
                 {btcDay ? signed(btcDay, pct(btcDay.div(100))) : "—"}
                 <span className="text-muted"> · {t("day24h")}</span>
               </p>
@@ -207,7 +207,7 @@ export default function SummaryCards({
           {btc?.position.avgCost ? (
             <>
               <p className={`${bigClass} ${tone}`}>{formatUsd(btc.position.avgCost, locale)}</p>
-              <p className={`mt-1 text-[10px] sm:text-xs ${tone}`}>
+              <p className={`mt-1 text-[11px] sm:text-xs ${tone}`}>
                 {unrealized ? (
                   <>
                     <Private>{signed(unrealized, usd(unrealized))}</Private>
@@ -240,7 +240,7 @@ export default function SummaryCards({
         {pnlCard(t("stocksPnl"))}
         <Card label={t("bestWorst")}>
           {movers ? (
-            <span className="mt-2 block space-y-1 text-[12px] sm:mt-2.5 sm:text-sm lg:text-base">
+            <span className="mt-2 block space-y-1 text-[13px] sm:mt-2.5 sm:text-sm lg:text-base">
               {line(movers.best.item.row.symbol, movers.best.dayChangePct)}
               {movers.worst.item !== movers.best.item &&
                 line(movers.worst.item.row.symbol, movers.worst.dayChangePct)}
