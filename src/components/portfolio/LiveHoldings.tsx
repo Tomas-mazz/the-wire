@@ -9,6 +9,7 @@ import { buildSummary, type SummaryItem } from "@/lib/portfolio/summary";
 import type { PriceSnapshot } from "@/lib/prices/types";
 import AllocationDonut from "./AllocationDonut";
 import ManualPriceEditor from "./ManualPriceEditor";
+import PerformanceChart from "./PerformanceChart";
 import Private from "./Private";
 import ShareSummary from "./ShareSummary";
 import SummaryCards, { type DashboardInfo, type Mode, type ValuedRow } from "./SummaryCards";
@@ -82,6 +83,8 @@ export default function LiveHoldings({ rows, initialPrices, livePairs, renderedA
   const [editing, setEditing] = useState<string | null>(null);
   // "Now / Total" of the P/L cards; the section summary follows it (decisions 93 and 109: Total first).
   const [mode, setMode] = useState<Mode>("total");
+  // Holding picked in the allocation list for the chart (decision 116); null = the section's total.
+  const [chartAsset, setChartAsset] = useState<string | null>(null);
 
   /** After saving or removing a manual price. */
   function applyManual(assetId: string, price: PriceSnapshot | null) {
@@ -99,6 +102,7 @@ export default function LiveHoldings({ rows, initialPrices, livePairs, renderedA
     return { row, price, position: valuePosition(toPosition(row), price?.price ?? null) };
   });
   const open = valued.filter((v) => !v.position.quantity.isZero());
+  const chartRow = open.find((v) => v.row.assetId === chartAsset) ?? null;
   const shares = allocation(valued.map((v) => v.position));
   const totals = summarize(valued.map((v) => v.position));
   const sorted = valued
@@ -160,17 +164,29 @@ export default function LiveHoldings({ rows, initialPrices, livePairs, renderedA
             </div>
           )}
           <SummaryCards info={dashboard} valued={valued} totals={totals} mode={mode} onModeChange={setMode} />
-          <AllocationDonut
-            slices={open
-              .filter((v) => v.position.marketValue !== null)
-              .map((v) => ({
-                assetId: v.row.assetId,
-                symbol: v.row.symbol,
-                name: v.row.name,
-                assetClass: v.row.assetClass,
-                value: v.position.marketValue!,
-              }))}
-          />
+          {/* Chart on the left, allocation on the right, a bit smaller (decision 116). */}
+          <div className="grid gap-3 lg:grid-cols-[2fr_1fr]">
+            <PerformanceChart
+              section={dashboard.section}
+              selected={chartRow ? { assetId: chartRow.row.assetId, symbol: chartRow.row.symbol } : null}
+              onShowTotal={() => setChartAsset(null)}
+              liveTotal={open.length > 0 ? totals.marketValue : null}
+              livePrice={chartRow?.position.lastPrice ?? null}
+            />
+            <AllocationDonut
+              selected={chartRow ? chartAsset : null}
+              onSelect={setChartAsset}
+              slices={open
+                .filter((v) => v.position.marketValue !== null)
+                .map((v) => ({
+                  assetId: v.row.assetId,
+                  symbol: v.row.symbol,
+                  name: v.row.name,
+                  assetClass: v.row.assetClass,
+                  value: v.position.marketValue!,
+                }))}
+            />
+          </div>
         </div>
       )}
       {heading}

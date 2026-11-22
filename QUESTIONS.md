@@ -251,3 +251,13 @@ The portfolio grows into a full investment tracker (a ledger, not a broker: no o
     → Answer: Signing in takes the user to their saved language even if the browser is in another one, and it is remembered for a year on that browser so opening the site lands there too. The EN | ES switch in the header also updates it for signed-in users (decided 2026-11-22).
 112. How is the time zone chosen?
     → Answer: Pick a country first. A country with one clock (Denmark, Argentina) sets the zone by itself; one with several (the US, Spain with the Canaries) shows a short list. Zones that keep the same time all year are grouped into one choice, e.g. "Eastern Time (GMT−5)" (decided 2026-11-22).
+113. Where does the price history for the chart come from?
+    → Answer: Crypto from Binance's daily candles (free, no key). Stocks and ETFs from Tiingo's end-of-day prices (free account; data for personal use only), because Finnhub's free plan no longer includes history. Closes are adjusted for splits but not dividends, to match the prices entered (decision 63), and cached in the database so each asset is asked at most every 6 hours (decided 2026-11-22).
+114. In the total view, what counts as the period's gain or loss?
+    → Answer: The change without the money added or taken out: end value − start value − buys + sells and dividends. Buying more in a month the market fell shows a loss. The line itself shows the real value in dollars (decided 2026-11-22).
+115. Which periods and units does the chart have?
+    → Answer: 1W · 1M · 3M · 1Y · All, starting on 1M. The line is in dollars with the period's change in dollars and percent above it; "Hide amounts" hides the dollars of the total view (decided 2026-11-22).
+116. What does the chart look like, and what happens when a holding is clicked?
+    → Answer: The chart on the left (two thirds) and the allocation on the right (one third, donut above its list, as option A of the preview), with the line and its fill green when the period gained and red when it lost (option B). Clicking a holding in the allocation shows its market price; clicking it again or "Show total" goes back (decided 2026-11-22).
+117. How do the summary cards look on phones?
+    → Answer: Three cards side by side with smaller text and less padding, and the News card below them across the whole width. From large screens the four cards share one row as before (decided 2026-11-22).

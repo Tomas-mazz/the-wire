@@ -30,3 +30,13 @@ export {
   type LedgerProblem,
   type LedgerTransaction,
 } from "./holdings";
+export {
+  dayRange,
+  periodChange,
+  priceChange,
+  utcDay,
+  valueSeries,
+  type DailyClose,
+  type PeriodChange,
+  type ValuePoint,
+} from "./history";

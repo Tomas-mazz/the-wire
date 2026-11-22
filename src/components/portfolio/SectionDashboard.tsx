@@ -5,16 +5,10 @@ import type { Topic } from "@/data/types";
 import { Link } from "@/i18n/navigation";
 import { requireUser } from "@/lib/auth";
 import { getProjects, getTransactions } from "@/lib/portfolio/data";
+import { SECTION_CLASSES } from "@/lib/portfolio/sections";
 import HoldingsTable, { holdingsFrom } from "./HoldingsTable";
 import { card, primaryButton } from "./styles";
 import type { Section } from "./SummaryCards";
-
-/** Which asset classes each section shows (decision 84). */
-const CLASSES: Record<Section, readonly string[]> = {
-  overview: ["stock", "etf", "crypto"],
-  crypto: ["crypto"],
-  stocks: ["stock", "etf"],
-};
 
 /** News topic of each section's News card; Overview takes the top story of any topic. */
 const TOPIC: Record<Section, Topic | null> = { overview: null, crypto: "crypto", stocks: "stocks" };
@@ -52,7 +46,7 @@ export default async function SectionDashboard({ section }: { section: Section }
     );
   }
 
-  const transactions = all.filter((tx) => CLASSES[section].includes(tx.asset.assetClass));
+  const transactions = all.filter((tx) => SECTION_CLASSES[section].includes(tx.asset.assetClass));
   const { rows, problemSymbols } = holdingsFrom(transactions);
 
   if (rows.length === 0 && problemSymbols.length === 0) {
