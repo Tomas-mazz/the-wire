@@ -1,6 +1,6 @@
 # The Wire
 
-A personal **investment tracker**: record the stocks, ETFs and crypto you already bought at your real brokers, group them into projects, and see your holdings, average cost, live prices, profit/loss and diversification. Available in English and Spanish.
+A personal **investment tracker**: record the stocks, ETFs and crypto you already bought at your real brokers, group them into projects, and see your holdings, average cost, live prices, profit/loss and diversification. Transactions can be typed in or imported from a broker export (Nordnet, Binance, Coinbase, or a simple CSV template). Available in English and Spanish.
 
 It is a ledger, not a broker: there is no trading, order placement or wallet connect, and nothing in the app is financial advice. The original news-summary product is paused (sample page at `/news`).
 
@@ -22,7 +22,8 @@ Next.js 16 (App Router, Cache Components) + TypeScript · Tailwind CSS · next-i
 - `src/lib/auth.ts`: who is signed in (the only place that checks the session)
 - `src/lib/supabase/`: Supabase clients (`admin.ts` uses the secret key, server only)
 - `src/domain/`: portfolio math (pure TypeScript + decimal.js, unit-tested)
-- `src/market-data/`: price providers (Binance, CoinGecko, Finnhub) behind one interface, unit-tested
+- `src/market-data/`: price providers (Binance, CoinGecko, Finnhub) behind one interface, plus ECB exchange rates (`fx.ts`), unit-tested
+- `src/lib/import/`: broker file readers and the import review (pure and unit-tested; `server.ts` is server-only)
 - `src/lib/prices/`: server price cache (`latest_prices`) and manual prices
 - `src/app/api/`: `prices` and `assets/search` routes (signed-in only)
 - `src/proxy.ts`: language routing + session refresh + auth redirects
