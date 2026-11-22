@@ -52,9 +52,16 @@ export default function ShareSummary({ build, variant, label }: Props) {
   return (
     <>
       {variant === "button" ? (
-        <button type="button" onClick={show} className={`${secondaryButton} px-3 py-2`}>
+        // On phones only the icon shows, so the button takes little room.
+        <button
+          type="button"
+          onClick={show}
+          aria-label={label}
+          title={label}
+          className={`${secondaryButton} p-2 sm:px-3 sm:py-2`}
+        >
           <Copy size={15} strokeWidth={1.75} aria-hidden="true" />
-          {label}
+          <span className="hidden sm:inline">{label}</span>
         </button>
       ) : (
         <button
