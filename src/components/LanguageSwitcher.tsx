@@ -1,12 +1,14 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
+import { rememberLocale } from "@/app/[locale]/settings/actions";
 import { useRouter } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 
 /**
  * EN | ES toggle. Switching keeps you on the same page (/en/… ↔ /es/…),
- * and next-intl remembers the choice in a cookie for your next visit.
+ * and next-intl remembers the choice in a cookie for your next visit. For a
+ * signed-in user it is also saved as their language (decision 111).
  *
  * The current URL is read only on click. Reading it while rendering
  * (usePathname) would make every dynamic route, e.g. /portfolio/projects/[id],
@@ -22,6 +24,9 @@ export default function LanguageSwitcher() {
     // "/es/portfolio" → "/portfolio"; next-intl adds the new locale back.
     const path = pathname.replace(new RegExp(`^/${locale}(?=/|$)`), "") || "/";
     router.replace(`${path}${search}`, { locale: next });
+    // Fire and forget: does nothing for visitors, and a failure only means
+    // the saved language stays as it was.
+    if (next !== locale) void rememberLocale(next).catch(() => {});
   }
 
   return (
