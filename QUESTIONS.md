@@ -269,3 +269,11 @@ The portfolio grows into a full investment tracker (a ledger, not a broker: no o
     → Answer: The The Wire import template's columns plus a `project` column, so it opens in Excel and can be imported again. Dates in the user's time zone; numbers exact, in USD (decided 2026-11-25).
 121. Are cash deposits and withdrawals included?
     → Answer: Yes, so the copy is complete (type deposit / withdrawal). The template can't import them back: on re-import those rows show as unreadable while the rest imports (decided 2026-11-25).
+122. Where do the legal notices go?
+    → Answer: A footer on every page (landing, login, portfolio, settings, news) with a short line, "The Wire is a personal tracker, not financial advice. Prices come from third parties and may be late or wrong.", and a "Legal notice" link to a /legal page with the full text (decided 2026-11-25).
+123. What does the legal page cover?
+    → Answer: Four sections: not financial advice; price sources and delays; how the numbers are calculated (average cost, P/L, Now / Total, the chart's change); and your data and privacy (what is stored, where, no selling or tracking, browser storage, export) (decided 2026-11-25).
+124. Do the notices show to visitors too?
+    → Answer: Yes, the footer is on every page, signed in or not, and /legal is public (decided 2026-11-25).
+125. Who do people contact to delete their account?
+    → Answer: tomasmazzucco11@gmail.com, published on /legal. A "Delete account" button in Settings can come later (decided 2026-11-25).

@@ -480,5 +480,51 @@
       "unauthorized": "Your session ended. Sign in again.",
       "save_failed": "Could not save. Try again."
     }
+  },
+  "SiteFooter": {
+    "notice": "The Wire is a personal tracker, not financial advice. Prices come from third parties and may be late or wrong.",
+    "legal": "Legal notice"
+  },
+  "Legal": {
+    "title": "Legal notice",
+    "updated": "Last updated: 25 November 2026",
+    "intro": "What The Wire is, where its numbers come from, how they are calculated and what happens with your data.",
+    "sections": {
+      "advice": {
+        "title": "Not financial advice",
+        "paragraphs": [
+          "The Wire is a personal ledger for your investments. It is not a broker or a financial adviser: it does not place orders, does not connect to your accounts and does not recommend buying, selling or holding anything.",
+          "Everything it shows is information for your own records. Past results do not predict future ones. Before making investment decisions, do your own research or ask a qualified professional."
+        ]
+      },
+      "data": {
+        "title": "Price sources and delays",
+        "paragraphs": [
+          "Live crypto prices come from Binance, with CoinGecko as a backup; crypto is quoted in USDT, which is close to but not exactly one US dollar. US stock and ETF prices come from Finnhub and can be up to about 15 minutes late.",
+          "The performance chart uses daily closing prices from Binance (crypto) and Tiingo (stocks and ETFs). When importing files, prices in other currencies are converted to dollars with the European Central Bank's rate for that day (through Frankfurter).",
+          "These services can be late, incomplete or wrong, and can stop working. The Wire marks prices that are out of date, but it cannot guarantee that any number is correct."
+        ]
+      },
+      "method": {
+        "title": "How the numbers are calculated",
+        "paragraphs": [
+          "Everything is in US dollars and kept as exact decimals; numbers are only rounded when shown.",
+          "Average cost: what you paid for the units you hold, fees included, divided by those units. A sale locks in a result (realized P/L): what you received, minus fees, minus the average cost of the units sold.",
+          "\"Now\" is the gain or loss on what you hold today at the current price. \"Total\" adds what sales already locked in and the dividends received.",
+          "The chart's change for a period leaves out money you put in or took out: end value − start value − buys + sales and dividends. Its percent is an approximation that does not weigh money by how long it was invested.",
+          "Stock splits are not adjusted automatically: enter trades with the split-adjusted numbers your broker shows today."
+        ]
+      },
+      "privacy": {
+        "title": "Your data and privacy",
+        "paragraphs": [
+          "What is stored: your email address (to send the sign-in link), your projects and transactions, and your settings (language, country and time zone). The data lives in a Supabase database with access rules so that each person can only see their own; the site runs on Vercel.",
+          "Your data is not sold, shared or used for ads, and there is no tracking or analytics. Price services only receive ticker symbols such as BTC or AAPL, never anything about you.",
+          "In your browser The Wire keeps a session cookie to keep you signed in, a language cookie for up to a year, and your \"Hide amounts\" choice in local storage.",
+          "You can download all your transactions at any time with \"Export CSV\" on the Transactions tab, and edit or delete them in the app."
+        ],
+        "contact": "To have your account and all its data deleted, or for any question about your data, write to <mail>{email}</mail>."
+      }
+    }
   }
 }
