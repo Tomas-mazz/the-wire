@@ -1,10 +1,10 @@
 import { Suspense } from "react";
 import Form from "next/form";
-import { FileUp } from "lucide-react";
+import { FileDown, FileUp } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { input, label, primaryButton, secondaryButton } from "@/components/portfolio/styles";
 import TransactionTable from "@/components/portfolio/TransactionTable";
-import { TRANSACTION_TYPES, type TransactionType } from "@/domain";
+import { TRANSACTION_TYPES } from "@/domain";
 import { Link } from "@/i18n/navigation";
 import { requireUser } from "@/lib/auth";
 import {
@@ -13,12 +13,9 @@ import {
   getTimeZone,
   getTransactions,
   TRANSACTION_LIST_LIMIT,
-  type TransactionFilters,
 } from "@/lib/portfolio/data";
-import { isUuid, zonedLocalToUtc } from "@/lib/portfolio/parse";
+import { readTransactionFilters, type SearchParams } from "@/lib/portfolio/filters";
 import { TransactionsSkeleton } from "@/components/portfolio/Skeletons";
-
-type SearchParams = Record<string, string | string[] | undefined>;
 
 /** Transactions tab: every transaction, newest first, with filters in the URL. */
 export default async function TransactionsPage({
@@ -33,29 +30,9 @@ export default async function TransactionsPage({
   );
 }
 
-const DATE = /^\d{4}-\d{2}-\d{2}$/;
-const one = (v: string | string[] | undefined) => (typeof v === "string" ? v : "");
-
-/** Reads the filters from the URL, ignoring anything malformed. */
-function readFilters(params: SearchParams, timeZone: string) {
-  const project = one(params.project);
-  const asset = one(params.asset);
-  const type = one(params.type);
-  const from = one(params.from);
-  const to = one(params.to);
-
-  const filters: TransactionFilters = {};
-  if (isUuid(project)) filters.projectId = project;
-  if (isUuid(asset)) filters.assetId = asset;
-  if ((TRANSACTION_TYPES as readonly string[]).includes(type)) filters.type = type as TransactionType;
-  // Whole days in the user's time zone: from 00:00 to 23:59:59.999.
-  if (DATE.test(from)) filters.from = zonedLocalToUtc(`${from}T00:00`, timeZone) ?? undefined;
-  if (DATE.test(to)) {
-    const end = zonedLocalToUtc(`${to}T23:59`, timeZone);
-    if (end) filters.to = new Date(Date.parse(end) + 59_999).toISOString();
-  }
-  const active = Object.keys(filters).length > 0;
-  return { filters, active, raw: { project, asset, type, from, to } };
+/** The filters as a query string for /api/export (empty values left out). */
+function exportQuery(raw: Record<string, string>): string {
+  return new URLSearchParams(Object.entries(raw).filter(([, value]) => value !== "")).toString();
 }
 
 async function Transactions({ params }: { params: SearchParams }) {
@@ -64,7 +41,7 @@ async function Transactions({ params }: { params: SearchParams }) {
   const t = await getTranslations("Portfolio");
 
   const timeZone = (await getTimeZone(user.id)) ?? "UTC";
-  const { filters, active, raw } = readFilters(params, timeZone);
+  const { filters, active, raw } = readTransactionFilters(params, timeZone);
   const [projects, assets, rows] = await Promise.all([
     getProjects(user.id, t("defaultProject")),
     getAssets(),
@@ -74,7 +51,12 @@ async function Transactions({ params }: { params: SearchParams }) {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-end">
+      <div className="flex flex-wrap justify-end gap-2">
+        {/* A plain link: it downloads a file. It carries the filters, so the file holds the rows on screen. */}
+        <a href={`/api/export?${exportQuery(raw)}`} download className={secondaryButton}>
+          <FileDown size={16} strokeWidth={1.75} aria-hidden="true" />
+          {t("transactions.exportLink")}
+        </a>
         <Link href="/portfolio/transactions/import" className={secondaryButton}>
           <FileUp size={16} strokeWidth={1.75} aria-hidden="true" />
           {t("transactions.importLink")}

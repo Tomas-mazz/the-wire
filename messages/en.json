@@ -281,6 +281,7 @@
       },
       "edit": "Edit",
       "editLabel": "Edit {asset} {type} from {date}",
+      "exportLink": "Export CSV",
       "importLink": "Import"
     },
     "transactionForm": {

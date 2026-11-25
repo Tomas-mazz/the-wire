@@ -281,6 +281,7 @@
       },
       "edit": "Editar",
       "editLabel": "Editar {type} de {asset} del {date}",
+      "exportLink": "Exportar CSV",
       "importLink": "Importar"
     },
     "transactionForm": {

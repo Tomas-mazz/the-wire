@@ -181,6 +181,32 @@ export async function getTransactions(
   return data.map(toTransaction);
 }
 
+/**
+ * Every transaction matching the filters, for the CSV export. PostgREST
+ * returns at most 1000 rows per request, so they are read page by page.
+ */
+export async function getAllTransactions(userId: string, filters: TransactionFilters = {}): Promise<TransactionRow[]> {
+  const PAGE = 1000;
+  const supabase = await createClient();
+  const rows: TransactionRow[] = [];
+  for (let offset = 0; ; offset += PAGE) {
+    let query = supabase.from("transactions").select(TRANSACTION_COLUMNS).eq("user_id", userId);
+    if (filters.projectId) query = query.eq("project_id", filters.projectId);
+    if (filters.assetId) query = query.eq("asset_id", filters.assetId);
+    if (filters.type) query = query.eq("type", filters.type);
+    if (filters.from) query = query.gte("executed_at", filters.from);
+    if (filters.to) query = query.lte("executed_at", filters.to);
+    // A stable order (id last) so pages never skip or repeat a row.
+    const { data, error } = await query
+      .order("executed_at", { ascending: true })
+      .order("id", { ascending: true })
+      .range(offset, offset + PAGE - 1);
+    if (error) fail("transactions", error);
+    rows.push(...data.map(toTransaction));
+    if (data.length < PAGE) return rows;
+  }
+}
+
 export async function getTransaction(
   userId: string,
   transactionId: string,
