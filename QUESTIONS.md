@@ -261,3 +261,11 @@ The portfolio grows into a full investment tracker (a ledger, not a broker: no o
     → Answer: The chart on the left (two thirds) and the allocation on the right (one third, donut above its list, as option A of the preview), with the line and its fill green when the period gained and red when it lost (option B). Clicking a holding in the allocation shows its market price; clicking it again or "Show total" goes back (decided 2026-11-22).
 117. How do the summary cards look on phones?
     → Answer: Three cards side by side with smaller text and less padding, and the News card below them across the whole width. From large screens the four cards share one row as before (decided 2026-11-22).
+118. Where is the CSV export?
+    → Answer: An "Export CSV" button on the Transactions tab, next to "Import" (decided 2026-11-25).
+119. Which transactions does it export?
+    → Answer: The ones the filters show: all of them without filters, or only a project, asset, type or date range when filtered (decided 2026-11-25).
+120. What columns does the file have?
+    → Answer: The The Wire import template's columns plus a `project` column, so it opens in Excel and can be imported again. Dates in the user's time zone; numbers exact, in USD (decided 2026-11-25).
+121. Are cash deposits and withdrawals included?
+    → Answer: Yes, so the copy is complete (type deposit / withdrawal). The template can't import them back: on re-import those rows show as unreadable while the rest imports (decided 2026-11-25).
