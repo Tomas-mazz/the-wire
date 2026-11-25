@@ -15,11 +15,12 @@ export default async function NewsPage() {
         <Hero />
         <NewsBoard items={SAMPLE_NEWS[locale]} />
       </main>
-      <footer className="border-t border-line">
+      {/* A note, not a footer: the site footer (legal notice) follows it. */}
+      <div className="border-t border-line">
         <p className="mx-auto max-w-[1200px] px-4 py-8 text-xs text-muted sm:px-6">
           {t("note")}
         </p>
-      </footer>
+      </div>
     </>
   );
 }

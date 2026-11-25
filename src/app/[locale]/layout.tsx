@@ -7,6 +7,7 @@ import { getTranslations } from "next-intl/server";
 import { PRIVACY_SCRIPT } from "@/components/portfolio/Private";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
+import SiteFooter from "@/components/SiteFooter";
 
 // next/font self-hosts the fonts: no requests to Google from the browser.
 const inter = Inter({
@@ -61,7 +62,11 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[locale]"
       </head>
       <body className="flex min-h-full flex-col font-sans">
         {/* Makes translations available to Client Components (useTranslations). */}
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider>
+          {children}
+          {/* Not-financial-advice notice and the link to /legal, on every page (decisions 122–124). */}
+          <SiteFooter />
+        </NextIntlClientProvider>
       </body>
     </html>
   );

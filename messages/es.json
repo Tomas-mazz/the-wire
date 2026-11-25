@@ -480,5 +480,51 @@
       "unauthorized": "Tu sesión terminó. Vuelve a iniciar sesión.",
       "save_failed": "No se pudo guardar. Inténtalo de nuevo."
     }
+  },
+  "SiteFooter": {
+    "notice": "The Wire es un registro personal, no asesoramiento financiero. Los precios vienen de terceros y pueden llegar con retraso o tener errores.",
+    "legal": "Aviso legal"
+  },
+  "Legal": {
+    "title": "Aviso legal",
+    "updated": "Última actualización: 25 de noviembre de 2026",
+    "intro": "Qué es The Wire, de dónde salen sus números, cómo se calculan y qué pasa con tus datos.",
+    "sections": {
+      "advice": {
+        "title": "No es asesoramiento financiero",
+        "paragraphs": [
+          "The Wire es un registro personal de tus inversiones. No es un broker ni un asesor financiero: no ejecuta órdenes, no se conecta a tus cuentas y no recomienda comprar, vender ni mantener nada.",
+          "Todo lo que muestra es información para tu propio seguimiento. Los resultados pasados no anticipan los futuros. Antes de tomar decisiones de inversión, infórmate por tu cuenta o consulta a un profesional cualificado."
+        ]
+      },
+      "data": {
+        "title": "Fuentes de precios y retrasos",
+        "paragraphs": [
+          "Los precios en vivo de las criptos vienen de Binance, con CoinGecko como respaldo; la cripto cotiza en USDT, que vale casi, pero no exactamente, un dólar. Los precios de acciones y ETF de EE. UU. vienen de Finnhub y pueden llegar con hasta unos 15 minutos de retraso.",
+          "El gráfico de evolución usa precios de cierre diarios de Binance (cripto) y Tiingo (acciones y ETF). Al importar archivos, los precios en otras monedas se pasan a dólares con el tipo de cambio del Banco Central Europeo de ese día (a través de Frankfurter).",
+          "Estos servicios pueden ir con retraso, estar incompletos o equivocarse, y pueden dejar de funcionar. The Wire marca los precios desactualizados, pero no puede garantizar que ningún número sea correcto."
+        ]
+      },
+      "method": {
+        "title": "Cómo se calculan los números",
+        "paragraphs": [
+          "Todo está en dólares estadounidenses y se guarda con decimales exactos; los números solo se redondean al mostrarlos.",
+          "Coste medio: lo que pagaste por las unidades que tienes, comisiones incluidas, dividido entre esas unidades. Una venta fija un resultado (P/L realizado): lo que recibiste, menos comisiones, menos el coste medio de las unidades vendidas.",
+          "\"Ahora\" es la ganancia o pérdida de lo que tienes hoy al precio actual. \"Total\" suma además lo que ya fijaron las ventas y los dividendos cobrados.",
+          "La variación del gráfico en un periodo no cuenta el dinero que metiste o sacaste: valor final − valor inicial − compras + ventas y dividendos. Su porcentaje es una aproximación que no pondera el dinero por el tiempo que estuvo invertido.",
+          "Los splits de acciones no se ajustan solos: apunta las operaciones con los números ajustados que muestra hoy tu broker."
+        ]
+      },
+      "privacy": {
+        "title": "Tus datos y privacidad",
+        "paragraphs": [
+          "Qué se guarda: tu email (para enviarte el enlace de acceso), tus proyectos y transacciones, y tus ajustes (idioma, país y zona horaria). Los datos están en una base de datos de Supabase con reglas de acceso para que cada persona solo vea los suyos; la web funciona en Vercel.",
+          "Tus datos no se venden, no se comparten y no se usan para publicidad, y no hay seguimiento ni analítica. Los servicios de precios solo reciben símbolos como BTC o AAPL, nunca nada sobre ti.",
+          "En tu navegador The Wire guarda una cookie de sesión para mantenerte dentro, una cookie de idioma durante hasta un año y tu elección de \"Ocultar importes\" en el almacenamiento local.",
+          "Puedes descargar todas tus transacciones cuando quieras con \"Exportar CSV\" en la pestaña Transacciones, y editarlas o borrarlas en la app."
+        ],
+        "contact": "Para que borremos tu cuenta y todos sus datos, o para cualquier pregunta sobre tus datos, escribe a <mail>{email}</mail>."
+      }
+    }
   }
 }
